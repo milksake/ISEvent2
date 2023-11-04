@@ -1,0 +1,44 @@
+{%extends "layout.html"%}
+
+{%block title%}
+Register
+{%endblock%}
+
+{%block estilos%}
+{%endblock%}
+
+{%block contenido%}
+<div class="page">
+
+    <div class="form">
+        <h1>Register Form</h1>
+        <form action="" method="post">
+            <div class="input-box">
+                <label>Nombre</label>
+                <br>
+                <input type="text" name="nombre" autocomplete="off" required>
+            </div>
+            <div class="input-box">
+                <label>Correo</label>
+                <br>
+                <input type="email" name="correo" autocomplete="off" required>
+            </div>
+            
+            <div class="input-box">
+                <label>Contraseña</label>
+                <br>
+                <input type="password" name="contrasena" autocomplete="off" required>
+            </div>
+            
+            <div class="input-box">
+                <label>Confirmar Contraseña</label>
+                <br>
+                <input type="password" name="contrasena-repeat" autocomplete="off" required>
+            </div>
+            
+            <button class="btn" type="submit" style="margin-bottom: 0;">Register</button>
+        </form>
+    </div>
+
+</div>
+{%endblock%}

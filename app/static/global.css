@@ -1,0 +1,90 @@
+/* Reset de estilos para eliminar márgenes y rellenos predeterminados */
+body, h1, h2, h3, p, ul, li, a {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+}
+
+/* Estilo del cuerpo del documento */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2; /* Color de fondo neutro */
+    color: #333; /* Color de texto neutro */
+}
+
+/* Estilo del encabezado */
+header {
+    background-color: #333; /* Color de fondo del encabezado */
+    color: #fff; /* Color de texto en el encabezado */
+    padding: 10px;
+}
+
+.dropdown {
+    display: inline-block;
+    position: relative;
+}
+    
+.dropdown-content {
+    display: none;
+    position: absolute;
+    width: 100%;
+    overflow: auto;
+    background-color: #333;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content a {
+    display: block;
+    color: #fff;    
+    padding: 5px;
+    text-decoration: none;
+}
+
+.dropdown-content a:hover {
+    color: #FFFFFF;
+    background-color: #ccc;
+}
+
+/* Estilo de la navegación en el encabezado */
+nav {
+    display: flex;
+    justify-content: space-between;
+}
+
+nav a, nav div {
+    color: #fff; /* Color de los enlaces en el encabezado */
+    margin-right: 10px;
+}
+
+/* Estilo del contenido principal */
+section {
+    margin: 20px;
+    padding: 20px;
+    background-color: #fff; /* Color de fondo del contenido */
+    border: 1px solid #ccc; /* Borde alrededor del contenido */
+}
+
+/* Estilo del pie de página */
+footer {
+    background-color: #333; /* Color de fondo del pie de página */
+    color: #fff; /* Color de texto en el pie de página */
+    padding: 10px;
+}
+
+/* Estilo de los mensajes emergentes */
+.alert {
+    background-color: #333; /* Color de fondo de la alerta */
+    color: #fff; /* Color de texto de la alerta */
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+/* Estilo de los enlaces en el contenido */
+section a {
+    color: #007bff; /* Color de los enlaces en el contenido */
+}

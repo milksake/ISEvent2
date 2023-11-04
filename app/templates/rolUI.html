@@ -1,0 +1,29 @@
+{%extends "layout.html"%}
+
+{%block estilos%}
+{%endblock%}
+
+{%block title%}
+E-vent
+{%endblock%}
+
+{%block contenido%}
+<form action="">
+    <input type="text" placeholder="Buscar.." name="query">
+    <button class="btn" type="submit" style="margin-bottom: 0;">Buscar</button>
+</form>
+<form action="" method="post">
+    {% for cuenta in cuentas %}
+    {{ cuenta.nombre }}
+        <select name="{{ cuenta.nombre }}" id="rol">
+            <option value="no">No cambiar</option>
+            <option value="admin">Administrador</option>
+            <option value="colaborador">Colaborador</option>
+            <option value="encargado">Encargado</option>
+            <option value="ninguno">Ninguno</option>
+        </select>
+        <button class="btn" type="submit" style="margin-bottom: 0;">Guardar</button>
+        {% endfor %}    
+</form>
+
+{%endblock%}
