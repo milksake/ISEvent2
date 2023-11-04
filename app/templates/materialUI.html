@@ -1,0 +1,21 @@
+{%extends "layout.html"%}
+
+{%block estilos%}
+{%endblock%}
+
+{%block title%}
+E-vent
+{%endblock%}
+
+{%block contenido%}
+<a class="btn" style="margin-bottom: 0;" href="{{ url_for('config.añadirMaterial') }}">Agregar Material</a>
+{% for material in materiales %}
+    <div>
+        {{ material.nombre }}
+        {{ material.cantidad }}
+        {{ material.descripcion }}
+        <a class="btn" href="{{ url_for('config.modificarMaterial', id=material.idMaterial) }}">Modificar Material</a>
+    </div>
+{% endfor %}
+
+{%endblock%}
