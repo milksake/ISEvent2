@@ -2,14 +2,38 @@ from app.config import bp
 from flask import render_template, request, flash, redirect, url_for, abort
 from flask_login import login_required, current_user
 from app.models.material import Material, materialesList
-
+from app.models.ambiente import Ambiente, ambienteslist
 @bp.route('/eventos')
 def eventos():
     return render_template("index.html")
 
 @bp.route('/ambientes')
 def ambientes():
-    return render_template("index.html")
+    return render_template("ambienteUI.html", ambientes=ambienteslist)
+
+@bp.route('/añadirAmbiente', methods=['GET', 'POST'])
+def añadirAmbiente():
+    if request.method == 'POST':
+        ambienteslist.append(Ambiente(len(ambienteslist),
+                                      request.form['nombre'],
+                                      request.form['aforo'],
+                                      request.form['descripcion'],
+                                      request.form['imagen']))
+        flash("Ambiente agregado")
+        return redirect(url_for('config.ambientes'))
+    return render_template("añadirAmbiente.html")
+
+@bp.route('/modificarAmbientes/<id>', methods=['GET','POST'])
+def modificarAmbiente(id):
+    if request.method == 'POST':
+        ambienteslist[int(id)] = Ambiente(int(id),
+                                      request.form['nombre'],
+                                      request.form['aforo'],
+                                      request.form['descripcion'],
+                                      request.form['imagen'])
+        flash("Ambiente modificado")
+        return redirect(url_for('config.ambientes'))
+    return render_template("añadirAmbiente.html")
 
 @bp.route('/actividades')
 def actividades():

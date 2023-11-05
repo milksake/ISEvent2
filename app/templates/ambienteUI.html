@@ -1,0 +1,28 @@
+{%extends "layout.html"%}
+
+{%block estilos%}
+{%endblock%}
+
+{%block title%}
+E-vent
+{%endblock%}
+
+{%block contenido%}
+<button>
+<a class="btn" style="margin-bottom: 0;" href="{{ url_for('config.añadirAmbiente') }}">Agregar ambiente</a>
+</button>
+<form action="">
+    <input type="text" placeholder="Buscar.." name="query">
+    <button class="btn" type="submit" style="margin-bottom: 0;">Buscar</button>
+</form>
+<form action="" method="post">
+    {% for ambiente in ambientes %}
+    <div>
+        {{ ambiente.nombre }}
+        {{ ambiente.descripcion }}
+        <a class="btn" href="{{ url_for('config.modificarAmbiente', id=ambiente.idAmbiente) }}">Modificar Ambiente</a>
+        {% endfor %}   
+    </div>
+    
+</form>
+{%endblock%}
