@@ -1,0 +1,24 @@
+{%extends "layout.html"%}
+
+{%block estilos%}
+{%endblock%}
+
+{%block title%}
+E-vent
+{%endblock%}
+
+{%block contenido%}
+<form action="">
+    <input type="text" placeholder="Buscar.." name="query">
+    <button class="btn" type="submit" style="margin-bottom: 0;">Buscar</button>
+</form>
+<form action="" method="post">
+    {% for evento in eventos %}
+    <div>
+        {{ evento.nombre }}
+        <a class="btn" href="{{ url_for('asistencia.tomarAsistencia', idEvento=evento.id) }}">Tomar asistencia</a>
+        {% endfor %}   
+    </div>
+    
+</form>
+{%endblock%}
