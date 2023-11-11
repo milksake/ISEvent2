@@ -1,15 +1,16 @@
 from app.config import bp
 from flask import render_template, request, flash, redirect, url_for, abort
 from flask_login import login_required, current_user
-from app.models.material import Material, materialesList
 from app.extensions import db
 
 @bp.route('/eventos')
+@login_required
 def eventos():
     even = db.Evento.select(lambda e : True)
     return render_template("index.html", eventos=even)
 
 @bp.route('/añadirEvento', methods=['GET', 'POST'])
+@login_required
 def añadirEvento():
     if request.method == 'POST':
         db.Evento(nombre=request.form['nombre'],
@@ -23,6 +24,7 @@ def añadirEvento():
     return render_template("añadirEvento.html")
 
 @bp.route('/modificarEvento/<id>', methods=['GET','POST'])
+@login_required
 def modificarEvento(id):
     if request.method == 'POST':
         ev = db.Evento.get(id=int(id))
@@ -40,11 +42,13 @@ def modificarEvento(id):
     return render_template("añadirEvento.html")
 
 @bp.route('/ambientes')
+@login_required
 def ambientes():
     amb = db.Ambiente.select(lambda a : True)
     return render_template("ambienteUI.html", ambientes=amb)
 
 @bp.route('/añadirAmbiente', methods=['GET', 'POST'])
+@login_required
 def añadirAmbiente():
     if request.method == 'POST':
         db.Ambiente(nombre=request.form['nombre'],
@@ -56,6 +60,7 @@ def añadirAmbiente():
     return render_template("añadirAmbiente.html")
 
 @bp.route('/modificarAmbientes/<id>', methods=['GET','POST'])
+@login_required
 def modificarAmbiente(id):
     if request.method == 'POST':
         amb = db.Ambiente.get(id=int(id))
@@ -74,12 +79,13 @@ def modificarAmbiente(id):
 def actividades():
     return render_template("index.html")
 
-@login_required
 @bp.route('/materiales')
+@login_required
 def materiales():
     #if current_user.rol != "admin":
     #    abort(403)
-    return render_template("materialUI.html", materiales=materialesList)
+    mat = db.Material.select(lambda m : True)
+    return render_template("materialUI.html", materiales=mat)
 
 @bp.route('/añadirMaterial', methods=['GET', 'POST'])
 @login_required
@@ -87,7 +93,9 @@ def añadirMaterial():
     #if current_user.rol != "admin":
     #    abort(403)
     if request.method == 'POST':
-        materialesList.append(Material(len(materialesList), request.form['nombre'], request.form['cantidad'], request.form['descripcion'], None))
+        db.Material(nombre=request.form['nombre'],
+                    cantidad=request.form['cantidad'],
+                    tipo=request.form['tipo'])
         flash("Material Creado")
         return redirect(url_for('config.materiales'))
     return render_template("añadirMaterial.html")
@@ -98,7 +106,10 @@ def modificarMaterial(id):
     #if current_user.rol != "admin":
     #    abort(403)
     if request.method == 'POST':
-        materialesList[int(id)] = Material(int(id), request.form['nombre'], request.form['cantidad'], request.form['descripcion'], None)
+        mat = db.Event.get(id=int(id))
+        mat.nombre = request.form['nombre']
+        mat.cantidad = request.form['cantidad']
+        mat.tipo = request.form['tipo']
         flash("Material Modificado")
         return redirect(url_for('config.materiales'))
     return render_template("añadirMaterial.html")

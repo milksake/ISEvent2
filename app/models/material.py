@@ -1,9 +1,7 @@
-class Material:
-    def __init__(self, id, nombre, cantidad, descripcion, tipo) -> None:
-        self.idMaterial = id
-        self.nombre = nombre
-        self.cantidad = cantidad
-        self.descripcion = descripcion
-        self.tipo = tipo
+from app.extensions import db
+from pony.orm import Required
 
-materialesList = []
+class Material(db.Entity):
+    nombre = Required(str, unique=True)
+    cantidad = Required(int)
+    tipo = Required(str)

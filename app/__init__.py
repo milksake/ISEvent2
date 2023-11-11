@@ -7,6 +7,7 @@ from app.extensions import db
 from app.models.cuenta import Cuenta, createUsers
 from app.models.ambiente import Ambiente, createAmbientes
 from app.models.evento import Evento, createEventos
+from app.models.material import Material
 
 from pony.flask import Pony
 from werkzeug.security import generate_password_hash

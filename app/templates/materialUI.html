@@ -13,7 +13,7 @@ E-vent
     <div>
         {{ material.nombre }}
         {{ material.cantidad }}
-        {{ material.descripcion }}
+        {{ material.tipo }}
         <a class="btn" href="{{ url_for('config.modificarMaterial', id=material.idMaterial) }}">Modificar Material</a>
     </div>
 {% endfor %}
