@@ -2,13 +2,13 @@ from app.config import bp
 from flask import render_template, request, flash, redirect, url_for, abort
 from flask_login import login_required, current_user
 from app.extensions import db
-
+#CF-03-01
 @bp.route('/eventos')
 @login_required
 def eventos():
     even = db.Evento.select(lambda e : True)
     return render_template("index.html", eventos=even)
-
+#CF-03-02
 @bp.route('/añadirEvento', methods=['GET', 'POST'])
 @login_required
 def añadirEvento():
@@ -22,7 +22,7 @@ def añadirEvento():
         flash("Evento agregado")
         return redirect(url_for('config.eventos'))
     return render_template("añadirEvento.html")
-
+#CF-03-03
 @bp.route('/modificarEvento/<id>', methods=['GET','POST'])
 @login_required
 def modificarEvento(id):
@@ -40,13 +40,13 @@ def modificarEvento(id):
         flash("Evento modificado")
         return redirect(url_for('config.eventos'))
     return render_template("añadirEvento.html")
-
+#CF-20-01
 @bp.route('/ambientes')
 @login_required
 def ambientes():
     amb = db.Ambiente.select(lambda a : True)
     return render_template("ambienteUI.html", ambientes=amb)
-
+#CF-20-02
 @bp.route('/añadirAmbiente', methods=['GET', 'POST'])
 @login_required
 def añadirAmbiente():
@@ -58,7 +58,7 @@ def añadirAmbiente():
         flash("Ambiente agregado")
         return redirect(url_for('config.ambientes'))
     return render_template("añadirAmbiente.html")
-
+#CF-20-03
 @bp.route('/modificarAmbientes/<id>', methods=['GET','POST'])
 @login_required
 def modificarAmbiente(id):
@@ -78,7 +78,7 @@ def modificarAmbiente(id):
 @bp.route('/actividades')
 def actividades():
     return render_template("index.html")
-
+#CF-18-01
 @bp.route('/materiales')
 @login_required
 def materiales():
@@ -86,7 +86,7 @@ def materiales():
     #    abort(403)
     mat = db.Material.select(lambda m : True)
     return render_template("materialUI.html", materiales=mat)
-
+#CF-18-02
 @bp.route('/añadirMaterial', methods=['GET', 'POST'])
 @login_required
 def añadirMaterial():
@@ -99,7 +99,7 @@ def añadirMaterial():
         flash("Material Creado")
         return redirect(url_for('config.materiales'))
     return render_template("añadirMaterial.html")
-
+#CF-18-03
 @bp.route('/modificarMaterial/<id>', methods=['GET', 'POST'])
 @login_required
 def modificarMaterial(id):

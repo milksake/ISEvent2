@@ -16,7 +16,7 @@ class Ambiente(db.Entity):
     imagen = Required(str)
 
 #ambienteslist = [Ambiente("0", "Green Hills", "19", "Sample text", "Sample image")]
-
+#CF-20-04
 @db_session
 def createAmbientes():
     x = Ambiente.get(nombre="Green Hills")
