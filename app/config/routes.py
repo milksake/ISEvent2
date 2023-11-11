@@ -2,23 +2,24 @@ from app.config import bp
 from flask import render_template, request, flash, redirect, url_for, abort
 from flask_login import login_required, current_user
 from app.models.material import Material, materialesList
-from app.models.ambiente import Ambiente, ambienteslist
+from app.extensions import db
+
 @bp.route('/eventos')
 def eventos():
     return render_template("index.html")
 
 @bp.route('/ambientes')
 def ambientes():
-    return render_template("ambienteUI.html", ambientes=ambienteslist)
+    amb = db.Ambiente.select(lambda a : True)
+    return render_template("ambienteUI.html", ambientes=amb)
 
 @bp.route('/añadirAmbiente', methods=['GET', 'POST'])
 def añadirAmbiente():
     if request.method == 'POST':
-        ambienteslist.append(Ambiente(len(ambienteslist),
-                                      request.form['nombre'],
-                                      request.form['aforo'],
-                                      request.form['descripcion'],
-                                      request.form['imagen']))
+        db.Ambiente(nombre=request.form['nombre'],
+                    aforo=request.form['aforo'],
+                    descripcion=request.form['descripcion'],
+                    imagen=request.form['imagen'])
         flash("Ambiente agregado")
         return redirect(url_for('config.ambientes'))
     return render_template("añadirAmbiente.html")
@@ -26,11 +27,14 @@ def añadirAmbiente():
 @bp.route('/modificarAmbientes/<id>', methods=['GET','POST'])
 def modificarAmbiente(id):
     if request.method == 'POST':
-        ambienteslist[int(id)] = Ambiente(int(id),
-                                      request.form['nombre'],
-                                      request.form['aforo'],
-                                      request.form['descripcion'],
-                                      request.form['imagen'])
+        amb = db.Ambiente.get(int(id))
+        if not amb:
+            flash("No existe ese ambiente")
+            return redirect(url_for('main.index'))
+        db.Ambiente(nombre=request.form['nombre'],
+                    aforo=request.form['aforo'],
+                    descripcion=request.form['descripcion'],
+                    imagen=request.form['imagen'])
         flash("Ambiente modificado")
         return redirect(url_for('config.ambientes'))
     return render_template("añadirAmbiente.html")

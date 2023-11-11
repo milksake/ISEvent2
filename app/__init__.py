@@ -1,22 +1,36 @@
 from flask import Flask, redirect, url_for, request, flash, render_template
 from flask_login import LoginManager, current_user, login_user, login_required, logout_user
 from config import Config
-from app.models.cuenta import Cuenta, users, get_user, get_user_from_email
+
+# Database
+from app.extensions import db
+from app.models.cuenta import Cuenta, createUsers
+from app.models.ambiente import Ambiente, createAmbientes
+
+from pony.flask import Pony
+from werkzeug.security import generate_password_hash
 
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
+    # Pony Database
+    db.bind(**app.config["PONY"])
+    db.generate_mapping(create_tables=True)
+    Pony(app)
+
+    # Initialize tables
+    createUsers()
+    createAmbientes()
+
     # Login
     login_manager = LoginManager()
     login_manager.init_app(app)
+    login_manager.login_view = 'login'
 
     @login_manager.user_loader
     def load_user(user_id):
-        for user in users:
-            if user.id == user_id:
-                return user
-        return None
+        return db.Cuenta.get(id=user_id)
 
     # Register blueprints (modules)
     from app.main import bp as main_bp
@@ -39,7 +53,7 @@ def create_app(config_class=Config):
         if current_user.is_authenticated:
             return redirect(url_for('main.index'))
         if request.method == 'POST':
-            user = get_user(request.form['nombre'])
+            user =  db.Cuenta.get(nombre=request.form['nombre'])
             if user and user.check_password(request.form['contrasena']):
                 login_user(user, remember=True)
                 return redirect(url_for('main.index'))
@@ -53,18 +67,17 @@ def create_app(config_class=Config):
             return redirect(url_for('main.index'))
         if request.method == 'POST':
             succesful = True
-            if get_user(request.form['nombre']):
+            if db.Cuenta.get(nombre=request.form['nombre']):
                 flash("Ese nombre ya existe")
                 succesful = False
-            if get_user_from_email(request.form['contrasena']):
-                flash("Ese email ya está en uso")
+            if db.Cuenta.get(correo=request.form['correo']):
+                flash("Ese correo ya está en uso")
                 succesful = False
             if request.form['contrasena'] != request.form['contrasena-repeat']:
                 flash("Ambas contraseñas deben ser iguales")
                 succesful = False
             if succesful:
-                newUser = Cuenta(str(len(users)), request.form['nombre'], request.form['contrasena'], request.form['correo'], "ninguno", None, None)
-                users.append(newUser)
+                newUser = db.Cuenta(nombre=request.form['nombre'], contrasena=generate_password_hash(request.form['contrasena']), correo=request.form['correo'], rol="ninguno")
                 login_user(newUser, remember=True)
                 return redirect(url_for('main.index'))
         return render_template('register.html')

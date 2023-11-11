@@ -1,27 +1,31 @@
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
+from app.extensions import db
+from pony.orm import Required, Set, db_session
 
-class Cuenta(UserMixin):
-    def __init__(self, id, nombre, contraseña, correo, rol, imagen, qr) -> None:
-        self.id = id
-        self.nombre = nombre
-        self.contraseña = generate_password_hash(contraseña)
-        self.correo = correo
-        self.rol = rol
-        self.imagen = imagen
-        self.qr = qr
-
-    def set_password(self, password):
-        self.contraseña = generate_password_hash(password)
+class Cuenta(db.Entity, UserMixin):
+    nombre = Required(str, unique=True)
+    contrasena = Required(str)
+    correo = Required(str, unique=True)
+    rol = Required(str)
+    #imagen = Required(str)
+    #qr = Required(qr)
 
     def check_password(self, password):
-        return check_password_hash(self.contraseña, password)
+        return check_password_hash(self.contrasena, password)
 
+@db_session
+def createUsers():
+    x = Cuenta.get(nombre="admin")
+    if (x):
+        x.delete()
+    Cuenta(nombre="admin", contrasena=generate_password_hash("devDynamo"), correo="example@mail.com", rol="admin")
+    x = Cuenta.get(nombre="test")
+    if (x):
+        x.delete()
+    Cuenta(nombre="test", contrasena=generate_password_hash("qazoo"), correo="asdgaf@zdfadf", rol="ninguno")
 
-users = [Cuenta("0", "admin", "devDynamo", "example@mail.com", "admin", None, None),
-         Cuenta("1", "test", "qaz", "asdgaf@zdfadf", "ninguno", None, None)]
-
-
+"""
 def obtenerCuenta(query):
     all = []
     for user in users:
@@ -48,3 +52,4 @@ def get_user_from_email(email):
         if user.correo == email:
             return user
     return None
+"""
