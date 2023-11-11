@@ -1,0 +1,19 @@
+{%extends "layout.html"%}
+
+{%block estilos%}
+{%endblock%}
+
+{%block title%}
+E-vent
+{%endblock%}
+
+{%block contenido%}
+<div>
+    <h1><a href="{{ url_for('inscripcion.evento', id=evento.id) }}">{{evento.nombre}}</a></h1>
+    
+    <p>{{ evento.descripcion }}</p>
+    <h2>Inicio: {{ evento.fechaInicio }}</h2>
+    <h2>Fin: {{ evento.fechaFin }}</h2>
+    <h2>Tipo: {{ evento.tipo }}</h2>
+</div>
+{%endblock%}

@@ -6,6 +6,7 @@ from config import Config
 from app.extensions import db
 from app.models.cuenta import Cuenta, createUsers
 from app.models.ambiente import Ambiente, createAmbientes
+from app.models.evento import Evento, createEventos
 
 from pony.flask import Pony
 from werkzeug.security import generate_password_hash
@@ -22,6 +23,7 @@ def create_app(config_class=Config):
     # Initialize tables
     createUsers()
     createAmbientes()
+    createEventos()
 
     # Login
     login_manager = LoginManager()

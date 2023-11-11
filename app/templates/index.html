@@ -8,5 +8,25 @@ E-vent
 {%endblock%}
 
 {%block contenido%}
-index
+<div class="container">
+    {% if current_user.is_authenticated and current_user.rol == "admin" %}
+    <button>
+        <a class="btn" style="margin-bottom: 0;" href="{{ url_for('config.añadirEvento') }}">Agregar evento</a>
+    </button>
+    {% endif %}
+    {%for evento in eventos%}
+        <div>
+            {% if current_user.is_authenticated and current_user.rol == "admin" %}
+                <h2><a href="{{ url_for('config.modificarEvento', id=evento.id) }}">{{evento.nombre}}</a></h2>
+            {% else %}
+            <h2><a href="{{ url_for('inscripcion.evento', id=evento.id) }}">{{evento.nombre}}</a></h2>
+            {% endif %}
+            
+            <p>{{ evento.descripcion }}</p>
+            <h3>Inicio: {{ evento.fechaInicio }}</h3>
+            <h3>Fin: {{ evento.fechaFin }}</h3>
+            <h3>Tipo: {{ evento.tipo }}</h3>
+        </div>
+    {%endfor%}
+</div>
 {%endblock%}
