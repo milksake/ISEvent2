@@ -6,6 +6,9 @@ from config import Config
 from app.extensions import db
 from app.models.cuenta import Cuenta, createUsers
 from app.models.ambiente import Ambiente, createAmbientes
+from app.models.inscripcion import Inscripcion
+from app.models.actividad import Actividad
+from app.models.paquete import Paquete
 from app.models.evento import Evento, createEventos
 from app.models.material import Material
 

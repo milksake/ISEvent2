@@ -1,15 +1,16 @@
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
 from app.extensions import db
-from pony.orm import Required, Set, db_session
+from pony.orm import Required, Set, Optional, db_session
 
 class Cuenta(db.Entity, UserMixin):
     nombre = Required(str, unique=True)
     contrasena = Required(str)
     correo = Required(str, unique=True)
     rol = Required(str)
-    #imagen = Required(str)
-    #qr = Required(qr)
+    imagen = Optional(str)
+    inscripciones = Set("Inscripcion")
+    cuenta_eventos = Set("Evento")
 
     def check_password(self, password):
         return check_password_hash(self.contrasena, password)
@@ -19,11 +20,17 @@ def createUsers():
     x = Cuenta.get(nombre="admin")
     if (x):
         x.delete()
-    Cuenta(nombre="admin", contrasena=generate_password_hash("devDynamo"), correo="example@mail.com", rol="admin")
+    Cuenta(nombre="admin",
+           contrasena=generate_password_hash("devDynamo"),
+           correo="example@mail.com",
+           rol="admin")
     x = Cuenta.get(nombre="test")
     if (x):
         x.delete()
-    Cuenta(nombre="test", contrasena=generate_password_hash("qazoo"), correo="asdgaf@zdfadf", rol="ninguno")
+    Cuenta(nombre="test",
+           contrasena=generate_password_hash("qazoo"),
+           correo="asdgaf@zdfadf",
+           rol="ninguno")
 
 """
 def obtenerCuenta(query):
