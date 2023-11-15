@@ -1,0 +1,32 @@
+{%extends "layout.html"%}
+
+{%block estilos%}
+{%endblock%}
+
+{%block title%}
+E-vent
+{%endblock%}
+
+{%block contenido%}
+<button>
+<a class="btn" style="margin-bottom: 0;" href="{{ url_for('config.añadirActividad') }}">Agregar actividad</a>
+</button>
+<form action="">
+    <input type="text" placeholder="Buscar.." name="query">
+    <button class="btn" type="submit" style="margin-bottom: 0;">Buscar</button>
+</form>
+<form action="" method="post">
+    {% for actividad in actividades %}
+    <div>
+        {{ actividad.nombre }}
+        {{ actividad.fechaInicio }}
+        {{ actividad.fechaFin }}
+        {{ actividad.tipo }}
+        {{ actividad.imagen }}
+        {{ actividad.descripcion }}
+        <a class="btn" href="{{ url_for('config.modificarActividad', id=actividad.idActividad) }}">Modificar Actividad</a>
+        {% endfor %}   
+    </div>
+    
+</form>
+{%endblock%}

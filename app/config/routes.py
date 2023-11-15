@@ -2,6 +2,9 @@ from app.config import bp
 from flask import render_template, request, flash, redirect, url_for, abort
 from flask_login import login_required, current_user
 from app.extensions import db
+from datetime import datetime
+from app.forms.FormValidarActividad import FormValidarActividad
+
 #CF-03-01
 @bp.route('/eventos')
 @login_required
@@ -75,9 +78,6 @@ def modificarAmbiente(id):
         return redirect(url_for('config.ambientes'))
     return render_template("añadirAmbiente.html")
 
-@bp.route('/actividades')
-def actividades():
-    return render_template("index.html")
 #CF-18-01
 @bp.route('/materiales')
 @login_required
@@ -113,3 +113,56 @@ def modificarMaterial(id):
         flash("Material Modificado")
         return redirect(url_for('config.materiales'))
     return render_template("añadirMaterial.html")
+
+
+#---------------------------INICIO ACTIVIDADES-----------------------------------------------------------
+#CF-17-01
+@bp.route('/actividades')
+@login_required
+def actividades():
+    act = db.Actividad.select(lambda a : True)
+    return render_template("actividadUI.html", actividades=act) #variable de template
+#CF-17-02
+@bp.route('/añadirActividad', methods=['GET', 'POST'])
+@login_required
+def añadirActividad():
+    form = FormValidarActividad()
+    if request.method == 'POST' and form.validate():
+        nombre = form.nombre.data
+        fechaInicio= datetime.combine(form.fechaInicio.data, datetime.min.time())
+        fechaFin= datetime.combine(form.fechaFin.data, datetime.min.time())
+        tipo = form.tipo.data
+        imagen= form.imagen.data
+        descripcion = form.descripcion.data
+        #aniadiendo a base de datos
+        db.Actividad(nombre= nombre,
+                     fechaInicio= fechaInicio,
+                     fechaFin= fechaFin,
+                     tipo= tipo,
+                     imagen= imagen,
+                     descripcion= descripcion,
+                    )
+        flash("Actividad agregada")
+        return redirect(url_for('config.actividades'))
+    return render_template("añadirActividad.html",form= form)
+#CF-17-03
+@bp.route('/modificarActividades/<id>', methods=['GET','POST'])
+@login_required
+def modificarActividad(id):
+    form = FormValidarActividad()
+    if request.method == 'POST':
+        act = db.Actividad.get(id=int(id))
+        if not act:
+            flash("No existe esa actividad")
+            return redirect(url_for('main.index'))
+        
+        act.nombre = form.nombre.data
+        act.fechaInicio =  datetime.combine(form.fechaInicio.data, datetime.min.time())
+        act.fechaFin = datetime.combine(form.fechaFin.data, datetime.min.time())
+        act.tipo= form.tipo.data
+        act.imagen= form.imagen.data
+        act.descripcion = form.descripcion.data
+        flash("Actividad modificada")
+        return redirect(url_for('config.actividades'))
+    return render_template("añadirActividad.html",form= form)
+#---------------------------FIN ACTIVIDADES------------------------------------------------------------

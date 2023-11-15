@@ -1,0 +1,49 @@
+{%extends "layout.html"%}
+
+{%block title%}
+Agregar actividad
+{%endblock%}
+
+{%block estilos%}
+{%endblock%}
+
+{%block contenido%}
+
+{% if form.errors %}
+    <div style="color: red;">
+        {% for field, errors in form.errors.items() %}
+            <p>{{ field|capitalize }}: {{ errors|join(', ') }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<form method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+
+    <label for="nombre">Nombre:</label>
+    {{ form.nombre(size=40) }}
+    <br>
+
+    <label for="fechaInicio">Fecha de Inicio:</label>
+    {{ form.fechaInicio }}
+    <br>
+
+    <label for="fechaFin">Fecha de Fin:</label>
+    {{ form.fechaFin }}
+    <br>
+
+    <label for="tipo">Tipo de Actividad:</label>
+    {{ form.tipo(size=20) }}
+    <br>
+
+    <label for="imagen">Imagen de la Actividad:</label>
+    {{ form.imagen }}
+    <br>
+
+    <label for="descripcion">Descripción:</label>
+    {{ form.descripcion(cols=40, rows=5) }}
+    <br>
+
+    <input type="submit" value="Guardar">
+</form>
+{%endblock%}

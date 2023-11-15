@@ -1,0 +1,51 @@
+{%extends "layout.html"%}
+
+{%block title%}
+Agregar ambiente
+{%endblock%}
+
+{%block estilos%}
+{%endblock%}
+
+{%block contenido%}
+<div class="page">
+    
+    <div class="form">
+        <h1>Evento</h1>
+        <form action="" method="post">
+            <div class="input-box">
+                <label>Nombre</label>
+                <br>
+                <input type="text" name="nombre" autocomplete="on" required>
+            </div>
+            <div class="input-box">
+                <label>Descripción</label>
+                <br>
+                <input type="text" name="descripcion" autocomplete="on" required>
+            </div>
+            <div class="input-box">
+                <label>Fecha de Inicio</label>
+                <br>
+                <input type="date" name="fechaInicio" autocomplete="on" required>
+            </div>
+            <div class="input-box">
+                <label>Fecha de Fin</label>
+                <br>
+                <input type="date" name="fechaFin" autocomplete="on" required>
+            </div>
+            <div class="input-box">
+                <label>Imagen</label>
+                <br>
+                <input type="text" name="imagen" autocomplete="on" required>
+            </div>
+            <div class="input-box">
+                <label>Tipo</label>
+                <br>
+                <input type="text" name="tipo" autocomplete="on" required>
+            </div>
+            <button class="btn" type="submit">Guardar</button>
+        </form>
+    </div>
+
+</div>
+{%endblock%}

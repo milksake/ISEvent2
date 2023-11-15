@@ -7,6 +7,7 @@ class Ambiente(db.Entity):
     descripcion = Required(str)
     imagen = Required(str)
     actividades = Set('Actividad')
+    
 
 #ambienteslist = [Ambiente("0", "Green Hills", "19", "Sample text", "Sample image")]
 #CF-20-04
