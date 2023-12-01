@@ -1,0 +1,67 @@
+{%extends "layout.html"%}
+
+{%block title%}
+Inscripcion
+{%endblock%}
+
+{%block estilos%}
+{%endblock%}
+
+{%block contenido%}
+<div class="page">
+    
+    <div class="form">
+        <h1>Preinscripcion</h1>
+        <h2>Evento </h2> <p>{{ evento.nombre }}</p>
+        <h2>Paquetes</h2>
+        <table>
+            <tr>
+                <th>Rol</th>
+                <th>Actividades</th>
+                <th>Precio</th>
+            </tr>
+            {% for paquete in evento.paquetes %}
+            <tr>
+                <td>{{ paquete.rol }}</td>
+                <td>{% for actividad in paquete.actividades %}{{ actividad.nombre }} {% endfor %}</td>
+                <td>{{ paquete.precio }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <form action="" method="post">
+            <div class="input-box">
+                <label>DNI</label>
+                <br>
+                <input type="text" name="docId" autocomplete="off" required>
+            </div>
+            {% if not current_user.is_authenticated %}
+                <div class="input-box">
+                    <label>Nombres</label>
+                    <br>
+                    <input type="text" name="nombres" autocomplete="off" required>
+                </div>
+                <div class="input-box">
+                    <label>Apellidos</label>
+                    <br>
+                    <input type="text" name="apellidos" autocomplete="off" required>
+                </div>
+                <div class="input-box">
+                    <label>Correo</label>
+                    <br>
+                    <input type="email" name="correo" autocomplete="off" required>
+                </div>
+            {% endif %}
+            <div class="input-box">
+                <select name="paquete">
+                {% for paquete in evento.paquetes %}
+                    <option value="{{ paquete.id }}">{{ paquete.rol }} {% for actividad in paquete.actividades %}{{ actividad.nombre }} {% endfor %}</option>
+                {% endfor %}
+                </select>
+            </div>
+            
+            <button class="btn" type="submit">Inscribirse</button>
+        </form>
+    </div>
+
+</div>
+{%endblock%}

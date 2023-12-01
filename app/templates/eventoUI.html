@@ -17,13 +17,19 @@ E-vent
     <h2>Tipo: {{ evento.tipo }}</h2>
     <h2>Actividades</h2>
     {% for actividad in evento.actividades %}
-        <h3>{{ actividad.nombre }}</h3>
-        <p>{{ actividad.descripcion }}</p>
+    <h3>{{ actividad.nombre }}</h3>
+    <p>{{ actividad.descripcion }}</p>
     {% endfor %}
     
-
-    <button>
-        <a class="btn" style="margin-bottom: 0;" href="{{ url_for('inscripcion.inscripcion', id=evento.id) }}">Inscribirse</a>
-    </button>
+    {% if evento.fechaInscripcion < fechaActual %}
+        <button>
+            <a class="btn" style="margin-bottom: 0;" href="{{ url_for('inscripcion.inscripcion', id=evento.id) }}">Inscribirse</a>
+        </button>
+    {% else %}
+        <h2>Fecha de Inscripción: {{ evento.fechaInscripcion }}</h2>
+        <button>
+            <a class="btn" style="margin-bottom: 0;" href="{{ url_for('inscripcion.preinscripcion', id=evento.id) }}">PreInscribirse</a>
+        </button>
+    {% endif %}
 </div>
 {%endblock%}
