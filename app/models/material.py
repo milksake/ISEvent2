@@ -5,3 +5,4 @@ class Material(db.Entity):
     nombre = Required(str, unique=True)
     cantidad = Required(int)
     tipo = Required(str)
+    egreso = Required("Egreso")

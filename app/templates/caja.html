@@ -1,0 +1,45 @@
+{%extends "layout.html"%}
+
+{%block title%}
+Material
+{%endblock%}
+
+{%block estilos%}
+{%endblock%}
+
+{%block contenido%}
+<div class="container">
+    <h2>Ingresos</h2>
+    <button><a href="{{url_for('caja.añadirIngreso')}}">Añadir Ingreso</a></button>
+    <table>
+        <tr>
+            <th>Monto</th>
+            <th>Descripcion</th>
+            <th>Fecha</th>
+        </tr>
+        {% for ing in ingresos %}
+        <tr>
+            <td>{{ ing.monto }}</td>
+            <td>{{ ing.descripcion }}</td>
+            <td>{{ ing.fecha }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h2>Egresos</h2>
+    <button><a href="{{url_for('caja.añadirEgreso')}}">Añadir Egreso</a></button>
+    <table>
+        <tr>
+            <th>Monto</th>
+            <th>Descripcion</th>
+            <th>Fecha</th>
+        </tr>
+        {% for ing in egresos %}
+        <tr>
+            <td>{{ ing.monto }}</td>
+            <td>{{ ing.descripcion }}</td>
+            <td>{{ ing.fecha }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{%endblock%}

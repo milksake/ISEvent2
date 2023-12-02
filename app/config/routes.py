@@ -152,9 +152,13 @@ def añadirMaterial():
     #if current_user.rol != "admin":
     #    abort(403)
     if request.method == 'POST':
+        eg = db.Egreso(monto=int(request.form['costo']),
+                       descripcion="material",
+                       fecha=datetime.now())
         db.Material(nombre=request.form['nombre'],
                     cantidad=request.form['cantidad'],
-                    tipo=request.form['tipo'])
+                    tipo=request.form['tipo'],
+                    egreso=eg)
         flash("Material Creado")
         return redirect(url_for('config.materiales'))
     return render_template("añadirMaterial.html")

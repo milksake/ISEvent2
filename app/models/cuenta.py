@@ -10,7 +10,7 @@ class Cuenta(db.Entity, UserMixin):
     rol = Required(str)
     imagen = Optional(str)
     inscripciones = Set("Inscripcion")
-    cuenta_eventos = Set("Evento")
+    comites = Set("Comite")
 
     def check_password(self, password):
         return check_password_hash(self.contrasena, password)

@@ -21,11 +21,16 @@ def inscripcion(id):
         return redirect(url_for("main.index"))
     if request.method == 'POST':
         paq = db.Paquete[request.form['paquete']]
+        nowDateTime = datetime.now()
+        ing = db.Ingreso(monto=int(paq.precio),
+                   descripcion="inscripcion",
+                   fecha=nowDateTime)
         db.Inscripcion(documentoId = request.form['docId'],
                        paquete = paq,
                        cuenta = current_user,
-                       fecha = datetime.now(),
-                       preinscripcion = False)
+                       fecha = nowDateTime,
+                       preinscripcion = False,
+                       ingreso=ing)
         flash('Inscripcion completa')
         return redirect(url_for('inscripcion.evento', id=eve.id))
     return render_template("inscripcion.html", evento=eve)

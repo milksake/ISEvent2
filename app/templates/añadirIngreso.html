@@ -1,7 +1,7 @@
 {%extends "layout.html"%}
 
 {%block title%}
-Material
+{{title}}
 {%endblock%}
 
 {%block estilos%}
@@ -11,23 +11,23 @@ Material
 <div class="page">
     
     <div class="form">
-        <h1>Material</h1>
+        <h1>{{title}}</h1>
         <form action="" method="post">
             <div class="input-box">
-                <label>Nombre</label>
+                <label>Monto</label>
                 <br>
-                <input type="text" name="nombre" autocomplete="off" required>
+                <input type="number" name="monto" autocomplete="off" required>
             </div>
             <div class="input-box">
-                <label>Tipo</label>
+                <label>Descripción</label>
                 <br>
-                <input type="text" name="tipo" autocomplete="off" required>
+                <input type="text" name="descripcion" autocomplete="off" required>
             </div>
             <div class="input-box">
-                <label>Cantidad</label>
+                <label>Fecha</label>
                 <br>
-                <input type="number" name="cantidad" autocomplete="off" required>
-            </div>
+                <input type="date" name="fecha" autocomplete="off" required>
+            </div>         
             <button class="btn" type="submit">Guardar</button>
         </form>
     </div>

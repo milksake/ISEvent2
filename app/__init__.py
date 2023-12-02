@@ -11,6 +11,10 @@ from app.models.actividad import Actividad
 from app.models.paquete import Paquete
 from app.models.evento import Evento, createEventos
 from app.models.material import Material
+from app.models.comite import Comite
+from app.models.egreso import Egreso
+from app.models.expositor import Expositor
+from app.models.ingreso import Ingreso
 
 from pony.flask import Pony
 from werkzeug.security import generate_password_hash

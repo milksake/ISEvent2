@@ -11,4 +11,5 @@ class Inscripcion(db.Entity):
     fecha = Required(datetime)
     paquete = Required("Paquete")
     cuenta = Optional("Cuenta")
+    ingreso = Optional("Ingreso")
 

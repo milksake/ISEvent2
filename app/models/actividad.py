@@ -12,3 +12,4 @@ class Actividad(db.Entity):
     ambiente = Required('Ambiente')
     evento = Required('Evento')
     paquetes = Set('Paquete')
+    expositores = Set("Expositor")
