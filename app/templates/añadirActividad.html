@@ -44,6 +44,14 @@ Agregar actividad
     {{ form.descripcion(cols=40, rows=5) }}
     <br>
 
+    <label for="evento">Evento:</label>
+    {{ form.evento(size=20) }}
+    <br>
+
+    <label for="ambiente">Ambiente:</label>
+    {{ form.ambiente(size=20) }}
+    <br>
+
     <input type="submit" value="Guardar">
 </form>
 {%endblock%}
