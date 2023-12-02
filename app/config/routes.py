@@ -43,6 +43,65 @@ def modificarEvento(id):
         flash("Evento modificado")
         return redirect(url_for('config.eventos'))
     return render_template("añadirEvento.html")
+
+@bp.route('/paquetes')
+@bp.route('/paquetes/<id>')
+@login_required
+def paquetes(id=None):
+    if not id:
+        evess = db.Evento.select(lambda e : True)
+        return render_template("paqueteUI.html", eventos=evess)
+    eve = db.Evento.get(id=int(id))
+    if (not eve):
+        flash("Ese evento no existe")
+        return redirect(url_for("main.index"))
+    return render_template("paqueteUI.html", evento=eve)
+
+@bp.route('/añadirPaquete/<id>', methods=['GET', 'POST'])
+@login_required
+def añadirPaquete(id = None):
+    eve = db.Evento.get(id=int(id))
+    if not eve:
+        flash("No existe ese evento")
+        return redirect(url_for('main.index'))
+    if request.method == 'POST':
+        acts_id = request.form.getlist('actividades')
+        if len(acts_id) == 0:
+            flash("Se tiene que elegir al menos una actividad")
+            return redirect(url_for('main.index'))
+        acts_id = [int(a) for a in acts_id]
+        acts = db.Actividad.select(lambda a: a.id in acts_id)
+        db.Paquete(
+            precio = int(request.form['precio']),
+            rol = request.form['rol'],
+            evento = eve,
+            actividades = acts,
+        )
+        flash("Paquete añadido")
+        return redirect(url_for('config.paquetes', id=id))
+    return render_template("añadirPaquete.html", evento=eve)
+
+@bp.route('/modificarPaquete/<id>', methods=['GET', 'POST'])
+@login_required
+def modificarPaquete(id):
+    paq = db.Paquete.get(id=int(id))
+    if not paq:
+        flash("No existe ese paquete")
+        return redirect(url_for('main.index'))
+    if request.method == 'POST':
+        acts_id = request.form.getlist('actividades')
+        if len(acts_id) == 0:
+            flash("Se tiene que elegir al menos una actividad")
+            return redirect(url_for('main.index'))
+        acts_id = [int(a) for a in acts_id]
+        acts = db.Actividad.select(lambda a: a.id in acts_id)
+        paq.precio = int(request.form['precio'])
+        paq.rol = request.form['rol']
+        paq.actividades = acts
+        flash("Paquete modificado")
+        return redirect(url_for('config.paquetes', id=paq.evento.id))
+    return render_template("añadirPaquete.html", evento=paq.evento)
+
 #CF-20-01
 @bp.route('/ambientes')
 @login_required

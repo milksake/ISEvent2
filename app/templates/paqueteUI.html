@@ -1,0 +1,41 @@
+{%extends "layout.html"%}
+
+{%block estilos%}
+{%endblock%}
+
+{%block title%}
+E-vent
+{%endblock%}
+
+{%block contenido%}
+{% if evento %}
+    <h2>Paquetes de {{ evento.nombre }}</h2>
+
+    <button>
+    <a class="btn" style="margin-bottom: 0;" href="{{ url_for('config.añadirPaquete', id=evento.id) }}">Agregar paquete</a>
+    </button>
+    <table>
+        <tr>
+            <th>Rol</th>
+            <th>Actividades</th>
+            <th>Precio</th>
+        </tr>
+        {% for paquete in evento.paquetes %}
+        <tr>
+            <td>{{ paquete.rol }}</td>
+            <td>{% for actividad in paquete.actividades %}{{ actividad.nombre }} {% endfor %}</td>
+            <td>{{ paquete.precio }}</td>
+            <td><button><a href="{{ url_for('config.modificarPaquete', id=paquete.id) }}">Modificar</a></button></td>
+        </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <h2>Elige Evento</h2>
+    {% for eve in eventos %}
+        <a>{{ eve.id }}: <a href="{{ url_for('config.paquetes', id=eve.id) }}">{{ eve.nombre }}</a>
+    {% endfor %}
+    
+{% endif %}
+
+
+{%endblock%}

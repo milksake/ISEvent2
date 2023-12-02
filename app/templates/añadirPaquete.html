@@ -1,0 +1,37 @@
+{%extends "layout.html"%}
+
+{%block title%}
+Material
+{%endblock%}
+
+{%block estilos%}
+{%endblock%}
+
+{%block contenido%}
+<div class="page">
+    <div class="form">
+        <h1>Paquete</h1>
+        <form action="" method="post">
+            <div class="input-box">
+                <label>Precio</label>
+                <br>
+                <input type="number" name="precio" autocomplete="off" required>
+            </div>
+            <div class="input-box">
+                <label>Rol</label>
+                <br>
+                <input type="text" name="rol" autocomplete="off" required>
+            </div>
+            <h2>Actividades</h2>
+            {% for act in evento.actividades %}
+            <div>
+                <input type="checkbox" name="actividades" value="{{ act.id }}">
+                <label>{{ act.nombre }}</label>
+            </div>
+            {% endfor %}      
+            
+            <button class="btn" type="submit">Guardar</button>
+        </form>
+    </div>
+</div>
+{%endblock%}
