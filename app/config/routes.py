@@ -193,6 +193,8 @@ def añadirActividad():
         tipo = form.tipo.data
         imagen= form.imagen.data
         descripcion = form.descripcion.data
+        evento= form.evento.data
+        ambiente= form.ambiente.data
         #aniadiendo a base de datos
         db.Actividad(nombre= nombre,
                      fechaInicio= fechaInicio,
@@ -200,6 +202,8 @@ def añadirActividad():
                      tipo= tipo,
                      imagen= imagen,
                      descripcion= descripcion,
+                     evento= db.Evento.get(nombre=evento),
+                     ambiente= db.Ambiente.get(nombre= ambiente),
                     )
         flash("Actividad agregada")
         return redirect(url_for('config.actividades'))
