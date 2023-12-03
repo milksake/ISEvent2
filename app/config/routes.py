@@ -20,6 +20,7 @@ def añadirEvento():
                     descripcion=request.form['descripcion'],
                     fechaInicio=request.form['fechaInicio'],
                     fechaFin=request.form['fechaFin'],
+                    fechaInscripcion=request.form['fechaInscripcion'],
                     imagen=request.form['imagen'],
                     tipo=request.form['tipo'])
         flash("Evento agregado")
@@ -38,6 +39,7 @@ def modificarEvento(id):
         ev.descripcion=request.form['descripcion']
         ev.fechaInicio=request.form['fechaInicio']
         ev.fechaFin=request.form['fechaFin']
+        ev.fechaInscripcion=request.form['fechaInscripcion'];
         ev.imagen=request.form['imagen']
         ev.tipo=request.form['tipo']
         flash("Evento modificado")

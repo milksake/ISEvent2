@@ -17,6 +17,7 @@ from app.models.expositor import Expositor
 from app.models.ingreso import Ingreso
 
 from pony.flask import Pony
+from pony.orm import commit
 from werkzeug.security import generate_password_hash
 
 def create_app(config_class=Config):
@@ -87,7 +88,11 @@ def create_app(config_class=Config):
                 flash("Ambas contraseñas deben ser iguales")
                 succesful = False
             if succesful:
-                newUser = db.Cuenta(nombre=request.form['nombre'], contrasena=generate_password_hash(request.form['contrasena']), correo=request.form['correo'], rol="ninguno")
+                newUser = db.Cuenta(nombre=request.form['nombre'],
+                                    contrasena=generate_password_hash(request.form['contrasena']),
+                                    correo=request.form['correo'],
+                                    rol="ninguno")
+                commit()
                 login_user(newUser, remember=True)
                 return redirect(url_for('main.index'))
         return render_template('register.html')
