@@ -1,5 +1,5 @@
 from app.extensions import db
-from pony.orm import Required, Optional
+from pony.orm import Required, Optional, Set
 from datetime import datetime
 
 class Inscripcion(db.Entity):
@@ -12,4 +12,5 @@ class Inscripcion(db.Entity):
     paquete = Required("Paquete")
     cuenta = Optional("Cuenta")
     ingreso = Optional("Ingreso")
+    asistencias = Set("Actividad")
 

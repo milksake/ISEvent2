@@ -88,3 +88,28 @@ footer {
 section a {
     color: #007bff; /* Color de los enlaces en el contenido */
 }
+
+table {
+	border-collapse: collapse;
+}
+
+table td {
+    color: #636363;
+	border: 1px solid #dddfe1;
+    padding: 10px;
+}
+
+table th {
+    padding: 10px;
+	background-color: #54585d;
+	color: #ffffff;
+	border: 1px solid #54585d;
+}
+
+.horizontal {
+    max-width: fit-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 15px;
+}

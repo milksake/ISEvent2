@@ -54,7 +54,7 @@ Inscripcion
             <div class="input-box">
                 <select name="paquete">
                 {% for paquete in evento.paquetes %}
-                    <option value="{{ paquete.id }}">{{ paquete.rol }} {% for actividad in paquete.actividades %}{{ actividad.nombre }} {% endfor %}</option>
+                    <option value="{{ paquete.id }}">{{ paquete.rol }} - {{ actividades|join(', ', attribute='nombre') }}</option>
                 {% endfor %}
                 </select>
             </div>

@@ -8,12 +8,3 @@ class Ambiente(db.Entity):
     imagen = Required(str)
     actividades = Set('Actividad')
     
-
-#ambienteslist = [Ambiente("0", "Green Hills", "19", "Sample text", "Sample image")]
-#CF-20-04
-@db_session
-def createAmbientes():
-    x = Ambiente.get(nombre="Green Hills")
-    if (x):
-        x.delete()
-    Ambiente(nombre="Green Hills", aforo=19, descripcion="Sample text", imagen="Sample image")

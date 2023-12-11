@@ -13,3 +13,4 @@ class Actividad(db.Entity):
     evento = Required('Evento')
     paquetes = Set('Paquete')
     expositores = Set("Expositor")
+    asistentes = Set("Inscripcion")

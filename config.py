@@ -4,4 +4,4 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     SECRET_KEY = "os.environ.get('SECRET_KEY')"
-    PONY = {'provider': 'sqlite', 'filename': 'database.db', 'create_db': True}
+    PONY = {'provider': 'sqlite', 'filename': 'database.db'}

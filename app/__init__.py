@@ -4,17 +4,6 @@ from config import Config
 
 # Database
 from app.extensions import db
-from app.models.cuenta import Cuenta, createUsers
-from app.models.ambiente import Ambiente, createAmbientes
-from app.models.inscripcion import Inscripcion
-from app.models.actividad import Actividad 
-from app.models.paquete import Paquete
-from app.models.evento import Evento, createEventos
-from app.models.material import Material
-from app.models.comite import Comite
-from app.models.egreso import Egreso
-from app.models.expositor import Expositor
-from app.models.ingreso import Ingreso
 
 from pony.flask import Pony
 from pony.orm import commit
@@ -26,13 +15,8 @@ def create_app(config_class=Config):
 
     # Pony Database
     db.bind(**app.config["PONY"])
-    db.generate_mapping(create_tables=True)
+    db.generate_mapping()
     Pony(app)
-
-    # Initialize tables
-    createUsers()
-    createAmbientes()
-    createEventos()
 
     # Login
     login_manager = LoginManager()
