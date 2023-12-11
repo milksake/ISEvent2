@@ -1,6 +1,27 @@
 {%extends "layout.html"%}
 
 {%block estilos%}
+<script>
+window.onload = function () {
+    var coll;
+    var content;
+    coll = document.getElementById("showActs");
+    content = document.getElementById("acts");
+    coll.addEventListener("click", function() {
+        if (content.style.display === "block") {
+          content.style.display = "none";
+        } else {
+          content.style.display = "block";
+        }
+    });
+};
+</script>
+<style>
+#showActs:hover {
+    color: grey;
+    cursor: pointer;
+}
+</style>
 {%endblock%}
 
 {%block title%}
@@ -8,17 +29,45 @@ E-vent
 {%endblock%}
 
 {%block contenido%}
-<form action="">
-    <input type="text" placeholder="Buscar.." name="query">
-    <button class="btn" type="submit" style="margin-bottom: 0;">Buscar</button>
-</form>
-<form action="" method="post">
-    {% for evento in eventos %}
-    <div>
-        {{ evento.nombre }}
-        <a class="btn" href="{{ url_for('asistencia.tomarAsistencia', idEvento=evento.id) }}">Tomar asistencia</a>
-        {% endfor %}   
-    </div>
-    
-</form>
+{% if nombreActividad %}
+    <h2>Toma de asistencia de {{ nombreActividad }}</h2>
+    <br>
+    <form action="" method="post">
+        <h3>Inscritos</h3>
+        <br>
+        <table>
+            <tr>
+                <th>Cuenta</th>
+                <th>Paquete</th>
+                <th>Rol</th>
+                <th>Asistencia</th>
+            </tr>
+            {% for insc in inscripciones %}
+                <tr>
+                    <td>{{ insc[0].cuenta.nombre }}</td>
+                    <td>{{ insc[0].paquete.actividades.nombre | join(', ') }}</td>
+                    <td>{{ insc[0].paquete.rol }}</td>
+                    {% if insc[1] %}
+                        <td>&#x2705;</td>
+                    {% else %}
+                        <td><input type="checkbox" name="asistencia" value="{{ insc[0].id }}"></td>
+                    {% endif %}                    
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <button class="btn" type="submit" style="margin-bottom: 0;">Guardar</button>
+    </form>
+{% else %}
+    <h2>Elige Actividad</h2>
+    <br>
+    {% for eve in eventos %}
+        <h3 id="showActs">{{ eve.nombre }}&#9662</h3>
+        <ul id="acts" style="display: none;">
+            {% for act in eve.actividades %}
+                <li><a href="{{ url_for('asistencia.asistencia', id=act.id) }}">{{ act.id }}: {{ act.nombre }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+{% endif %}
 {%endblock%}

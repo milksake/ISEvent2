@@ -1,5 +1,5 @@
 /* Reset de estilos para eliminar márgenes y rellenos predeterminados */
-body, h1, h2, h3, p, ul, li, a {
+body, h1, h2, h3, p, a {
     margin: 0;
     padding: 0;
     list-style: none;
