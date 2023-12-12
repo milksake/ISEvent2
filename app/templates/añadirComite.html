@@ -1,0 +1,69 @@
+{%extends "layout.html"%}
+
+{%block title%}
+E-vent
+{%endblock%}
+
+{%block estilos%}
+<script>
+    window.onload = function () {
+        var container = document.getElementById("cuentasContainer");
+        var button = document.getElementById("cuentasButton");
+        button.addEventListener("click", function() {
+            var inp = document.createElement("input");
+            inp.type = "text";
+            inp.name = "cuentasA";
+            var text = document.createTextNode("Cuenta: ");
+            var listIt = document.createElement("li");
+            listIt.appendChild(text);
+            listIt.appendChild(inp);
+            container.appendChild(listIt);
+        });
+    };
+</script>
+{%endblock%}
+
+{%block contenido%}
+<div class="page">
+    
+    <div class="form">
+        {% if comite %}
+        <h1>Modificar Comite</h1>
+        {% else %}
+        <h1>Añadir Comite</h1>
+        {% endif %}
+        <br>
+        <form action="" method="post">
+            <div class="input-box">
+                <label>Nombre</label>
+                <br>
+                <input type="text" name="nombre" autocomplete="off" {% if comite %}value="{{ comite.nombre }}"{% endif %} required>
+            </div>
+            <br>
+            <h3>Cuentas</h3>
+            <br>
+            {% if comite %}
+            <table>
+                <tr>
+                    <th>Cuenta</th>
+                    <th>Correo</th>
+                    <th>Eliminar?</th>
+                </tr>
+                {% for cuenta in comite.cuentas %}
+                <tr>
+                    <td>{{ cuenta.nombre }}</td>
+                    <td>{{ cuenta.correo }}</td>
+                    <td><input type="checkbox" name="cuentasE" value="{{ cuenta.id }}"></td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+            <ul id="cuentasContainer" style="list-style-type:square;"></ul>
+            <button id="cuentasButton" type="button">Añadir cuenta</button>
+            <br><br>
+            <button class="btn" type="submit">Guardar</button>
+        </form>
+    </div>
+
+</div>
+{%endblock%}

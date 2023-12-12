@@ -1,0 +1,49 @@
+{%extends "layout.html"%}
+
+{%block estilos%}
+{%endblock%}
+
+{%block title%}
+E-vent
+{%endblock%}
+
+{%block contenido%}
+{% if comite %}    
+    <h2>Comite {{ comite.nombre }}</h2>
+    <br>
+    <h3>Cuentas</h3>
+    <br>
+    <table>
+        <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Rol</th>
+        </tr>
+        {% for cuenta in comite.cuentas %}
+        <tr>
+            <td>{{ cuenta.nombre }}</td>
+            <td>{{ cuenta.correo }}</td>
+            <td>{{ cuenta.rol|capitalize }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <h3>Eventos</h3>
+    <ul>
+        {% for eve in comite.eventos %}
+            <li><a href="inscripcion.evento", id="{{ eve.id }}">{{ eve.nombre }}</a></li>
+        {% endfor %}        
+    </ul>
+    <a href="{{ url_for('gestion.modificarComite', id=comite.id) }}"><button type="button">Modificar Comite</button></a>
+{% else %}
+    <h2>Comites</h2>
+    <ul>
+    {% for comit in comites %}
+        <li><a href="{{ url_for('gestion.comites', id=comit.id) }}">{{ comit.nombre }}</a></li>
+    {% endfor %}
+    </ul>
+    <br>
+    <a href="{{ url_for('gestion.añadirComite') }}"><button type="button">Añadir Comité</button></a>
+{% endif %}
+
+{%endblock%}

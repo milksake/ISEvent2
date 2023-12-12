@@ -8,28 +8,60 @@ E-vent
 {%endblock%}
 
 {%block contenido%}
+<div style="display: flex; justify-content:space-between">
 <div>
-    <h1><a href="{{ url_for('inscripcion.evento', id=evento.id) }}">{{evento.nombre}}</a></h1>
-    
+    <a href="{{ url_for('inscripcion.evento', id=evento.id) }}"><h1>{{evento.nombre}}</h1></a>
+    <br>
+    <div><b>Inicio:</b> {{ evento.fechaInicio }}</div>
+    <div><b>Fin:</b> {{ evento.fechaFin }}</div>
+    <div><b>Tipo:</b> {{ evento.tipo }}</div>
+    <br>
     <p>{{ evento.descripcion }}</p>
-    <h2>Inicio: {{ evento.fechaInicio }}</h2>
-    <h2>Fin: {{ evento.fechaFin }}</h2>
-    <h2>Tipo: {{ evento.tipo }}</h2>
+    <br>
     <h2>Actividades</h2>
+    <br>
+    <div style="display: flex; flex-wrap: wrap;">
     {% for actividad in evento.actividades %}
-    <h3>{{ actividad.nombre }}</h3>
-    <p>{{ actividad.descripcion }}</p>
+        <div>
+            <h3>{{ actividad.nombre }}</h3>
+            <br>
+            <div><b>Inicio:</b> {{ actividad.fechaInicio }}</div>
+            <div><b>Fin:</b> {{ actividad.fechaFin }}</div>
+            <div><b>Tipo:</b> {{ actividad.tipo }}</div>
+            <div><b>Ambiente:</b> {{ actividad.ambiente.nombre }}</div>
+            <br>
+            <p>{{ actividad.descripcion }}</p>
+            {% if actividad.expositores|length > 0 %}            
+                <h4>Expositores</h4>
+                <ul>
+                {% for expositor in actividad.expositores %}
+                    <li>{{ expositor.nombre }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+            
+        </div>
     {% endfor %}
+    </div>
     
-    {% if evento.fechaInscripcion < fechaActual %}
-        <button>
-            <a class="btn" style="margin-bottom: 0;" href="{{ url_for('inscripcion.inscripcion', id=evento.id) }}">Inscribirse</a>
-        </button>
-    {% else %}
-        <h2>Fecha de Inscripción: {{ evento.fechaInscripcion }}</h2>
-        <button>
-            <a class="btn" style="margin-bottom: 0;" href="{{ url_for('inscripcion.preinscripcion', id=evento.id) }}">PreInscribirse</a>
-        </button>
+    {% if fechaActual < evento.fechaInscripcionInicio %}
+        <div><b>Fecha de Inscripción:</b> {{ evento.fechaInscripcionIni }}</div>
+        <a class="btn" style="margin-bottom: 0;" href="{{ url_for('inscripcion.preinscripcion', id=evento.id) }}">
+            <button type="button">
+                PreInscribirse
+            </button>
+        </a>
+    {% elif fechaActual < evento.fechaInscripcionFin %}
+        <div><b>Fecha Límite de Inscripción:</b> {{ evento.fechaInscripcionFin }}</div>
+        <a class="btn" style="margin-bottom: 0;" href="{{ url_for('inscripcion.inscripcion', id=evento.id) }}">
+            <button type="button">
+                Inscribirse
+            </button>
+        </a>
     {% endif %}
+</div>
+<div>
+    <img style="max-height: 450px;" src="{{ url_for('static', filename='imgs/eventos/' ~ evento.id ~ '.png') }}" alt="{{ evento.nombre }}">
+</div>
 </div>
 {%endblock%}

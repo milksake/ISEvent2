@@ -23,7 +23,13 @@
                             </div>
                         </div>
                         <a href="{{ url_for('caja.caja') }}">Caja</a>
-                        <a href="{{ url_for('gestion.gestion') }}">Roles</a>
+                        <div class="dropdown">
+                            <div>Gestion de Usuarios</div>
+                            <div class="dropdown-content">
+                                <a href="{{ url_for('gestion.roles') }}">Roles</a>
+                                <a href="{{ url_for('gestion.comites')}}">Comités</a>
+                            </div>
+                        </div>
                         <div class="dropdown">
                             <div>Reportes</div>
                             <div class="dropdown-content">

@@ -7,7 +7,6 @@ class Actividad(db.Entity):
     fechaInicio = Required(datetime)
     fechaFin = Required(datetime)
     tipo = Required(str)
-    imagen = Required(str)
     descripcion = Required(str)
     ambiente = Required('Ambiente')
     evento = Required('Evento')

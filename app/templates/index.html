@@ -10,9 +10,11 @@ E-vent
 {%block contenido%}
 <div class="container">
     {% if current_user.is_authenticated and current_user.rol == "admin" %}
-    <button>
-        <a class="btn" style="margin-bottom: 0;" href="{{ url_for('config.añadirEvento') }}">Agregar evento</a>
-    </button>
+    <a class="btn" style="margin-bottom: 0;" href="{{ url_for('config.añadirEvento') }}">
+        <button type="button">
+            Agregar evento
+        </button>
+    </a>
     {% endif %}
     {%for evento in eventos%}
         <div>

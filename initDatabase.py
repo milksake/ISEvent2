@@ -6,50 +6,51 @@ from app.extensions import db
 
 @db_session
 def createUsers():
-    x = db.Cuenta.get(nombre="admin")
-    if (x):
-        x.delete()
     db.Cuenta(nombre="admin",
            contrasena=generate_password_hash("devDynamo"),
            correo="example@mail.com",
            rol="admin")
-    x = db.Cuenta.get(nombre="test")
-    if (x):
-        x.delete()
     db.Cuenta(nombre="test",
            contrasena=generate_password_hash("qazoo"),
            correo="asdgaf@zdfadf",
            rol="ninguno")
+    db.Cuenta(nombre="test2",
+           contrasena=generate_password_hash("qwerty"),
+           correo="asdgafggg@zdfadgggf",
+           rol="ninguno")
+    db.Cuenta(nombre="test3",
+           contrasena=generate_password_hash("123456"),
+           correo="affffsdgaf@zdfaffffdf",
+           rol="ninguno")
 
 @db_session
 def createAmbientes():
-    x = db.Ambiente.get(nombre="Green Hills")
-    if (x):
-        x.delete()
     db.Ambiente(nombre="Green Hills", aforo=19, descripcion="Sample text", imagen="Sample image")
 
 @db_session
 def createEventos():
-    x = db.Evento.get(nombre="Evento Ejemplo")
-    if (x):
-        x.delete()
     fechaIni = datetime(2023, 12, 12, 12, 00)
     fechaFin = datetime(2024, 1, 1, 1, 1)
-    fechaIns = datetime(2023, 12, 1, 18, 00)
+    fechaInsIni = datetime(2023, 12, 1, 18, 00)
+    fechaInsFin = datetime(2023, 12, 10, 18, 00)
+    
+    com1 = db.Comite(
+        nombre="Comite 1",
+        cuentas=[db.Cuenta.get(nombre="test"), db.Cuenta.get(nombre="test3")])
     e1 = db.Evento(
         nombre="Evento Ejemplo",
         descripcion="Sample text",
         fechaInicio=fechaIni,
         fechaFin=fechaFin,
-        fechaInscripcion=fechaIns,
-        imagen="Sample image",
-        tipo="Conferencia")
+        fechaInscripcionInicio=fechaInsIni,
+        fechaInscripcionFin=fechaInsFin,
+        tipo="Conferencia",
+        comite=com1)
     act1 = db.Actividad(
         nombre = "Charla 1",
         fechaInicio = fechaIni,
         fechaFin = fechaFin,
         tipo = "Charla",
-        imagen = "No image",
         descripcion = "Esta es una charla",
         ambiente = db.Ambiente.get(nombre="Green Hills"),
         evento = e1)
@@ -62,7 +63,6 @@ def createEventos():
         rol = "profesional",
         evento = e1,
         actividades = [act1])
-    act1.paquetes = [p1, p2]
     e1.paquetes = [p1, p2]
     
 config = Config

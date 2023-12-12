@@ -8,9 +8,11 @@ E-vent
 {%endblock%}
 
 {%block contenido%}
-<button>
-<a class="btn" style="margin-bottom: 0;" href="{{ url_for('config.añadirAmbiente') }}">Agregar ambiente</a>
+<a class="btn" style="margin-bottom: 0;" href="{{ url_for('config.añadirAmbiente') }}">
+<button type="button">
+    Agregar ambiente
 </button>
+</a>
 <form action="">
     <input type="text" placeholder="Buscar.." name="query">
     <button class="btn" type="submit" style="margin-bottom: 0;">Buscar</button>

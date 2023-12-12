@@ -17,7 +17,7 @@ body {
 header {
     background-color: #333; /* Color de fondo del encabezado */
     color: #fff; /* Color de texto en el encabezado */
-    padding: 10px;
+    padding: 20px;
 }
 
 .dropdown {
@@ -63,7 +63,7 @@ nav a, nav div {
 /* Estilo del contenido principal */
 section {
     margin: 20px;
-    padding: 20px;
+    padding: 50px;
     background-color: #fff; /* Color de fondo del contenido */
     border: 1px solid #ccc; /* Borde alrededor del contenido */
 }
@@ -111,5 +111,12 @@ table th {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    gap: 15px;
+}
+
+.form form {
+    display: flex;
+    flex-direction: column;
+    max-width: fit-content;
     gap: 15px;
 }

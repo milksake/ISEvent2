@@ -8,9 +8,11 @@ E-vent
 {%endblock%}
 
 {%block contenido%}
-<button>
-<a class="btn" style="margin-bottom: 0;" href="{{ url_for('config.añadirActividad') }}">Agregar actividad</a>
+<a class="btn" style="margin-bottom: 0;" href="{{ url_for('config.añadirActividad') }}">
+<button type="button">
+    Agregar actividad
 </button>
+</a>
 <form action="">
     <input type="text" placeholder="Buscar.." name="query">
     <button class="btn" type="submit" style="margin-bottom: 0;">Buscar</button>

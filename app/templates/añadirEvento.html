@@ -9,47 +9,67 @@ Agregar ambiente
 
 {%block contenido%}
 <div class="page">
-    
+    <div style="display: flex; justify-content:space-between">
     <div class="form">
-        <h1>Evento</h1>
-        <form action="" method="post">
+        {% if evento %}
+            <h1>Modificar Evento</h1>
+        {% else %}
+            <h1>Añadir Evento</h1>
+        {% endif %}
+        <br>
+        <form action="" method="post" enctype="multipart/form-data">
             <div class="input-box">
                 <label>Nombre</label>
                 <br>
-                <input type="text" name="nombre" autocomplete="off" required>
+                <input type="text" name="nombre" autocomplete="off" {% if evento %}value="{{ evento.nombre }}"{% endif %} required>
             </div>
             <div class="input-box">
                 <label>Descripción</label>
                 <br>
-                <input type="text" name="descripcion" autocomplete="off" required>
+                <input type="text" name="descripcion" autocomplete="off" {% if evento %}value="{{ evento.descripcion }}"{% endif %} required>
             </div>
             <div class="input-box">
-                <label>Fecha de Inicio</label>
+                <label>Fecha de Inicio de Inscripciones</label>
                 <br>
-                <input type="date" name="fechaInicio" autocomplete="off" required>
+                <input type="datetime-local" name="fechaInscripcionIni" autocomplete="off" {% if evento %}value="{{ evento.fechaInscripcionInicio.strftime('%Y-%m-%dT%H:%M') }}"{% endif %} required>
             </div>
             <div class="input-box">
-                <label>Fecha de Fin</label>
+                <label>Fecha de Fin de Inscripciones</label>
                 <br>
-                <input type="date" name="fechaFin" autocomplete="off" required>
-            </div>
-            <div class="input-box">
-                <label>Fecha de Inscripcion</label>
-                <br>
-                <input type="date" name="fechaInscripcion" autocomplete="off" required>
-            </div>
+                <input type="datetime-local" name="fechaInscripcionFin" autocomplete="off" {% if evento %}value="{{ evento.fechaInscripcionFin.strftime('%Y-%m-%dT%H:%M') }}"{% endif %} required>
+            </div>            
             <div class="input-box">
                 <label>Imagen</label>
+                {% if evento %}(solo si se quiere cambiar){% endif %}
                 <br>
-                <input type="text" name="imagen" autocomplete="off" required>
+                <input type="file" name="imagen" accept="image/png, image/jpg, image/jpeg" autocomplete="off" {% if not evento %}required{% endif %}>
             </div>
             <div class="input-box">
                 <label>Tipo</label>
                 <br>
-                <input type="text" name="tipo" autocomplete="off" required>
+                <input type="text" name="tipo" autocomplete="off" {% if evento %}value="{{ evento.tipo }}"{% endif %} required>
             </div>
+            <div class="input-box">
+                <label>Comite</label>
+                <br>
+                <select name="comite">
+                    {% if evento %}
+                        <option value="{{ evento.comite.id }}" selected>{{ evento.comite.nombre }}</option>
+                    {% endif %}
+                    {% for comite in comites %}
+                        <option value="{{ comite.id }}">{{ comite.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
             <button class="btn" type="submit">Guardar</button>
         </form>
+    </div>
+    <div>
+        {% if evento %}
+            <img style="max-height: 450px;" src="{{ url_for('static', filename='imgs/eventos/' ~ evento.id ~ '.png') }}" alt="{{ evento.nombre }}">
+        {% endif %}
+    </div>
     </div>
 
 </div>

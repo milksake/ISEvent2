@@ -4,47 +4,81 @@ from flask_login import login_required, current_user
 from app.extensions import db
 from datetime import datetime
 from app.forms.FormValidarActividad import FormValidarActividad
+from pony.orm import commit
 
 #CF-03-01
 @bp.route('/eventos')
 @login_required
 def eventos():
-    even = db.Evento.select(lambda e : True)
+    even = db.Evento.select()
     return render_template("index.html", eventos=even)
+
 #CF-03-02
 @bp.route('/añadirEvento', methods=['GET', 'POST'])
 @login_required
 def añadirEvento():
     if request.method == 'POST':
-        db.Evento(nombre=request.form['nombre'],
-                    descripcion=request.form['descripcion'],
-                    fechaInicio=request.form['fechaInicio'],
-                    fechaFin=request.form['fechaFin'],
-                    fechaInscripcion=request.form['fechaInscripcion'],
-                    imagen=request.form['imagen'],
-                    tipo=request.form['tipo'])
+        file = request.files['imagen']
+        if not file or file.filename == '' or file.filename.split('.')[-1].lower() not in ['jpg', 'png', 'jpeg']:
+            flash('Seleccione una imágen valida')
+            return redirect(url_for('main.index'))
+        nom = request.form['nombre']
+        ev = db.Evento.get(nombre=nom)
+        if ev:
+            flash('Ese nombre de evento ya existe')
+            return redirect(url_for('main.index'))
+        comit = db.Comite.get(id=int(request.form['comite']))
+        if not comit:
+            flash('Ese comite no es válido')
+        
+        newEve = db.Evento(
+            nombre=nom,
+            descripcion=request.form['descripcion'],
+            fechaInscripcionInicio=datetime.strptime(request.form['fechaInscripcionIni'], '%Y-%m-%dT%H:%M'),
+            fechaInscripcionFin=datetime.strptime(request.form['fechaInscripcionFin'], '%Y-%m-%dT%H:%M'),
+            tipo=request.form['tipo'],
+            comite=comit
+        )
+        commit()
+        file.save("./app/" + url_for('static', filename=f"imgs/eventos/{ev.id}.png"))
         flash("Evento agregado")
         return redirect(url_for('config.eventos'))
-    return render_template("añadirEvento.html")
+    comits = db.Comite.select()
+    return render_template("añadirEvento.html", comites=comits)
+
 #CF-03-03
 @bp.route('/modificarEvento/<id>', methods=['GET','POST'])
 @login_required
 def modificarEvento(id):
+    ev = db.Evento.get(id=int(id))
+    if not ev:
+        flash("No existe ese evento")
+        return redirect(url_for('main.index'))
     if request.method == 'POST':
-        ev = db.Evento.get(id=int(id))
-        if not ev:
-            flash("No existe ese evento")
+        nom = request.form['nombre']
+        ev1 = db.Evento.get(nombre=nom)
+        if ev1 and ev1.nombre != ev.nombre:
+            flash('Ese nombre de evento ya existe')
             return redirect(url_for('main.index'))
+        comit = db.Comite.get(id=int(request.form['comite']))
+        if not comit:
+            flash('Ese comite no es válido')
+
         ev.nombre = request.form['nombre']
         ev.descripcion=request.form['descripcion']
-        ev.fechaInicio=request.form['fechaInicio']
-        ev.fechaFin=request.form['fechaFin']
-        ev.fechaInscripcion=request.form['fechaInscripcion'];
-        ev.imagen=request.form['imagen']
+        ev.fechaInscripcionInicio=datetime.strptime(request.form['fechaInscripcionIni'], '%Y-%m-%dT%H:%M')
+        ev.fechaInscripcionFin=datetime.strptime(request.form['fechaInscripcionFin'], '%Y-%m-%dT%H:%M')
         ev.tipo=request.form['tipo']
+        ev.comite = comit
+
+        file = request.files['imagen']
+        if file and file.filename != '' and file.filename.split('.')[-1].lower() in ['jpg', 'png', 'jpeg']:
+            file.save("./app/" + url_for('static', filename=f"imgs/eventos/{ev.id}.png"))
+
         flash("Evento modificado")
         return redirect(url_for('config.eventos'))
-    return render_template("añadirEvento.html")
+    comits = db.Comite.select()
+    return render_template("añadirEvento.html", evento=ev, comites=comits)
 
 @bp.route('/paquetes')
 @bp.route('/paquetes/<id>')

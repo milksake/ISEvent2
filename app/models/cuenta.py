@@ -1,5 +1,5 @@
 from flask_login import UserMixin
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import check_password_hash
 from app.extensions import db
 from pony.orm import Required, Set, Optional, db_session
 
@@ -8,7 +8,6 @@ class Cuenta(db.Entity, UserMixin):
     contrasena = Required(str)
     correo = Required(str, unique=True)
     rol = Required(str)
-    imagen = Optional(str)
     inscripciones = Set("Inscripcion")
     comites = Set("Comite")
 

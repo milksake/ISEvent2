@@ -10,7 +10,11 @@ Material
 {%block contenido%}
 <div class="container">
     <h2>Ingresos</h2>
-    <button><a href="{{url_for('caja.añadirIngreso')}}">Añadir Ingreso</a></button>
+    <a href="{{url_for('caja.añadirIngreso')}}">
+        <button type="button">
+            Añadir Ingreso
+        </button>
+    </a>
     <table>
         <tr>
             <th>Monto</th>
@@ -26,7 +30,11 @@ Material
         {% endfor %}
     </table>
     <h2>Egresos</h2>
-    <button><a href="{{url_for('caja.añadirEgreso')}}">Añadir Egreso</a></button>
+    <a href="{{url_for('caja.añadirEgreso')}}">
+        <button type="button">
+        Añadir Egreso
+        </button>
+    </a>
     <table>
         <tr>
             <th>Monto</th>

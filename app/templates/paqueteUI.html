@@ -11,9 +11,11 @@ E-vent
 {% if evento %}
     <h2>Paquetes de {{ evento.nombre }}</h2>
 
-    <button>
-    <a class="btn" style="margin-bottom: 0;" href="{{ url_for('config.añadirPaquete', id=evento.id) }}">Agregar paquete</a>
+    <a class="btn" style="margin-bottom: 0;" href="{{ url_for('config.añadirPaquete', id=evento.id) }}">
+    <button type="button">
+        Agregar paquete
     </button>
+    </a>
     <table>
         <tr>
             <th>Rol</th>
@@ -25,7 +27,7 @@ E-vent
             <td>{{ paquete.rol }}</td>
             <td>{% for actividad in paquete.actividades %}{{ actividad.nombre }} {% endfor %}</td>
             <td>{{ paquete.precio }}</td>
-            <td><button><a href="{{ url_for('config.modificarPaquete', id=paquete.id) }}">Modificar</a></button></td>
+            <td><a href="{{ url_for('config.modificarPaquete', id=paquete.id) }}"><button type="button">Modificar</button></a></td>
         </tr>
         {% endfor %}
     </table>
