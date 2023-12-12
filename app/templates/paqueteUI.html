@@ -10,11 +10,12 @@ E-vent
 {%block contenido%}
 {% if evento %}
     <h2>Paquetes de {{ evento.nombre }}</h2>
-
+    <br>
     <a class="btn" style="margin-bottom: 0;" href="{{ url_for('config.añadirPaquete', id=evento.id) }}">
     <button type="button">
         Agregar paquete
     </button>
+    <br><br>
     </a>
     <table>
         <tr>
@@ -33,6 +34,7 @@ E-vent
     </table>
 {% else %}
     <h2>Elige Evento</h2>
+    <br>
     {% for eve in eventos %}
         <a>{{ eve.id }}: <a href="{{ url_for('config.paquetes', id=eve.id) }}">{{ eve.nombre }}</a>
     {% endfor %}

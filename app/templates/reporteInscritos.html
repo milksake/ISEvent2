@@ -67,6 +67,7 @@ E-vent
     </table>
 {% else %}
     <h2>Elige Evento</h2>
+    <br>
     {% for eve in eventos %}
         <a>{{ eve.id }}: <a href="{{ url_for('reporte.reporteInscritos', id=eve.id) }}">{{ eve.nombre }}</a>
     {% endfor %}

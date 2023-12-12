@@ -13,18 +13,25 @@ E-vent
     Agregar ambiente
 </button>
 </a>
+<br><br>
 <form action="">
     <input type="text" placeholder="Buscar.." name="query">
     <button class="btn" type="submit" style="margin-bottom: 0;">Buscar</button>
 </form>
-<form action="" method="post">
-    {% for ambiente in ambientes %}
-    <div>
-        {{ ambiente.nombre }}
-        {{ ambiente.descripcion }}
-        <a class="btn" href="{{ url_for('config.modificarAmbiente', id=ambiente.idAmbiente) }}">Modificar Ambiente</a>
-        {% endfor %}   
+<br>
+{% for ambiente in ambientes %}
+<div style="border: solid gray; padding:20px; display:flex; justify-content:space-between; margin-bottom:20px;">
+    <div>    
+    <h3><a href="{{ url_for('config.modificarAmbiente', id=ambiente.id) }}">{{ ambiente.nombre }}</a></h3>
+        <br>
+        <div><b>Aforo:</b> {{ ambiente.aforo }}</div>
+        <br>
+        <p>{{ ambiente.descripcion }}</p>
+        </div>
+        <div>
+            <img style="max-height: 300px;" src="{{ url_for('static', filename='imgs/ambientes/'~ ambiente.id ~ '.png') }}" alt="">
+        </div>
     </div>
-    
-</form>
+    </div>
+{% endfor %}
 {%endblock%}

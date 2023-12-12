@@ -13,22 +13,34 @@ E-vent
     Agregar actividad
 </button>
 </a>
+<br>
+<br>
 <form action="">
     <input type="text" placeholder="Buscar.." name="query">
     <button class="btn" type="submit" style="margin-bottom: 0;">Buscar</button>
 </form>
-<form action="" method="post">
+<br>
+<table>
+    <tr>
+        <th>Nombre</th>
+        <th>Evento</th>
+        <th>Inicio</th>
+        <th>Fin</th>
+        <th>Tipo</th>
+        <th>Descripcion</th>
+    </tr> 
     {% for actividad in actividades %}
-    <div>
-        {{ actividad.nombre }}
-        {{ actividad.fechaInicio }}
-        {{ actividad.fechaFin }}
-        {{ actividad.tipo }}
-        {{ actividad.imagen }}
-        {{ actividad.descripcion }}
-        <a class="btn" href="{{ url_for('config.modificarActividad', id=actividad.idActividad) }}">Modificar Actividad</a>
+    <tr>
+        <td>{{ actividad.nombre }}</td>
+        <td><a href="{{url_for('inscripcion.evento', id=actividad.evento.id)}}">{{ actividad.evento.nombre }}</a></td>
+        <td>{{ actividad.fechaInicio }}</td>
+        <td>{{ actividad.fechaFin }}</td>
+        <td>{{ actividad.tipo }}</td>
+        <td>{{ actividad.descripcion }}</td>
+        <td><a class="btn" href="{{ url_for('config.modificarActividad', id=actividad.id) }}">Modificar Actividad</a></td>
         {% endfor %}   
-    </div>
+    </tr>
     
-</form>
+</table>
+    
 {%endblock%}

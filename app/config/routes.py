@@ -40,7 +40,7 @@ def añadirEvento():
             comite=comit
         )
         commit()
-        file.save("./app/" + url_for('static', filename=f"imgs/eventos/{ev.id}.png"))
+        file.save("./app/" + url_for('static', filename=f"imgs/eventos/{newEve.id}.png"))
         flash("Evento agregado")
         return redirect(url_for('config.eventos'))
     comits = db.Comite.select()
@@ -142,36 +142,59 @@ def modificarPaquete(id):
 @bp.route('/ambientes')
 @login_required
 def ambientes():
-    amb = db.Ambiente.select(lambda a : True)
+    amb = db.Ambiente.select(lambda a: request.args.get("query", default="") in a.nombre)
     return render_template("ambienteUI.html", ambientes=amb)
+
 #CF-20-02
 @bp.route('/añadirAmbiente', methods=['GET', 'POST'])
 @login_required
 def añadirAmbiente():
     if request.method == 'POST':
-        db.Ambiente(nombre=request.form['nombre'],
+        file = request.files['imagen']
+        if not file or file.filename == '' or file.filename.split('.')[-1].lower() not in ['jpg', 'png', 'jpeg']:
+            flash('Seleccione una imágen valida')
+            return redirect(url_for('main.index'))
+        nom = request.form['nombre']
+        amb = db.Ambiente.get(nombre=nom)
+        if amb:
+            flash("Ese nombre de evento ya existe pruebe con otro")
+            return redirect(url_for('main.index'))
+        
+        newAmb = db.Ambiente(nombre=request.form['nombre'],
                     aforo=request.form['aforo'],
-                    descripcion=request.form['descripcion'],
-                    imagen=request.form['imagen'])
+                    descripcion=request.form['descripcion'])
+        commit()
+        file.save("./app/" + url_for('static', filename=f"imgs/ambientes/{newAmb.id}.png"))
         flash("Ambiente agregado")
         return redirect(url_for('config.ambientes'))
     return render_template("añadirAmbiente.html")
+
 #CF-20-03
 @bp.route('/modificarAmbientes/<id>', methods=['GET','POST'])
 @login_required
 def modificarAmbiente(id):
+    amb = db.Ambiente.get(id=int(id))
+    if not amb:
+        flash("No existe ese ambiente")
+        return redirect(url_for('main.index'))
     if request.method == 'POST':
-        amb = db.Ambiente.get(id=int(id))
-        if not amb:
-            flash("No existe ese ambiente")
+        nom = request.form['nombre']
+        amb2 = db.Ambiente.get(nombre=nom)
+        if amb2 and amb2.nombre != amb.nombre:
+            flash("Ese nombre de evento ya existe")
             return redirect(url_for('main.index'))
-        amb.nombre = request.form['nombre']
+
+        amb.nombre = nom
         amb.aforo = request.form['aforo']
         amb.descripcion = request.form['descripcion']
-        amb.imagen = request.form['imagen']
+
+        file = request.files['imagen']
+        if file and file.filename != '' and file.filename.split('.')[-1].lower() in ['jpg', 'png', 'jpeg']:
+            file.save("./app/" + url_for('static', filename=f"imgs/ambientes/{amb.id}.png"))
+
         flash("Ambiente modificado")
         return redirect(url_for('config.ambientes'))
-    return render_template("añadirAmbiente.html")
+    return render_template("añadirAmbiente.html", ambiente=amb)
 
 #CF-18-01
 @bp.route('/materiales')
@@ -181,6 +204,7 @@ def materiales():
     #    abort(403)
     mat = db.Material.select(lambda m : True)
     return render_template("materialUI.html", materiales=mat)
+
 #CF-18-02
 @bp.route('/añadirMaterial', methods=['GET', 'POST'])
 @login_required
@@ -198,6 +222,7 @@ def añadirMaterial():
         flash("Material Creado")
         return redirect(url_for('config.materiales'))
     return render_template("añadirMaterial.html")
+
 #CF-18-03
 @bp.route('/modificarMaterial/<id>', methods=['GET', 'POST'])
 @login_required
@@ -219,8 +244,10 @@ def modificarMaterial(id):
 @bp.route('/actividades')
 @login_required
 def actividades():
-    act = db.Actividad.select(lambda a : True)
+    q = request.args.get("query", default="")
+    act = db.Actividad.select(lambda a: q in a.nombre or q in a.evento.nombre or q in a.tipo)
     return render_template("actividadUI.html", actividades=act) #variable de template
+
 #CF-17-02
 @bp.route('/añadirActividad', methods=['GET', 'POST'])
 @login_required
@@ -231,23 +258,32 @@ def añadirActividad():
         fechaInicio= datetime.combine(form.fechaInicio.data, datetime.min.time())
         fechaFin= datetime.combine(form.fechaFin.data, datetime.min.time())
         tipo = form.tipo.data
-        imagen= form.imagen.data
         descripcion = form.descripcion.data
         evento= form.evento.data
         ambiente= form.ambiente.data
+
+        evento = db.Evento.get(nombre= evento)
+        if not evento:
+            flash("Evento no válido")
+            return redirect(url_for('config.actividades'))
+        ambiente = db.Ambiente.get(nombre= ambiente)
+        if not ambiente:
+            flash("Ambiente no válido")
+            return redirect(url_for('config.actividades'))
+        
         #aniadiendo a base de datos
         db.Actividad(nombre= nombre,
                      fechaInicio= fechaInicio,
                      fechaFin= fechaFin,
                      tipo= tipo,
-                     imagen= imagen,
                      descripcion= descripcion,
-                     evento= db.Evento.get(nombre=evento),
-                     ambiente= db.Ambiente.get(nombre= ambiente),
+                     evento= evento,
+                     ambiente= ambiente,
                     )
         flash("Actividad agregada")
         return redirect(url_for('config.actividades'))
     return render_template("añadirActividad.html",form= form)
+
 #CF-17-03
 @bp.route('/modificarActividades/<id>', methods=['GET','POST'])
 @login_required
@@ -260,11 +296,18 @@ def modificarActividad(id):
             return redirect(url_for('main.index'))
         
         act.nombre = form.nombre.data
-        act.fechaInicio =  datetime.combine(form.fechaInicio.data, datetime.min.time())
-        act.fechaFin = datetime.combine(form.fechaFin.data, datetime.min.time())
+        act.fechaInicio = form.fechaInicio.data
+        act.fechaFin = form.fechaFin.data
         act.tipo= form.tipo.data
-        act.imagen= form.imagen.data
         act.descripcion = form.descripcion.data
+
+        print(act.evento.fechaInicio, type(act.evento.fechaInicio))
+        print(form.fechaInicio.data, type(form.fechaInicio.data))
+        if not act.evento.fechaInicio or form.fechaInicio.data < act.evento.fechaInicio:
+            act.evento.fechaInicio = form.fechaInicio.data
+        if not act.evento.fechaFin or act.evento.fechaFin < form.fechaFin.data:
+            act.evento.fechaFin = form.fechaFin.data
+
         flash("Actividad modificada")
         return redirect(url_for('config.actividades'))
     return render_template("añadirActividad.html",form= form)

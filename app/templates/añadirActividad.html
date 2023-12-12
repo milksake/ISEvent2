@@ -17,7 +17,7 @@ Agregar actividad
     </div>
 {% endif %}
 
-<form method="POST" enctype="multipart/form-data">
+<form method="POST">
     {{ form.hidden_tag() }}
 
     <label for="nombre">Nombre:</label>
@@ -34,10 +34,6 @@ Agregar actividad
 
     <label for="tipo">Tipo de Actividad:</label>
     {{ form.tipo(size=20) }}
-    <br>
-
-    <label for="imagen">Imagen de la Actividad:</label>
-    {{ form.imagen }}
     <br>
 
     <label for="descripcion">Descripción:</label>

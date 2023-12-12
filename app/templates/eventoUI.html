@@ -8,21 +8,21 @@ E-vent
 {%endblock%}
 
 {%block contenido%}
-<div style="display: flex; justify-content:space-between">
+<div style="display: flex; justify-content:space-between;">
 <div>
     <a href="{{ url_for('inscripcion.evento', id=evento.id) }}"><h1>{{evento.nombre}}</h1></a>
     <br>
-    <div><b>Inicio:</b> {{ evento.fechaInicio }}</div>
-    <div><b>Fin:</b> {{ evento.fechaFin }}</div>
+    <div><b>Inicio:</b> {{ evento.fechaInicio|default('Sin Fecha', true) }}</div>
+    <div><b>Fin:</b> {{ evento.fechaFin|default('Sin Fecha', true) }}</div>
     <div><b>Tipo:</b> {{ evento.tipo }}</div>
     <br>
     <p>{{ evento.descripcion }}</p>
     <br>
     <h2>Actividades</h2>
     <br>
-    <div style="display: flex; flex-wrap: wrap;">
+    <div style="display: flex; flex-wrap: wrap; gap:15px;">
     {% for actividad in evento.actividades %}
-        <div>
+        <div style="border: solid gray; padding:20px;">
             <h3>{{ actividad.nombre }}</h3>
             <br>
             <div><b>Inicio:</b> {{ actividad.fechaInicio }}</div>
@@ -45,14 +45,18 @@ E-vent
     </div>
     
     {% if fechaActual < evento.fechaInscripcionInicio %}
+        <br>
         <div><b>Fecha de Inscripción:</b> {{ evento.fechaInscripcionIni }}</div>
+        <br>
         <a class="btn" style="margin-bottom: 0;" href="{{ url_for('inscripcion.preinscripcion', id=evento.id) }}">
             <button type="button">
                 PreInscribirse
             </button>
         </a>
     {% elif fechaActual < evento.fechaInscripcionFin %}
+        <br>
         <div><b>Fecha Límite de Inscripción:</b> {{ evento.fechaInscripcionFin }}</div>
+        <br>
         <a class="btn" style="margin-bottom: 0;" href="{{ url_for('inscripcion.inscripcion', id=evento.id) }}">
             <button type="button">
                 Inscribirse

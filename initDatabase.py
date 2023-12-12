@@ -25,7 +25,7 @@ def createUsers():
 
 @db_session
 def createAmbientes():
-    db.Ambiente(nombre="Green Hills", aforo=19, descripcion="Sample text", imagen="Sample image")
+    db.Ambiente(nombre="Green Hills", aforo=19, descripcion="Sample text")
 
 @db_session
 def createEventos():

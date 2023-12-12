@@ -39,9 +39,7 @@ E-vent
                 <br>
                 <input type="text" name="nombre" autocomplete="off" {% if comite %}value="{{ comite.nombre }}"{% endif %} required>
             </div>
-            <br>
             <h3>Cuentas</h3>
-            <br>
             {% if comite %}
             <table>
                 <tr>
@@ -60,7 +58,7 @@ E-vent
             {% endif %}
             <ul id="cuentasContainer" style="list-style-type:square;"></ul>
             <button id="cuentasButton" type="button">Añadir cuenta</button>
-            <br><br>
+            <br>
             <button class="btn" type="submit">Guardar</button>
         </form>
     </div>

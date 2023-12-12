@@ -5,6 +5,5 @@ class Ambiente(db.Entity):
     nombre = Required(str, unique=True)
     aforo = Required(int)
     descripcion = Required(str)
-    imagen = Required(str)
     actividades = Set('Actividad')
     

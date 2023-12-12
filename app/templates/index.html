@@ -9,25 +9,35 @@ E-vent
 
 {%block contenido%}
 <div class="container">
+    <h1>Eventos</h1>
+    <br>
     {% if current_user.is_authenticated and current_user.rol == "admin" %}
     <a class="btn" style="margin-bottom: 0;" href="{{ url_for('config.añadirEvento') }}">
         <button type="button">
             Agregar evento
         </button>
     </a>
+    <br>
+    <br>
     {% endif %}
     {%for evento in eventos%}
-        <div>
+        <div style="border: solid gray; padding:20px; display:flex; justify-content:space-between; margin-bottom:20px;">
+            <div>
             {% if current_user.is_authenticated and current_user.rol == "admin" %}
                 <h2><a href="{{ url_for('config.modificarEvento', id=evento.id) }}">{{evento.nombre}}</a></h2>
             {% else %}
             <h2><a href="{{ url_for('inscripcion.evento', id=evento.id) }}">{{evento.nombre}}</a></h2>
             {% endif %}
-            
+            <br>
+            <div><b>Inicio:</b> {{ evento.fechaInicio|default('Sin fecha', true) }}</div>
+            <div><b>Fin:</b> {{ evento.fechaFin|default('Sin fecha', true) }}</div>
+            <div><b>Tipo:</b> {{ evento.tipo }}</div>
+            <br>
             <p>{{ evento.descripcion }}</p>
-            <h3>Inicio: {{ evento.fechaInicio }}</h3>
-            <h3>Fin: {{ evento.fechaFin }}</h3>
-            <h3>Tipo: {{ evento.tipo }}</h3>
+            </div>
+            <div>
+                <img style="max-height: 400px;" src="{{ url_for('static', filename='imgs/eventos/'~ evento.id ~ '.png') }}" alt="">
+            </div>
         </div>
     {%endfor%}
 </div>
