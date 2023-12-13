@@ -59,7 +59,7 @@ E-vent
         {% for inscripcion in inscripciones %}                
             <tr>
                 <td>{{ inscripcion.cuenta.nombre }}</td>
-                <td>{% for actividad in inscripcion.paquete.actividades %}{{ actividad.nombre }} {% endfor %}</td>
+                <td>{{ inscripcion.paquete.actividades|join(', ', attribute='nombre') }}</td>
                 <td>{{ inscripcion.paquete.rol }}</td>
                 <td>{{ inscripcion.fecha }}</td>
             </tr>

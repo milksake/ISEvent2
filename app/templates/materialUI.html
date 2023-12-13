@@ -8,14 +8,32 @@ E-vent
 {%endblock%}
 
 {%block contenido%}
-<a class="btn" style="margin-bottom: 0;" href="{{ url_for('config.añadirMaterial') }}">Agregar Material</a>
-{% for material in materiales %}
-    <div>
-        {{ material.nombre }}
-        {{ material.cantidad }}
-        {{ material.tipo }}
-        <a class="btn" href="{{ url_for('config.modificarMaterial', id=material.idMaterial) }}">Modificar Material</a>
-    </div>
-{% endfor %}
+{% if evento is defined %}
+    <h1>Materiales de {{ evento.nombre }}</h1>
+    <br>
+    <a class="btn" style="margin-bottom: 0;" href="{{ url_for('config.añadirMaterial', id=evento.id) }}"><button type="button">Agregar Material</button></a>
+    <br><br>
+    <table>
+        <tr>
+            <th>Nombre</th>
+            <th>Cantidad</th>
+            <th>Tipo</th>
+        </tr>
+        {% for material in materiales %}
+        <tr>
+                <td>{{ material.nombre }}</td>
+                <td>{{ material.cantidad }}</td>
+                <td>{{ material.tipo|capitalize }}</td>
+                <td><a class="btn" href="{{ url_for('config.modificarMaterial', id=material.id) }}">Modificar Material</a></td>
+            </tr>
+            {% endfor %}
+    </table>
+{% else %}
+    <h2>Elige Evento</h2>
+    <br>
+    {% for eve in eventos %}
+        <a>{{ eve.id }}: <a href="{{ url_for('config.materiales', id=eve.id) }}">{{ eve.nombre }}</a>
+    {% endfor %}
+{% endif %}
 
 {%endblock%}

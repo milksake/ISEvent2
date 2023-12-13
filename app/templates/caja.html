@@ -8,20 +8,29 @@ Material
 {%endblock%}
 
 {%block contenido%}
+{% if evento is defined %}
 <div class="container">
+    <h1>Caja de {{ evento.nombre }}</h1>
+    <br>
+    <b>Utilidad: </b>{{ evento.ingresos|sum(attribute='monto') - evento.egresos|sum(attribute='monto') }}
+    <br><br>
     <h2>Ingresos</h2>
-    <a href="{{url_for('caja.añadirIngreso')}}">
+    <br>
+    <b>Total: </b> {{ evento.ingresos|sum(attribute='monto') }}
+    <br><br>
+    <a href="{{url_for('caja.añadirIngreso', id=evento.id)}}">
         <button type="button">
             Añadir Ingreso
         </button>
     </a>
+    <br><br>
     <table>
         <tr>
             <th>Monto</th>
             <th>Descripcion</th>
             <th>Fecha</th>
         </tr>
-        {% for ing in ingresos %}
+        {% for ing in evento.ingresos %}
         <tr>
             <td>{{ ing.monto }}</td>
             <td>{{ ing.descripcion }}</td>
@@ -29,19 +38,24 @@ Material
         </tr>
         {% endfor %}
     </table>
+    <br>
     <h2>Egresos</h2>
-    <a href="{{url_for('caja.añadirEgreso')}}">
+    <br>
+    <b>Total: </b> {{ evento.egresos|sum(attribute='monto') }}
+    <br><br>
+    <a href="{{url_for('caja.añadirEgreso', id=evento.id)}}">
         <button type="button">
-        Añadir Egreso
+            Añadir Egreso
         </button>
     </a>
+    <br><br>
     <table>
         <tr>
             <th>Monto</th>
             <th>Descripcion</th>
             <th>Fecha</th>
         </tr>
-        {% for ing in egresos %}
+        {% for ing in evento.egresos %}
         <tr>
             <td>{{ ing.monto }}</td>
             <td>{{ ing.descripcion }}</td>
@@ -50,4 +64,11 @@ Material
         {% endfor %}
     </table>
 </div>
+{% else %}
+    <h2>Elige Evento</h2>
+    <br>
+    {% for eve in eventos %}
+        <a>{{ eve.id }}: <a href="{{ url_for('caja.caja', id=eve.id) }}">{{ eve.nombre }}</a>
+    {% endfor %}
+{% endif %}
 {%endblock%}

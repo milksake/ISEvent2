@@ -1,0 +1,69 @@
+{%extends "layout.html"%}
+
+{%block estilos%}
+<script>
+window.onload = function () {
+    var coll;
+    var content;
+    coll = document.getElementById("showActs");
+    content = document.getElementById("acts");
+    coll.addEventListener("click", function() {
+        if (content.style.display === "block") {
+          content.style.display = "none";
+        } else {
+          content.style.display = "block";
+        }
+    });
+};
+</script>
+<style>
+#showActs:hover {
+    color: grey;
+    cursor: pointer;
+}
+</style>
+{%endblock%}
+
+{%block title%}
+E-vent
+{%endblock%}
+
+{%block contenido%}
+{% if nombreActividad is defined %}
+    <h2>Entrega de Materiales de {{ nombreActividad }}</h2>
+    <br>
+    <form action="" method="post">
+        <h3>Materiales</h3>
+        <br>
+        <table>
+            <tr>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Cantidad Disponible</th>
+                <th>Cantidad Entregada</th>
+            </tr>
+            {% for mat in materiales %}
+                <tr>
+                    <td>{{ mat.nombre }}</td>
+                    <td>{{ mat.tipo }}</td>
+                    <td>{{ mat.cantidad }}</td>
+                    <td><input type="number" name="{{mat.id}}" value="0"></td>      
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <button class="btn" type="submit" style="margin-bottom: 0;">Entregar</button>
+    </form>
+{% else %}
+    <h2>Elige Actividad</h2>
+    <br>
+    {% for eve in eventos %}
+        <h3 id="showActs">{{ eve.nombre }}&#9662</h3>
+        <ul id="acts" style="display: none;">
+            {% for act in eve.actividades %}
+                <li><a href="{{ url_for('asistencia.entrega', id=act.id) }}">{{ act.nombre }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+{% endif %}
+{%endblock%}

@@ -10,7 +10,7 @@ def evento(id):
     if (not eve):
         flash("Ese evento no existe")
         return redirect(url_for("main.index"))
-    return render_template("eventoUI.html", evento=eve, fechaActual=datetime.now())
+    return render_template("eventoUI.html", evento=eve, fechaActual=datetime.now().replace(second=0, microsecond=0))
 
 @bp.route('/<id>', methods=['GET', 'POST'])
 @login_required
@@ -21,10 +21,11 @@ def inscripcion(id):
         return redirect(url_for("main.index"))
     if request.method == 'POST':
         paq = db.Paquete[request.form['paquete']]
-        nowDateTime = datetime.now()
-        ing = db.Ingreso(monto=int(paq.precio),
-                   descripcion="inscripcion",
-                   fecha=nowDateTime)
+        nowDateTime = datetime.now().replace(second=0, microsecond=0)
+        ing = db.Ingreso(monto=float(paq.precio),
+                   descripcion=f"Inscripcion: {request.form['current_user.nombre']}",
+                   fecha=nowDateTime,
+                   evento=eve)
         db.Inscripcion(documentoId = request.form['docId'],
                        paquete = paq,
                        cuenta = current_user,
@@ -47,12 +48,12 @@ def preinscripcion(id):
             db.Inscripcion(documentoId = request.form['docId'],
                             paquete = paq,
                             cuenta = current_user,
-                            fecha = datetime.now(),
+                            fecha = datetime.now().replace(second=0, microsecond=0),
                             preinscripcion = True)
         else:
             db.Inscripcion(documentoId = request.form['docId'],
                             paquete = paq,
-                            fecha = datetime.now(),
+                            fecha = datetime.now().replace(second=0, microsecond=0),
                             nombres = request.form['nombres'],
                             apellidos = request.form['apellidos'],
                             correo = request.form['correo'],

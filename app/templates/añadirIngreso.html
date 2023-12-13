@@ -17,7 +17,7 @@
             <div class="input-box">
                 <label>Monto</label>
                 <br>
-                <input type="number" name="monto" autocomplete="off" required>
+                <input type="number" name="monto" step="0.01" min="0" autocomplete="off" required>
             </div>
             <div class="input-box">
                 <label>Descripción</label>
@@ -27,7 +27,7 @@
             <div class="input-box">
                 <label>Fecha</label>
                 <br>
-                <input type="date" name="fecha" autocomplete="off" required>
+                <input type="datetime-local" name="fecha" autocomplete="off" required>
             </div>         
             <button class="btn" type="submit">Guardar</button>
         </form>

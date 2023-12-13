@@ -108,7 +108,7 @@ def añadirPaquete(id = None):
         acts_id = [int(a) for a in acts_id]
         acts = db.Actividad.select(lambda a: a.id in acts_id)
         db.Paquete(
-            precio = int(request.form['precio']),
+            precio = float(request.form['precio']),
             rol = request.form['rol'],
             evento = eve,
             actividades = acts,
@@ -131,7 +131,7 @@ def modificarPaquete(id):
             return redirect(url_for('main.index'))
         acts_id = [int(a) for a in acts_id]
         acts = db.Actividad.select(lambda a: a.id in acts_id)
-        paq.precio = int(request.form['precio'])
+        paq.precio = float(request.form['precio'])
         paq.rol = request.form['rol']
         paq.actividades = acts
         flash("Paquete modificado")
@@ -198,30 +198,48 @@ def modificarAmbiente(id):
 
 #CF-18-01
 @bp.route('/materiales')
+@bp.route('/materiales/<id>')
 @login_required
-def materiales():
+def materiales(id = None):
     #if current_user.rol != "admin":
     #    abort(403)
-    mat = db.Material.select(lambda m : True)
-    return render_template("materialUI.html", materiales=mat)
+    if id:
+        eve = db.Evento.get(id=int(id))
+        if not eve:
+            flash("Ese evento no existe")
+            return redirect(url_for('main.index'))
+        mat = db.Material.select(lambda m : m.actividad.evento.id == int(id))
+        return render_template("materialUI.html", materiales=mat, evento=eve)
+    eves = db.Evento.select()
+    return render_template('materialUI.html', eventos=eves)
 
 #CF-18-02
-@bp.route('/añadirMaterial', methods=['GET', 'POST'])
+@bp.route('/añadirMaterial/<id>', methods=['GET', 'POST'])
 @login_required
-def añadirMaterial():
+def añadirMaterial(id):
     #if current_user.rol != "admin":
     #    abort(403)
+    eve = db.Evento.get(id=int(id))
+    if not eve:
+        flash("Ese evento no es válido")
+        return redirect(url_for('main.index'))
     if request.method == 'POST':
-        eg = db.Egreso(monto=int(request.form['costo']),
-                       descripcion="material",
-                       fecha=datetime.now())
+        act = db.Actividad.get(id=int(request.form['actividad']))
+        if not act:
+            flash("Actividad no válida")
+            return redirect(url_for('main.index'))
+        eg = db.Egreso(monto=float(request.form['costo']),
+                       descripcion=f"Material: {request.form['cantidad']} {request.form['nombre']}",
+                       fecha=datetime.now().replace(second=0, microsecond=0),
+                       evento=eve)
         db.Material(nombre=request.form['nombre'],
                     cantidad=request.form['cantidad'],
                     tipo=request.form['tipo'],
-                    egreso=eg)
+                    egreso=eg,
+                    actividad=act)
         flash("Material Creado")
         return redirect(url_for('config.materiales'))
-    return render_template("añadirMaterial.html")
+    return render_template("añadirMaterial.html", actividades=eve.actividades)
 
 #CF-18-03
 @bp.route('/modificarMaterial/<id>', methods=['GET', 'POST'])
@@ -229,14 +247,25 @@ def añadirMaterial():
 def modificarMaterial(id):
     #if current_user.rol != "admin":
     #    abort(403)
+    mat = db.Material.get(id=int(id))
+    if not mat:
+        flash("Ese material no es válido")
+        return redirect(url_for('main.index'))
     if request.method == 'POST':
-        mat = db.Event.get(id=int(id))
+        act = db.Actividad.get(id=int(request.form['actividad']))
+        if not act:
+            flash("Actividad no válida")
+            return redirect(url_for('main.index'))
         mat.nombre = request.form['nombre']
         mat.cantidad = request.form['cantidad']
         mat.tipo = request.form['tipo']
+        mat.actividad = act
+        mat.egreso.monto=float(request.form['costo'])
+        mat.egreso.descripcion=f"Material: {request.form['cantidad']} {request.form['nombre']}"
+        mat.egreso.fecha=datetime.now().replace(second=0, microsecond=0)
         flash("Material Modificado")
         return redirect(url_for('config.materiales'))
-    return render_template("añadirMaterial.html")
+    return render_template("añadirMaterial.html", actividades=mat.actividad.evento.actividades)
 
 
 #---------------------------INICIO ACTIVIDADES-----------------------------------------------------------

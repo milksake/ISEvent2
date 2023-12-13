@@ -2,6 +2,7 @@ from app.gestion import bp
 from flask import render_template, abort, request, flash, redirect, url_for
 from flask_login import current_user, login_required
 from app.extensions import db
+
 #CF-13-01
 @bp.route('/roles', methods=['GET', 'POST'])
 @login_required

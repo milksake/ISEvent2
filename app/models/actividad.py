@@ -1,5 +1,5 @@
 from app.extensions import db
-from pony.orm import Required, Set, db_session, Optional
+from pony.orm import Required, Set
 from datetime import datetime
 
 class Actividad(db.Entity):
@@ -13,3 +13,4 @@ class Actividad(db.Entity):
     paquetes = Set('Paquete')
     expositores = Set("Expositor")
     asistentes = Set("Inscripcion")
+    materiales = Set("Material")

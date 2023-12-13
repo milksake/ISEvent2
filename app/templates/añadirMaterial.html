@@ -32,8 +32,17 @@ Material
             <div class="input-box">
                 <label>Costo</label>
                 <br>
-                <input type="number" name="costo" autocomplete="off" required>
-            </div>            
+                <input type="number" name="costo" step="0.01" min="0" autocomplete="off" required>
+            </div>
+            <div class="input-box">
+                <label>Actividad</label>
+                <br>
+                <select name="actividad">
+                    {% for actividad in actividades %}
+                        <option value="{{ actividad.id }}">{{ actividad.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <button class="btn" type="submit">Guardar</button>
         </form>
     </div>

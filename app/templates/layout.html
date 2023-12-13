@@ -37,9 +37,10 @@
                             </div>
                         </div>
                         <div class="dropdown">
-                            <div>Asistencia</div>
+                            <div>Asistencias y Materiales</div>
                             <div class="dropdown-content">
                                 <a href="{{ url_for('asistencia.asistencia')}}">Asistencia</a>
+                                <a href="{{ url_for('asistencia.entrega')}}">Entrega de Materiales</a>
                             </div>
                         </div>
                     {% else %}
@@ -80,7 +81,7 @@
         {% if messages %}
             {% for category, message in messages %}
                 <script>
-                    setTimeout(function(){ window.alert("{{message}}"); }, 100);
+                    setTimeout(function(){ window.alert("{{message|forceescape}}"); }, 100);
                 </script>
             {% endfor %}    
         {% endif %}

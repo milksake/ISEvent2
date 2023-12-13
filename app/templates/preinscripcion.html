@@ -1,7 +1,7 @@
 {%extends "layout.html"%}
 
 {%block title%}
-Inscripcion
+Preinscripcion
 {%endblock%}
 
 {%block estilos%}
@@ -11,9 +11,10 @@ Inscripcion
 <div class="page">
     
     <div class="form">
-        <h1>Preinscripcion</h1>
-        <h2>Evento </h2> <p>{{ evento.nombre }}</p>
+        <h1>Preinscripcion para {{ evento.nombre }}</h1>
+        <br>
         <h2>Paquetes</h2>
+        <br>
         <table>
             <tr>
                 <th>Rol</th>
@@ -22,8 +23,8 @@ Inscripcion
             </tr>
             {% for paquete in evento.paquetes %}
             <tr>
-                <td>{{ paquete.rol }}</td>
-                <td>{% for actividad in paquete.actividades %}{{ actividad.nombre }} {% endfor %}</td>
+                <td>{{ paquete.rol|capitalize }}</td>
+                <td>{{ paquete.actividades|join(', ', attribute='nombre') }}</td>
                 <td>{{ paquete.precio }}</td>
             </tr>
             {% endfor %}
@@ -54,7 +55,7 @@ Inscripcion
             <div class="input-box">
                 <select name="paquete">
                 {% for paquete in evento.paquetes %}
-                    <option value="{{ paquete.id }}">{{ paquete.rol }} - {{ actividades|join(', ', attribute='nombre') }}</option>
+                    <option value="{{ paquete.id }}">{{ paquete.rol|capitalize }} - {{ paquete.actividades|join(', ', attribute='nombre') }}</option>
                 {% endfor %}
                 </select>
             </div>
