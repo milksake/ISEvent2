@@ -67,7 +67,7 @@ Agregar ambiente
     </div>
     <div>
         {% if evento %}
-            <img style="max-height: 450px;" src="{{ url_for('static', filename='imgs/eventos/' ~ evento.id ~ '.png') }}" alt="{{ evento.nombre }}">
+            <img style="max-width: 450px;" src="{{ url_for('static', filename='imgs/eventos/' ~ evento.id ~ '.jpg') }}" alt="{{ evento.nombre }}">
         {% endif %}
     </div>
     </div>
