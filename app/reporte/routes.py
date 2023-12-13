@@ -74,4 +74,44 @@ def reporteAsistencias(id = None):
 @bp.route('/materiales/<id>', methods=['GET', 'POST'])
 @login_required
 def reporteMateriales(id = None):
-    return redirect(url_for('main.index'))
+    if not id:
+        eves = db.Evento.select()
+        return render_template("reporteMateriales.html", eventos=eves)
+    eve = db.Evento.get(id=int(id))
+    if not eve:
+        flash("Ese evento no existe.")
+        return redirect(url_for('main.index'))
+    query = select(m for m in db.Material if m.actividad.evento.id == int(id))
+    if request.method == 'POST':
+        f = lambda m : [m.nombre, m.cantidad, m.tipo, m.actividad.nombre]
+        generarExcel(['Material', 'Cantidad', 'Tipo', 'Actividad'], query, f)
+        return send_file("./"+ url_for('static', filename="archivos/reporte.xlsx"), download_name=f'reporte materiales {eve.nombre}.xlsx')
+    return render_template('reporteMateriales.html', materiales=query, nombreEvento=eve.nombre)
+
+@bp.route('/<tipo>/<id>', methods=['GET', 'POST'])
+@login_required
+def reporteCaja(tipo, id):
+    eve = db.Evento.get(id=int(id))
+    if not eve:
+        flash("Ese evento no existe.")
+        return redirect(url_for('main.index'))
+    if request.method == 'POST':
+        query = None
+        if tipo == 'ingresos':
+            query = select(i for i in db.Ingreso if i.evento.id == int(id))
+        elif tipo == 'egresos':
+            query = select(i for i in db.Egreso if i.evento.id == int(id))
+        else:
+            flash("Reporte no válido")
+            return redirect(url_for('main.index'))
+        fechaIni = request.form['fechaIni']
+        if fechaIni and fechaIni != "":
+            query = query.filter(lambda i : i.fecha >= datetime.strptime(fechaIni, '%Y-%m-%dT%H:%M'))
+        fechaFin = request.form['fechaFin']
+        if fechaFin and fechaFin != "":
+            query = query.filter(lambda i : i.fecha <= datetime.strptime(fechaFin, '%Y-%m-%dT%H:%M'))
+        
+        f = lambda m : [m.monto, m.descripcion, m.fecha]
+        generarExcel(['Monto', 'Decripcion', 'Fecha'], query, f)
+        return send_file("./"+ url_for('static', filename="archivos/reporte.xlsx"), download_name=f'reporte {tipo} {eve.nombre}.xlsx')
+    return render_template('reporteCaja.html', tipo=tipo)
