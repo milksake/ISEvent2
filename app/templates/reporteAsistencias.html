@@ -1,0 +1,46 @@
+{%extends "layout.html"%}
+
+{%block estilos%}
+{%endblock%}
+
+{%block title%}
+E-vent
+{%endblock%}
+
+{%block contenido%}
+{% if evento is defined %}
+    <h2>Reporte de Inscritos de {{ evento.nombre }}</h2>
+    <br>
+    <table>
+        <tr>
+            <th>Cuenta</th>
+            {% for act in evento.actividades %}
+                <th>{{ act.nombre }}</th>
+            {% endfor %}
+        </tr>
+        {% for asistencia in asistencias %}     
+            <tr>
+                <td>{{ asistencia[0].cuenta.nombre }}</td>
+                {% for presente in asistencia[1] %}
+                    <td>{% if presente %}&#x2705;{% else %}&#10060;{% endif %}
+                    </td>
+                {% endfor %}
+                
+            </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <form action="" method="post">
+        <button>Exportar</button>
+    </form>
+{% else %}
+    <h2>Elige Evento</h2>
+    <br>
+    {% for eve in eventos %}
+        <a>{{ eve.id }}: <a href="{{ url_for('reporte.reporteAsistencias', id=eve.id) }}">{{ eve.nombre }}</a>
+    {% endfor %}
+    
+{% endif %}
+
+
+{%endblock%}

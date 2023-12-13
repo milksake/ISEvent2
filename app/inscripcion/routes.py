@@ -23,7 +23,7 @@ def inscripcion(id):
         paq = db.Paquete[request.form['paquete']]
         nowDateTime = datetime.now().replace(second=0, microsecond=0)
         ing = db.Ingreso(monto=float(paq.precio),
-                   descripcion=f"Inscripcion: {request.form['current_user.nombre']}",
+                   descripcion=f"Inscripcion: {current_user.nombre}",
                    fecha=nowDateTime,
                    evento=eve)
         db.Inscripcion(documentoId = request.form['docId'],

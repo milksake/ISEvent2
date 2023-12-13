@@ -8,7 +8,7 @@ E-vent
 {%endblock%}
 
 {%block contenido%}
-<div style="display: flex; justify-content:space-between;">
+<div style="display: flex; justify-content:space-between; gap:30px;">
 <div>
     <a href="{{ url_for('inscripcion.evento', id=evento.id) }}"><h1>{{evento.nombre}}</h1></a>
     <br>

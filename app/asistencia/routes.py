@@ -26,8 +26,6 @@ def asistencia(id = None):
 
     ins = select(i for i in db.Inscripcion if int(id) in i.asistencias.id)
     ins = select((i, (i in ins)) for i in db.Inscripcion if int(id) in i.paquete.actividades.id)
-    for p in ins:
-        print(p)
     return render_template("asistenciaUI.html", inscripciones=ins, nombreActividad=act.nombre)
 
 @bp.route('/materiales')
