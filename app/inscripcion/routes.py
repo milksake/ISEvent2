@@ -3,6 +3,7 @@ from flask import render_template, redirect, flash, url_for, request
 from flask_login import login_required, current_user
 from app.extensions import db
 from datetime import datetime
+import qrcode
 
 ############
 # CF-04-01 #
@@ -39,12 +40,29 @@ def inscripcion(id):
                    descripcion=f"Inscripcion: {current_user.nombre}",
                    fecha=nowDateTime,
                    evento=eve)
-        db.Inscripcion(documentoId = request.form['docId'],
-                       paquete = paq,
-                       cuenta = current_user,
-                       fecha = nowDateTime,
-                       preinscripcion = False,
-                       ingreso=ing)
+        
+        # Crear instancia de Inscripcion
+        inscripcion = db.Inscripcion(
+            documentoId=request.form['docId'],
+            paquete=paq,
+            cuenta=current_user,
+            fecha=nowDateTime,
+            preinscripcion=False,
+            ingreso=ing,
+            asistencia_validada=False,
+        )
+        
+        # Commit para obtener el Primary Key asignado
+        db.commit()
+
+        # Obtener el Primary Key recién asignado
+        primary_key = inscripcion.id  # Reemplazar con el nombre correcto del Primary Key
+
+        # Generar el código QR
+        qr = qrcode.make(str(primary_key))
+        qr_path = f"app/static/qr/{primary_key}.png"
+        qr.save(qr_path)
+
         flash('Inscripcion completa')
         return redirect(url_for('inscripcion.evento', id=eve.id))
     return render_template("inscripcion.html", evento=eve)

@@ -1,37 +1,55 @@
-{%extends "layout.html"%}
+{% extends "layout.html" %}
 
-{%block estilos%}
+{% block estilos %}
 <script>
-window.onload = function () {
-    var coll;
-    var content;
-    coll = document.getElementById("showActs");
-    content = document.getElementById("acts");
-    coll.addEventListener("click", function() {
-        if (content.style.display === "block") {
-          content.style.display = "none";
-        } else {
-          content.style.display = "block";
-        }
-    });
-};
+    window.onload = function () {
+        var coll = document.querySelectorAll(".showActs");
+        var content;
+
+        coll.forEach(function (element) {
+            element.addEventListener("click", function () {
+                content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        });
+    };
 </script>
+
 <style>
-#showActs:hover {
-    color: grey;
-    cursor: pointer;
-}
+    .showActs:hover {
+        color: grey;
+        cursor: pointer;
+    }
 </style>
-{%endblock%}
+{% endblock %}
 
-{%block title%}
+{% block title %}
 E-vent
-{%endblock%}
+{% endblock %}
 
-{%block contenido%}
+{% block contenido %}
 {% if nombreActividad %}
     <h2>Toma de asistencia de {{ nombreActividad }}</h2>
     <br>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="{{ url_for('static', filename='scripts/qrCode.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <a id="btn-scan-qr" href="#">
+        <img src="https://dab1nmslvvntp.cloudfront.net/wp-content/uploads/2017/07/1499401426qr_icon.svg" class="img-fluid text-center" width="175">
+    <a/>
+    <canvas hidden="" id="qr-canvas" class="img-fluid"></canvas>
+    </div>
+    <div class="row mx-5 my-3">
+    <button class="btn btn-success btn-sm rounded-3 mb-2" onclick="encenderCamara()">Encender camara</button>
+    <button class="btn btn-danger btn-sm rounded-3" onclick="cerrarCamara()">Detener camara</button>
+    <audio id="audioScaner" src="{{url_for('static',filename= 'scripts/qr-scan.js')}}"></audio>
+    <script src="{{url_for('static',filename= 'scripts/qr-scan.js')}}"></script>
+
     <form action="" method="post">
         <h3>Inscritos</h3>
         <br>
@@ -50,8 +68,8 @@ E-vent
                     {% if insc[1] %}
                         <td>&#x2705;</td>
                     {% else %}
-                        <td><input type="checkbox" name="asistencia" value="{{ insc[0].id }}"></td>
-                    {% endif %}                    
+                        <td><input id= "cb_asistencia{{insc[0].id}}" type="checkbox" name="asistencia" value="{{ insc[0].id }}"></td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </table>
@@ -62,12 +80,12 @@ E-vent
     <h2>Elige Actividad</h2>
     <br>
     {% for eve in eventos %}
-        <h3 id="showActs">{{ eve.nombre }}&#9662</h3>
-        <ul id="acts" style="display: none;">
+        <h3 class="showActs">{{ eve.nombre }}&#9662</h3>
+        <ul style="display: none;">
             {% for act in eve.actividades %}
-                <li><a href="{{ url_for('asistencia.asistencia', id=act.id) }}">{{ act.id }}: {{ act.nombre }}</a></li>
+            <li><a href="{{ url_for('asistencia.asistencia', id=act.id) }}">{{ act.id }}: {{ act.nombre }}</a></li>
             {% endfor %}
         </ul>
     {% endfor %}
 {% endif %}
-{%endblock%}
+{% endblock %}

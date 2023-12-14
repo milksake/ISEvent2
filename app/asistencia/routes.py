@@ -1,8 +1,10 @@
+from flask import jsonify
 from app.asistencia import bp
 from flask import render_template, request, flash, redirect, url_for
 from flask_login import login_required
 from app.extensions import db
 from pony.orm import select, commit
+
 
 ############
 # CF-10-01 #
@@ -23,6 +25,7 @@ def asistencia(id = None):
         for in_id in ins_id:
             toUP = db.Inscripcion.get(id=int(in_id))
             if toUP:
+                toUP.asistencia_validada= True
                 toUP.asistencias.add(act)
         flash('Asistencia guardada')
         return redirect(url_for('main.index'))
@@ -31,6 +34,7 @@ def asistencia(id = None):
     ins = select((i, (i in ins)) for i in db.Inscripcion if int(id) in i.paquete.actividades.id)
     return render_template("asistenciaUI.html", inscripciones=ins, nombreActividad=act.nombre)
 # FIN
+
 
 ############
 # CF-10-02 #
