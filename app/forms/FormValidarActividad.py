@@ -17,7 +17,7 @@ class FormValidarActividad(FlaskForm):
                         Regexp('^[a-zA-Z0-9.,-_]*$', message="Solo se permiten caracteres alfanuméricos, coma, punto, guión y subguión.")])
 
     evento = StringField('Evento', validators=[
-        Length(min=1, max=20, message="La longitud debe estar entre 1 y 20 caracteres."),
+        Length(min=1, max=40, message="La longitud debe estar entre 1 y 20 caracteres."),
         Regexp('^[a-zA-Z0-9.,_ -]*$', message="Solo se permiten caracteres alfanuméricos, coma, punto, guión, subguión y espacio.")
     ])
 

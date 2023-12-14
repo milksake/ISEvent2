@@ -43,6 +43,10 @@ def create_app(config_class=Config):
     from app.reporte import bp as reporte_bp
     app.register_blueprint(reporte_bp, url_prefix='/reporte')
 
+    ##########################
+    # FUNCION INICIAR SESIÓN #
+    ##########################
+
     @app.route('/login', methods=['GET', 'POST'])
     def login():
         if current_user.is_authenticated:
@@ -55,6 +59,12 @@ def create_app(config_class=Config):
             else:
                 flash("Nombre o contraseña no válido")
         return render_template('login.html')
+
+    # FIN
+
+    #######################
+    # FUNCION REGISTRARSE #
+    #######################
 
     @app.route('/register', methods=['GET', 'POST'])
     def register():
@@ -81,6 +91,12 @@ def create_app(config_class=Config):
                 return redirect(url_for('main.index'))
         return render_template('register.html')
     
+    # FIN
+
+    ##################
+    # FUNCION LOGOUT #
+    ##################
+
     @app.route('/logout')
     @login_required
     def logout():
@@ -94,3 +110,5 @@ def create_app(config_class=Config):
         return redirect(url_for('main.index'))
 
     return app
+
+    # FIN

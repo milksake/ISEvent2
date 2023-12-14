@@ -4,6 +4,9 @@ from flask_login import login_required
 from app.extensions import db
 from pony.orm import select, commit
 
+############
+# CF-10-01 #
+############
 @bp.route('/')
 @bp.route('/<id>', methods=['GET', 'POST'])
 @login_required
@@ -27,7 +30,11 @@ def asistencia(id = None):
     ins = select(i for i in db.Inscripcion if int(id) in i.asistencias.id)
     ins = select((i, (i in ins)) for i in db.Inscripcion if int(id) in i.paquete.actividades.id)
     return render_template("asistenciaUI.html", inscripciones=ins, nombreActividad=act.nombre)
+# FIN
 
+############
+# CF-10-02 #
+############
 @bp.route('/materiales')
 @bp.route('/materiales/<id>', methods=['GET', 'POST'])
 def entrega(id = None):
@@ -56,4 +63,4 @@ def entrega(id = None):
         commit()
     
     return render_template("entrega.html", nombreActividad=act.nombre, materiales=act.materiales)
-
+# FIN

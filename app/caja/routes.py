@@ -4,6 +4,9 @@ from flask_login import login_required
 from app.extensions import db
 from datetime import datetime
 
+############
+# CF-12-01 #
+############
 @bp.route('/')
 @bp.route('/<id>')
 @login_required
@@ -15,7 +18,11 @@ def caja(id = None):
             return redirect(url_for('main.index'))
         return render_template("caja.html", evento=eve)
     return render_template("caja.html", eventos=db.Evento.select())
+# FIN
 
+############
+# CF-12-02 #
+############
 @bp.route('/añadirIngreso/<id>', methods=['GET', 'POST'])
 @login_required
 def añadirIngreso(id):
@@ -31,7 +38,11 @@ def añadirIngreso(id):
         flash('Ingreso añadido')
         return redirect(url_for('caja.caja'))
     return render_template('añadirIngreso.html', title='Ingreso', actividades=eve.actividades)
+# FIN
 
+############
+# CF-12-03 #
+############
 @bp.route('/añadirEgreso/<id>', methods=['GET', 'POST'])
 @login_required
 def añadirEgreso(id):
@@ -47,3 +58,4 @@ def añadirEgreso(id):
         flash('Egreso añadido')
         return redirect(url_for('caja.caja'))
     return render_template('añadirIngreso.html', title='Egreso', actividades=eve.actividades)
+# FIN

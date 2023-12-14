@@ -3,7 +3,9 @@ from flask import render_template, abort, request, flash, redirect, url_for
 from flask_login import current_user, login_required
 from app.extensions import db
 
-#CF-13-01
+############
+# CF-13-01 #
+############
 @bp.route('/roles', methods=['GET', 'POST'])
 @login_required
 def roles():
@@ -17,7 +19,11 @@ def roles():
         return redirect(url_for("main.index"))
     cuentas = db.Cuenta.select(lambda c: request.args.get("query", default="") in c.nombre and c.id != current_user.id)
     return render_template("rolUI.html", cuentas=cuentas)
+# FIN
 
+############
+# CF-13-05 #
+############
 @bp.route('/comite/<id>')
 @bp.route('/comite')
 @login_required
@@ -32,7 +38,11 @@ def comites(id = None):
         return render_template('comiteUI.html', comite=comit)
     comits = db.Comite.select()
     return render_template('comiteUI.html', comites=comits)
+# FIN
 
+############
+# CF-13-03 #
+############
 @bp.route('/añadirComite', methods=['GET', 'POST'])
 @login_required
 def añadirComite():
@@ -47,7 +57,11 @@ def añadirComite():
         flash("Comité creado")
         return redirect(url_for('gestion.comites', id=c.id))
     return render_template('añadirComite.html')
+# FIN
 
+############
+# CF-13-04 #
+############
 @bp.route('/modificarComite/<id>', methods=['GET', 'POST'])
 @login_required
 def modificarComite(id):
@@ -68,3 +82,4 @@ def modificarComite(id):
         flash("Comité modificado")
         return redirect(url_for('gestion.comites', id=comit.id))
     return render_template('añadirComite.html', comite=comit)
+# FIN

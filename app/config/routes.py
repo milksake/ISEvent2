@@ -6,14 +6,19 @@ from datetime import datetime
 from app.forms.FormValidarActividad import FormValidarActividad
 from pony.orm import commit
 
-#CF-03-01
+############
+# CF-03-01 #
+############
 @bp.route('/eventos')
 @login_required
 def eventos():
     even = db.Evento.select()
     return render_template("index.html", eventos=even)
+# FIN ----------------------------------------------------------------------------------------------------
 
-#CF-03-02
+############
+# CF-03-02 #
+############
 @bp.route('/añadirEvento', methods=['GET', 'POST'])
 @login_required
 def añadirEvento():
@@ -45,8 +50,12 @@ def añadirEvento():
         return redirect(url_for('config.eventos'))
     comits = db.Comite.select()
     return render_template("añadirEvento.html", comites=comits)
+# FIN ----------------------------------------------------------------------------------------------------
 
-#CF-03-03
+
+############
+# CF-03-03 #
+############
 @bp.route('/modificarEvento/<id>', methods=['GET','POST'])
 @login_required
 def modificarEvento(id):
@@ -79,7 +88,11 @@ def modificarEvento(id):
         return redirect(url_for('config.eventos'))
     comits = db.Comite.select()
     return render_template("añadirEvento.html", evento=ev, comites=comits)
+#FIN
 
+############
+# CF-15-03 #
+############
 @bp.route('/paquetes')
 @bp.route('/paquetes/<id>')
 @login_required
@@ -93,6 +106,9 @@ def paquetes(id=None):
         return redirect(url_for("main.index"))
     return render_template("paqueteUI.html", evento=eve)
 
+############
+# CF-15-01 #
+############
 @bp.route('/añadirPaquete/<id>', methods=['GET', 'POST'])
 @login_required
 def añadirPaquete(id = None):
@@ -116,7 +132,11 @@ def añadirPaquete(id = None):
         flash("Paquete añadido")
         return redirect(url_for('config.paquetes', id=id))
     return render_template("añadirPaquete.html", evento=eve)
+# FIN
 
+############
+# CF-15-02 #
+############
 @bp.route('/modificarPaquete/<id>', methods=['GET', 'POST'])
 @login_required
 def modificarPaquete(id):
@@ -137,15 +157,21 @@ def modificarPaquete(id):
         flash("Paquete modificado")
         return redirect(url_for('config.paquetes', id=paq.evento.id))
     return render_template("añadirPaquete.html", evento=paq.evento)
+# FIN
 
-#CF-20-01
+############
+# CF-20-01 #
+############
 @bp.route('/ambientes')
 @login_required
 def ambientes():
     amb = db.Ambiente.select(lambda a: request.args.get("query", default="") in a.nombre)
     return render_template("ambienteUI.html", ambientes=amb)
+# FIN ----------------------------------------------------------------------------------------------------
 
-#CF-20-02
+############
+# CF-20-02 #
+############
 @bp.route('/añadirAmbiente', methods=['GET', 'POST'])
 @login_required
 def añadirAmbiente():
@@ -168,8 +194,11 @@ def añadirAmbiente():
         flash("Ambiente agregado")
         return redirect(url_for('config.ambientes'))
     return render_template("añadirAmbiente.html")
+# FIN ----------------------------------------------------------------------------------------------------
 
-#CF-20-03
+############
+# CF-20-03 #
+############
 @bp.route('/modificarAmbientes/<id>', methods=['GET','POST'])
 @login_required
 def modificarAmbiente(id):
@@ -195,8 +224,11 @@ def modificarAmbiente(id):
         flash("Ambiente modificado")
         return redirect(url_for('config.ambientes'))
     return render_template("añadirAmbiente.html", ambiente=amb)
+# FIN ----------------------------------------------------------------------------------------------------
 
-#CF-18-01
+############
+# CF-18-01 #
+############
 @bp.route('/materiales')
 @bp.route('/materiales/<id>')
 @login_required
@@ -212,8 +244,11 @@ def materiales(id = None):
         return render_template("materialUI.html", materiales=mat, evento=eve)
     eves = db.Evento.select()
     return render_template('materialUI.html', eventos=eves)
+# FIN ----------------------------------------------------------------------------------------------------
 
-#CF-18-02
+############
+# CF-18-02 #
+############
 @bp.route('/añadirMaterial/<id>', methods=['GET', 'POST'])
 @login_required
 def añadirMaterial(id):
@@ -240,8 +275,11 @@ def añadirMaterial(id):
         flash("Material Creado")
         return redirect(url_for('config.materiales'))
     return render_template("añadirMaterial.html", actividades=eve.actividades)
+# FIN ----------------------------------------------------------------------------------------------------
 
-#CF-18-03
+############
+# CF-18-03 #
+############
 @bp.route('/modificarMaterial/<id>', methods=['GET', 'POST'])
 @login_required
 def modificarMaterial(id):
@@ -266,18 +304,22 @@ def modificarMaterial(id):
         flash("Material Modificado")
         return redirect(url_for('config.materiales'))
     return render_template("añadirMaterial.html", actividades=mat.actividad.evento.actividades)
+# FIN ----------------------------------------------------------------------------------------------------
 
-
-#---------------------------INICIO ACTIVIDADES-----------------------------------------------------------
-#CF-17-01
+############
+# CF-17-01 #
+############
 @bp.route('/actividades')
 @login_required
 def actividades():
     q = request.args.get("query", default="")
     act = db.Actividad.select(lambda a: q in a.nombre or q in a.evento.nombre or q in a.tipo)
     return render_template("actividadUI.html", actividades=act) #variable de template
+# FIN ----------------------------------------------------------------------------------------------------
 
-#CF-17-02
+############
+# CF-17-02 #
+############
 @bp.route('/añadirActividad', methods=['GET', 'POST'])
 @login_required
 def añadirActividad():
@@ -312,8 +354,11 @@ def añadirActividad():
         flash("Actividad agregada")
         return redirect(url_for('config.actividades'))
     return render_template("añadirActividad.html",form= form)
+# FIN
 
-#CF-17-03
+############
+# CF-17-03 #
+############
 @bp.route('/modificarActividades/<id>', methods=['GET','POST'])
 @login_required
 def modificarActividad(id):
@@ -340,4 +385,4 @@ def modificarActividad(id):
         flash("Actividad modificada")
         return redirect(url_for('config.actividades'))
     return render_template("añadirActividad.html",form= form)
-#---------------------------FIN ACTIVIDADES------------------------------------------------------------
+# FIN ----------------------------------------------------------------------------------------------------
