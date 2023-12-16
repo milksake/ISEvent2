@@ -74,66 +74,39 @@ def createUsers():
     
 @db_session
 def createAmbientes():
-    db.Ambiente(nombre="Sala de Auditorio",
-                aforo=100,
-                descripcion="El auditorio es un espacio íntimo y acogedor diseñado para albergar eventos con una capacidad moderada de audiencia. Con un diseño compacto pero funcional, dispone de filas de asientos dispuestas de manera que todos los espectadores disfruten de una excelente visibilidad. La disposición escalonada de las butacas asegura que cada asistente tenga una vista clara del escenario, creando un ambiente cercano que favorece la interacción y la conexión entre el público y los artistas o presentadores."
-                )
-    # nombre de la imagen "1.jpg"
-    
-    db.Ambiente(nombre="Sala de Laboratorio",
-                aforo=30,
-                descripcion="El salón de laboratorio cuenta con una disposición ordenada y funcional de 30 computadoras, creando un entorno propicio para actividades prácticas y experimentación en el ámbito informático. Las estaciones de trabajo están distribuidas de manera uniforme en filas, permitiendo un fácil acceso y movilidad para los usuarios."
-                )
-    # nombre de la imagen "2.jpg"
-    
-    db.Ambiente(nombre="Sala de Aula",
-                aforo=30,
-                descripcion="El aula con capacidad para 35 personas está diseñada para proporcionar un entorno educativo íntimo y colaborativo. Con un diseño eficiente, dispone de pupitres o mesas con sillas para acomodar a cada estudiante de manera cómoda y funcional. La disposición de los asientos está organizada para facilitar la interacción y la participación en discusiones en grupo."
-                )
-    # nombre de la imagen "3.jpg"
-    
-    db.Ambiente(nombre="Patio",
-                aforo=100,
-                descripcion="El patio es un espacio versátil y abierto diseñado para albergar una variedad de eventos y actividades. Con un diseño amplio y accesible, el patio ofrece flexibilidad para la creación de escenarios temporales y la realización de diversas presentaciones al aire libre."
-                )
-    # nombre de la imagen "4.jpg"
-    
-    # Agregar 6 ambientes más
-    db.Ambiente(nombre="Sala de Conferencias",
-                aforo=100,
-                descripcion="La sala de conferencias está equipada con tecnología de punta y ofrece un entorno ideal para presentaciones y discusiones de alto nivel. El diseño del espacio permite una distribución cómoda de los asistentes, fomentando la participación y el intercambio de ideas."
-                )
-    # nombre de la imagen "5.jpg"
-    
-    db.Ambiente(nombre="Sala de Reuniones",
-                aforo=20,
-                descripcion="La sala de reuniones proporciona un entorno íntimo y privado para discusiones ejecutivas y reuniones de equipo. Con una disposición de mesa de conferencias y cómodas sillas, este ambiente favorece la toma de decisiones y la colaboración efectiva."
-                )
-    # nombre de la imagen "6.jpg"
-    
-    db.Ambiente(nombre="Sala de Exposiciones",
-                aforo=40,
-                descripcion="La sala de exposiciones ofrece un espacio amplio y bien iluminado para presentar obras de arte, proyectos o productos. Con paredes modulares y una disposición versátil, este ambiente es perfecto para exhibiciones creativas y eventos culturales."
-                )
-    # nombre de la imagen "7.jpg"
-    
-    db.Ambiente(nombre="Sala de Entrenamiento",
-                aforo=40,
-                descripcion="La sala de entrenamiento está equipada con recursos audiovisuales y mobiliario adaptable para facilitar sesiones de formación y desarrollo profesional. Con un diseño funcional, este ambiente permite a los participantes centrarse en el aprendizaje y la adquisición de habilidades."
-                )
-    # nombre de la imagen "8.jpg"
-    
-    db.Ambiente(nombre="Sala de Proyecciones",
-                aforo=40,
-                descripcion="La sala de proyecciones cuenta con un sistema de sonido e imagen de alta calidad, ofreciendo un espacio dedicado para la proyección de películas, presentaciones y eventos audiovisuales. Con asientos cómodos, este ambiente garantiza una experiencia inmersiva para los espectadores."
-                )
-    # nombre de la imagen "9.jpg"
-    
-    db.Ambiente(nombre="Sala de Estudio",
-                aforo=15,
-                descripcion="La sala de estudio proporciona un entorno tranquilo y enfocado para actividades académicas e investigación. Con mesas individuales y estanterías, este ambiente es ideal para estudiantes y profesionales que requieren un espacio para el estudio independiente."
-                )
-    # nombre de la imagen "10.jpg"
+    # Lista sin repetidos
+    ambientes_sin_repetir = [
+        "Sala de Aula",
+        "Sala de Auditorio",
+        "Aulas Creativas",
+        "Patio",
+        "Área de Juegos",
+        "Salón Temático",
+        "Área de Cine",
+        "Campo Deportivo",
+        "Pista de Atletismo",
+        "Cancha de Vóley Playa",
+        "Salón de Debates",
+        "Área de Servicio",
+        "Salón de Juegos",
+        "Sala de Talleres",
+        "Sala de Conferencias",
+        "Reserva Natural",
+        "Escenario Principal",
+        "Galería de Arte",
+        "Sala de Danza",
+        "Sala de Laboratorio",
+        "Área de Networking",
+    ]
+
+    # Capacidad genérica para los ambientes
+    capacidad = 50  # Puedes ajustar este valor según tus necesidades
+
+    # Crear objetos db.Ambiente para cada elemento de la lista
+    for ambiente_nombre in ambientes_sin_repetir:
+        db.Ambiente(nombre=ambiente_nombre,
+                    aforo=capacidad,
+                    descripcion=f"Descripción de {ambiente_nombre}.")
 
 @db_session
 def createEventos():
@@ -142,9 +115,11 @@ def createEventos():
     fechaInsIni = datetime(2023, 12, 1, 18, 00)
     fechaInsFin = datetime(2023, 12, 30, 18, 00)
     
-    ###########
-    # EVENTOS #
-    ###########
+    #########################
+    # EVENTOS Y ACTIVIDADES #
+    #########################
+
+    # Evento 1
 
     comite_bienvenida = db.Comite(
         nombre="Comité de bienvenida",
@@ -162,9 +137,58 @@ def createEventos():
     )
     #imagen: /static/imgs/eventos/1.jpg
 
+    act_conoce_companeros = db.Actividad(
+        nombre = "Conoce a tus compañeros",
+        fechaInicio = fechaIni,
+        fechaFin = fechaFin,
+        tipo = "Charla",
+        descripcion = "Conoce a tus compañeros es una charla diseñada para fomentar la conexión y la camaradería entre los participantes. Durante la sesión, se brinda a cada miembro la oportunidad de compartir brevemente sus experiencias, intereses y objetivos. La charla busca crear un ambiente inclusivo, donde todos tengan la oportunidad de aprender más sobre sus colegas, promoviendo así la construcción de relaciones sólidas dentro del grupo. A través de este intercambio, se fortalece el sentido de comunidad y colaboración, creando una base positiva para futuras interacciones.",
+        ambiente = db.Ambiente.get(nombre="Sala de Aula"),
+        evento = bienvenida_nuevos
+    )
+
+    act_conoce_la_plataforma = db.Actividad(
+        nombre = "Conoce la plataforma virtual",
+        fechaInicio = fechaIni,
+        fechaFin = fechaFin,
+        tipo = "Charla",
+        descripcion = "Conoce el entorno en el que estarás trabajando constantemente desde incluso antes de tu primera clase. En esta charla se busca dar una introduccion a los estudiantes de las características de la plataforma virtual en la que podrán hacer seguimiento de su progreso académico o de sus notas. Con la ayuda de profesores que ya están familiarizados, los estudiantes podrán usar de la mejor manera posible la plataforma.",
+        ambiente = db.Ambiente.get(nombre="Sala de Aula"),
+        evento = bienvenida_nuevos
+    )
+    
+    act_conoce_local = db.Actividad(
+        nombre = "Conoce el entorno en el que estarás estudiando",
+        fechaInicio = fechaIni,
+        fechaFin = fechaFin,
+        tipo = "Charla",
+        descripcion = "Conoce el local donde estarás pasando los próximos 5 años de tu vida, con esta introducción podrás ubicarte y guiar a otras personas alrededor de la universidad sin dificultades.",
+        ambiente = db.Ambiente.get(nombre="Patio"),
+        evento = bienvenida_nuevos
+    )
+
+    act_manual_supervivencia = db.Actividad(
+        nombre = "Manual de supervivencia universitaria",
+        fechaInicio = fechaIni,
+        fechaFin = fechaFin,
+        tipo = "Charla",
+        descripcion = "Conoce los mejores consejos dados por otros estudiantes universitarios que ya pasaron por lo que pronto te pasará a ti. Aprende como es que se pueden prevenir problemas y lidiar con situaciones cotidianas en este nuevo ámbito que puede ser muy diferente a lo que estabas acostumbrado, haz más facil tu adaptación al nuevo mundo y prepárate para tu primer día de clases. Presta atención a los más experimentados y anota sus sugerencias, puede que en un futuro tu mismo puedas ayudar a otros estudiantes que comienzan aquí mejorando esos consejos que recibiste.",
+        ambiente = db.Ambiente.get(nombre="Sala de Aula"),
+        evento = bienvenida_nuevos
+    )
+    
+    p1_bienvenida_estudiantes = db.Paquete(
+        precio=0.00,
+        rol="Estudiante",
+        evento=bienvenida_nuevos,
+        actividades=[act_conoce_companeros, act_conoce_la_plataforma, act_manual_supervivencia, act_conoce_local]
+    )
+
+    ############################################
+
     comite_clubes = db.Comite(
-        nombre ="Comité de clubes",
-        cuentas = []
+        nombre="Comité de clubes",
+        cuentas=[]
     )
 
     feria_club = db.Evento(
@@ -178,6 +202,76 @@ def createEventos():
         comite=db.Comite.get(nombre="Comité de clubes")
     )
     #imagen: /static/imgs/eventos/2.jpg
+
+    act_presentacion_clubes = db.Actividad(
+        nombre="Presentación de Clubes",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Presentación",
+        descripcion="La Presentación de Clubes es un evento dedicado a destacar la diversidad de clubes y organizaciones estudiantiles en el campus. Cada club tiene la oportunidad de compartir sus objetivos, actividades y eventos planificados para el semestre. Esta actividad ofrece a los estudiantes la posibilidad de explorar opciones extracurriculares, unirse a clubes afines a sus intereses y conectarse con la vibrante vida estudiantil en la universidad.",
+        ambiente=db.Ambiente.get(nombre="Sala de Auditorio"),
+        evento=feria_club
+    )
+
+    act_forma_club = db.Actividad(
+        nombre="¿Cómo puedo hacer mi propio club?",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Presentación",
+        descripcion="Quizás ninguno de los clubs te llama la atención lo suficiente, entonces ¿Que puedes hacer?. Muy fácil, puedes formar tu propio club pero debes cumplir con una serie de requisitos, para ello te daremos una serie de recomendaciones.",
+        ambiente=db.Ambiente.get(nombre="Sala de Auditorio"),
+        evento=feria_club
+    )
+
+    act_talleres_creativos = db.Actividad(
+        nombre="Talleres Creativos",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Taller",
+        descripcion="Participa en talleres creativos organizados por diferentes clubes para explorar y desarrollar tus habilidades artísticas y creativas.",
+        ambiente=db.Ambiente.get(nombre="Aulas Creativas"),
+        evento=feria_club
+    )
+
+    act_debate_club = db.Actividad(
+        nombre="Debate Club",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Debate",
+        descripcion="El Debate Club ofrece la oportunidad de participar en debates estimulantes sobre una variedad de temas. Únete para mejorar tus habilidades de argumentación y expresión oral.",
+        ambiente=db.Ambiente.get(nombre="Salón de Debates"),
+        evento=feria_club
+    )
+
+    act_servicio_comunitario = db.Actividad(
+        nombre="Servicio Comunitario",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Voluntariado",
+        descripcion="Colabora con clubes involucrados en actividades de servicio comunitario. Descubre cómo puedes contribuir positivamente a la comunidad mientras te unes a un club.",
+        ambiente=db.Ambiente.get(nombre="Área de Servicio"),
+        evento=feria_club
+    )
+
+    act_torneo_esport = db.Actividad(
+        nombre="Torneo Esport",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Torneo",
+        descripcion="Participa en torneos esport organizados por clubes especializados en deportes electrónicos. Demuestra tus habilidades en juegos competitivos y forma parte de la comunidad esport de la universidad.",
+        ambiente=db.Ambiente.get(nombre="Salón de Juegos"),
+        evento=feria_club
+    )
+
+    # Paquete actualizado
+    p1_feria_club = db.Paquete(
+        precio=0.00,
+        rol="Estudiante",
+        evento=feria_club,
+        actividades=[act_presentacion_clubes, act_forma_club, act_talleres_creativos, act_debate_club, act_servicio_comunitario, act_torneo_esport]
+    )
+
+    #########################
 
     comite_social = db.Comite(
         nombre="Comité de Eventos Sociales",
@@ -196,6 +290,65 @@ def createEventos():
     )
     #imagen: /static/imgs/eventos/3.jpg
 
+    # Nuevas actividades para el Comité de Eventos Sociales
+    act_karaoke_noche = db.Actividad(
+        nombre="Noche de Karaoke",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Entretenimiento",
+        descripcion="Participa en una noche llena de música y diversión con una sesión de karaoke. Conoce a otros estudiantes mientras disfrutas de tu canción favorita.",
+        ambiente=db.Ambiente.get(nombre="Salón de Juegos"),
+        evento=fiesta_bienvenida
+    )
+
+    act_juegos_sociales = db.Actividad(
+        nombre="Juegos Sociales",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Juegos",
+        descripcion="Únete a divertidos juegos sociales diseñados para romper el hielo y fomentar la interacción entre los estudiantes. ¡Haz nuevos amigos mientras te diviertes!",
+        ambiente=db.Ambiente.get(nombre="Área de Juegos"),
+        evento=fiesta_bienvenida
+    )
+
+    act_noche_tematica = db.Actividad(
+        nombre="Noche Temática",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Social",
+        descripcion="Disfruta de una noche temática llena de sorpresas. Pueden haber disfraces, decoraciones y actividades relacionadas con el tema de la noche. ¡Vive una experiencia única con tus compañeros!",
+        ambiente=db.Ambiente.get(nombre="Salón Temático"),
+        evento=fiesta_bienvenida
+    )
+
+    act_cine_al_aire_libre = db.Actividad(
+        nombre="Cine al Aire Libre",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Cine",
+        descripcion="Relájate bajo las estrellas mientras disfrutas de una película proyectada al aire libre. Tráete una manta y algo de snacks para una noche de cine bajo el cielo.",
+        ambiente=db.Ambiente.get(nombre="Área de Cine"),
+        evento=fiesta_bienvenida
+    )
+
+    # Paquete actualizado para la Fiesta de Bienvenida al Semestre
+    p1_fiesta_bienvenida = db.Paquete(
+        precio=0.00,
+        rol="Estudiante",
+        evento=fiesta_bienvenida,
+        actividades=[act_karaoke_noche, act_juegos_sociales, act_noche_tematica, act_cine_al_aire_libre]
+    )
+
+    # Nuevo paquete para la Fiesta de Bienvenida al Semestre
+    p2_fiesta_bienvenida = db.Paquete(
+        precio=5.00,  # Se establece un precio para este paquete
+        rol="Estudiante",
+        evento=fiesta_bienvenida,
+        actividades=[act_karaoke_noche, act_juegos_sociales, act_noche_tematica, act_cine_al_aire_libre]
+    )
+
+    #########################
+
     comite_deportivo = db.Comite(
         nombre="Comité Deportivo",
         cuentas=[]
@@ -211,7 +364,65 @@ def createEventos():
         tipo="Deportivo",
         comite=comite_deportivo
     )
-    #imagen: /static/imgs/eventos/4.jpg
+
+    act_torneo_futbol = db.Actividad(
+        nombre="Torneo de Fútbol",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Torneo",
+        descripcion="Participa en el emocionante torneo de fútbol interfacultades. Forma un equipo con tus compañeros de facultad y compite por la victoria.",
+        ambiente=db.Ambiente.get(nombre="Campo Deportivo"),
+        evento=competencias_deportivas
+    )
+
+    act_carrera_atletica = db.Actividad(
+        nombre="Carrera Atlética",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Competencia",
+        descripcion="Demuestra tu resistencia en la carrera atlética interfacultades. Corre junto a estudiantes de otras facultades y vive la emoción de la competición.",
+        ambiente=db.Ambiente.get(nombre="Pista de Atletismo"),
+        evento=competencias_deportivas
+    )
+
+    act_voley_playa = db.Actividad(
+        nombre="Torneo de Vóley Playa",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Torneo",
+        descripcion="Forma parte del torneo de vóley playa interfacultades. Disfruta de un día de sol, arena y competencia amistosa.",
+        ambiente=db.Ambiente.get(nombre="Cancha de Vóley Playa"),
+        evento=competencias_deportivas
+    )
+
+    act_gimnasia_artistica = db.Actividad(
+        nombre="Exhibición de Gimnasia Artística",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Exhibición",
+        descripcion="Disfruta de una impresionante exhibición de gimnasia artística. Los estudiantes mostrarán sus habilidades y destrezas en una presentación emocionante.",
+        ambiente=db.Ambiente.get(nombre="Sala de Danza"),
+        evento=competencias_deportivas
+    )
+
+    # Paquete 1 para Competencias Deportivas
+    p1_competencias_deportivas = db.Paquete(
+        precio=0.00,
+        rol="Estudiante",
+        evento=competencias_deportivas,
+        actividades=[act_torneo_futbol, act_carrera_atletica, act_voley_playa, act_gimnasia_artistica]
+    )
+
+    # Paquete 2 para Competencias Deportivas
+    p2_competencias_deportivas = db.Paquete(
+        precio=10.00,
+        rol="Estudiante",
+        evento=competencias_deportivas,
+        actividades=[act_torneo_futbol, act_carrera_atletica, act_voley_playa, act_gimnasia_artistica]
+    )
+
+    ##############################
+
     comite_sostenibilidad = db.Comite(
         nombre="Comité de Sostenibilidad",
         cuentas=[]
@@ -238,13 +449,53 @@ def createEventos():
         ambiente = db.Ambiente.get(nombre="Sala de Auditorio"),
         evento = semana_sostenibilidad
     )
-    
+
+    act_taller_reciclaje = db.Actividad(
+        nombre="Taller de Reciclaje Creativo",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Taller",
+        descripcion="Participa en un taller práctico de reciclaje creativo. Aprende a reutilizar materiales y a crear objetos útiles y decorativos a partir de materiales reciclados.",
+        ambiente=db.Ambiente.get(nombre="Sala de Talleres"),
+        evento=semana_sostenibilidad
+    )
+
+    act_charla_consumo_responsable = db.Actividad(
+        nombre="Charla sobre Consumo Responsable",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Charla",
+        descripcion="Descubre la importancia del consumo responsable. La charla abordará temas como la elección de productos sostenibles, la reducción del desperdicio y la toma de decisiones informadas para un estilo de vida más sostenible.",
+        ambiente=db.Ambiente.get(nombre="Sala de Conferencias"),
+        evento=semana_sostenibilidad
+    )
+
+    act_excursion_naturaleza = db.Actividad(
+        nombre="Excursión a la Naturaleza",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Excursión",
+        descripcion="Únete a una emocionante excursión a la naturaleza. Explora un entorno natural, aprende sobre la biodiversidad y conecta con la belleza del medio ambiente.",
+        ambiente=db.Ambiente.get(nombre="Reserva Natural"),
+        evento=semana_sostenibilidad
+    )
+
+    # Paquete 1 para la Semana de la Sostenibilidad
     p1_semana_sostenibilidad = db.Paquete(
         precio=0.00,
         rol="Estudiante",
         evento=semana_sostenibilidad,
-        actividades=[act_semana_sostenibilidad]
+        actividades=[act_semana_sostenibilidad, act_taller_reciclaje, act_charla_consumo_responsable, act_excursion_naturaleza]
     )
+
+    # Paquete 2 para la Semana de la Sostenibilidad
+    p2_semana_sostenibilidad = db.Paquete(
+        precio=5.00,
+        rol="Estudiante",
+        evento=semana_sostenibilidad,
+        actividades=[act_semana_sostenibilidad, act_taller_reciclaje, act_charla_consumo_responsable, act_excursion_naturaleza]
+    )
+
 
     #############################
 
@@ -275,12 +526,53 @@ def createEventos():
         evento=db.Evento.get(nombre="Festival Cultural")
     )
 
-    p1_nuestra_propia_cultura = db.Paquete(
-        precio=8.00,  # Precio accesible para fomentar la participación
-        rol="Estudiante",
-        evento=db.Evento.get(nombre="Festival Cultural"),
-        actividades=[act_nuestra_propia_cultura]
+    act_presentacion_musical = db.Actividad(
+    nombre="Presentación Musical",
+    fechaInicio=fechaIni,
+    fechaFin=fechaFin,
+    tipo="Presentación",
+    descripcion="Disfruta de talentosas presentaciones musicales que representan diferentes géneros y tradiciones. Celebra la diversidad sonora de nuestra comunidad universitaria.",
+    ambiente=db.Ambiente.get(nombre="Escenario Principal"),
+    evento=festival_cultural
     )
+
+    act_exposicion_artistica = db.Actividad(
+        nombre="Exposición Artística",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Exposición",
+        descripcion="Explora la creatividad y el arte en nuestra Exposición Artística. Estudiantes presentarán sus obras, mostrando la diversidad de expresiones artísticas en la comunidad universitaria.",
+        ambiente=db.Ambiente.get(nombre="Galería de Arte"),
+        evento=festival_cultural
+    )
+
+    act_taller_danza_tradicional = db.Actividad(
+        nombre="Taller de Danza Tradicional",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Taller",
+        descripcion="Participa en un taller de danza tradicional donde podrás aprender movimientos y coreografías representativas de diversas culturas. Una experiencia divertida y educativa.",
+        ambiente=db.Ambiente.get(nombre="Sala de Danza"),
+        evento=festival_cultural
+    )
+
+    # Paquete 1 para el Festival Cultural
+    p1_festival_cultural = db.Paquete(
+        precio=8.00,
+        rol="Estudiante",
+        evento=festival_cultural,
+        actividades=[act_nuestra_propia_cultura, act_exposicion_artistica, act_presentacion_musical, act_taller_danza_tradicional]
+    )
+
+    # Paquete 2 para el Festival Cultural
+    p2_festival_cultural = db.Paquete(
+        precio=12.00,
+        rol="Estudiante",
+        evento=festival_cultural,
+        actividades=[act_nuestra_propia_cultura, act_exposicion_artistica, act_presentacion_musical, act_taller_danza_tradicional]
+    )
+
+    ##################################################
 
     comite_empleabilidad = db.Comite(
         nombre="Comité de Empleabilidad",
@@ -308,12 +600,43 @@ def createEventos():
         evento=db.Evento.get(nombre="Feria de Empleo y Prácticas")
     )
 
-    p1_primer_empleo = db.Paquete(
-        precio=0.00,  # Entrada gratuita para facilitar la participación
-        rol="Estudiante",
-        evento=db.Evento.get(nombre="Feria de Empleo y Prácticas"),
-        actividades=[act_primer_empleo]
+    act_taller_habilidades_profesionales = db.Actividad(
+        nombre="Taller de Habilidades Profesionales",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Taller",
+        descripcion="Participa en un taller dedicado al desarrollo de habilidades profesionales clave, como la redacción de currículums, técnicas de entrevista y la construcción de una marca personal. Mejora tus habilidades para destacar en el mercado laboral.",
+        ambiente=db.Ambiente.get(nombre="Sala de Conferencias"),
+        evento=feria_empleo
     )
+
+    act_sesion_networking = db.Actividad(
+        nombre="Sesión de Networking",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Networking",
+        descripcion="Únete a una sesión de networking donde podrás interactuar directamente con representantes de empresas. Amplía tu red profesional y descubre oportunidades de empleo y prácticas.",
+        ambiente=db.Ambiente.get(nombre="Área de Networking"),
+        evento=feria_empleo
+    )
+
+    # Paquete 1 para la Feria de Empleo y Prácticas
+    p1_feria_empleo = db.Paquete(
+        precio=0.00,
+        rol="Estudiante",
+        evento=feria_empleo,
+        actividades=[act_primer_empleo, act_taller_habilidades_profesionales, act_sesion_networking]
+    )
+
+    # Paquete 2 para la Feria de Empleo y Prácticas
+    p2_feria_empleo = db.Paquete(
+        precio=5.00,
+        rol="Estudiante",
+        evento=feria_empleo,
+        actividades=[act_primer_empleo, act_taller_habilidades_profesionales, act_sesion_networking]
+    )
+
+    ###################################################
 
     comite_talentos = db.Comite(
         nombre="Comité de Talentos",
@@ -341,88 +664,53 @@ def createEventos():
         evento=db.Evento.get(nombre="Noche de Talentos")
     )
 
-    p1_presentacion_talentos = db.Paquete(
-        precio=6.00,  # Precio accesible para fomentar la participación
-        rol="Estudiante",
-        evento=db.Evento.get(nombre="Noche de Talentos"),
-        actividades=[act_presentacion_talentos]
-    )
-
-    #imagen: /static/imgs/eventos/8.jpg
-
-    ###############
-    # ACTIVIDADES #
-    ###############
-
-    act_conoce_companeros = db.Actividad(
-        nombre = "Conoce a tus compañeros",
-        fechaInicio = fechaIni,
-        fechaFin = fechaFin,
-        tipo = "Charla",
-        descripcion = "Conoce a tus compañeros es una charla diseñada para fomentar la conexión y la camaradería entre los participantes. Durante la sesión, se brinda a cada miembro la oportunidad de compartir brevemente sus experiencias, intereses y objetivos. La charla busca crear un ambiente inclusivo, donde todos tengan la oportunidad de aprender más sobre sus colegas, promoviendo así la construcción de relaciones sólidas dentro del grupo. A través de este intercambio, se fortalece el sentido de comunidad y colaboración, creando una base positiva para futuras interacciones.",
-        ambiente = db.Ambiente.get(nombre="Sala de Aula"),
-        evento = bienvenida_nuevos
-    )
-    
-    p1_conoce_companeros = db.Paquete(
-        precio=0.00,
-        rol="Estudiante",
-        evento=fiesta_bienvenida,
-        actividades=[act_conoce_companeros]
-    )
-    
-    act_presentacion_clubes = db.Actividad(
-    nombre="Presentación de Clubes",
+    act_exhibicion_arte = db.Actividad(
+        nombre="Exhibición de Arte",
         fechaInicio=fechaIni,
         fechaFin=fechaFin,
-        tipo="Presentación",
-        descripcion="La Presentación de Clubes es un evento dedicado a destacar la diversidad de clubes y organizaciones estudiantiles en el campus. Cada club tiene la oportunidad de compartir sus objetivos, actividades y eventos planificados para el semestre. Esta actividad ofrece a los estudiantes la posibilidad de explorar opciones extracurriculares, unirse a clubes afines a sus intereses y conectarse con la vibrante vida estudiantil en la universidad.",
+        tipo="Exhibición",
+        descripcion="Participa en una exhibición de arte donde los estudiantes pueden mostrar sus creaciones artísticas, desde pinturas hasta esculturas. Celebra la diversidad de expresiones artísticas presentes en la comunidad universitaria.",
+        ambiente=db.Ambiente.get(nombre="Galería de Arte"),
+        evento=noche_talentos
+    )
+
+    act_comedia_stand_up = db.Actividad(
+        nombre="Noche de Comedia Stand-Up",
+        fechaInicio=fechaIni,
+        fechaFin=fechaFin,
+        tipo="Comedia",
+        descripcion="Disfruta de una noche llena de risas con actuaciones de comedia stand-up. Estudiantes talentosos presentarán sus mejores rutinas humorísticas, proporcionando entretenimiento y diversión a la comunidad universitaria.",
         ambiente=db.Ambiente.get(nombre="Sala de Auditorio"),
-        evento=feria_club
+        evento=noche_talentos
     )
 
-    p1_presentacion_clubes = db.Paquete(
-        precio=0.00,  # Precio gratuito para fomentar la participación
+    # Paquete 1 para la Noche de Talentos
+    p1_noche_talentos = db.Paquete(
+        precio=6.00,
         rol="Estudiante",
-        evento=feria_club,
-        actividades=[act_presentacion_clubes]
+        evento=noche_talentos,
+        actividades=[act_presentacion_talentos, act_exhibicion_arte, act_comedia_stand_up]
     )
 
-    act_fiesta_bienvenida = db.Actividad(
-        nombre="Baila con nosotros",
-        fechaInicio=fechaIni,
-        fechaFin=fechaFin,
-        tipo="Baile",
-        descripcion="La Presentación de Clubes es un evento dedicado a destacar la diversidad de clubes y organizaciones estudiantiles en el campus. Cada club tiene la oportunidad de compartir sus objetivos, actividades y eventos planificados para el semestre. Esta actividad ofrece a los estudiantes la posibilidad de explorar opciones extracurriculares, unirse a clubes afines a sus intereses y conectarse con la vibrante vida estudiantil en la universidad.",
-        ambiente=db.Ambiente.get(nombre="Patio"),
-        evento=fiesta_bienvenida
-    )
-
-    p1_fiesta_bienvenida = db.Paquete(
-        precio=0.00,
+    # Paquete 2 para la Noche de Talentos
+    p2_noche_talentos = db.Paquete(
+        precio=10.00,  # Precio ajustado para ofrecer una experiencia más completa
         rol="Estudiante",
-        evento=fiesta_bienvenida,
-        actividades=[act_fiesta_bienvenida]
+        evento=noche_talentos,
+        actividades=[act_presentacion_talentos, act_exhibicion_arte, act_comedia_stand_up]
     )
 
-    act_manana_deportiva = db.Actividad(
-        nombre="Mañana Deportiva",
-        fechaInicio=fechaIni,
-        fechaFin=fechaFin,
-        tipo="Deportivo",
-        descripcion="La Mañana Deportiva es una jornada dedicada a la actividad física y la promoción de un estilo de vida saludable. Incluye una variedad de competiciones deportivas, juegos y actividades recreativas. Este evento fomenta la participación de la comunidad universitaria en actividades deportivas, fortaleciendo la camaradería y el bienestar general de los estudiantes.",
-        ambiente=db.Ambiente.get(nombre="Patio"),
-        evento=competencias_deportivas
-    )
+@db_session
+def createInscritos():
+    pass
 
-    p1_manana_deportiva = db.Paquete(
-        precio=5.00,  # Precio accesible para incentivar la participación
-        rol="Estudiante",
-        evento=db.Evento.get(nombre="Competencias Deportivas Interfacultades"),
-        actividades=[act_manana_deportiva]
+@db_session
+def createPosers():
+    db.Expositor(
+        nombre="Javier Ibaerrechea",
+        correo="javier@mail.com",
+        descripcion="Javier es un estudiante de cuarto año de la carrera Derecho, uno de los alumnos más destacados con un promedio que lo hace destacar y un punto de vista diferente."
     )
-
-    
 config = Config
 config.PONY['create_db'] = True
 config.PONY['filename'] = 'app/' + config.PONY['filename']
@@ -435,3 +723,4 @@ db.generate_mapping(create_tables=True)
 createUsers()
 createAmbientes()
 createEventos()
+createPosers()
