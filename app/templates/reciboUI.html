@@ -1,0 +1,24 @@
+{%extends "layout.html"%}
+
+{%block title%}
+Inscripcion
+{%endblock%}
+
+{%block estilos%}
+{%endblock%}
+
+{%block contenido%}
+<div class="page">
+Numero de recibo: {{ recibo.id }}
+<br>
+Documento de identificacion: {{ recibo.documentoId }}
+<br>
+Número de cuenta: {{ recibo.cuenta.nombre }}
+<br>
+Paquete: {{ recibo.paquete.id }}
+<br>
+Evento: {{ recibo.paquete.evento.nombre }}
+<br>
+
+</div>
+{%endblock%}

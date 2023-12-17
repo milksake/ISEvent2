@@ -20,9 +20,17 @@ def evento(id):
     return render_template("eventoUI.html", evento=eve, fechaActual=datetime.now().replace(second=0, microsecond=0))
 # FIN
 
+# Funcion del recibo
+@bp.route('/recibo/<id>')
+@login_required
+def recibo(id):
+    recibo = db.Inscripcion.get(id=int(id))
+    return render_template("reciboUI.html", recibo=recibo)
+
 ############
 # CF-04-02 #
 ############
+import webbrowser
 @bp.route('/<id>', methods=['GET', 'POST'])
 @login_required
 def inscripcion(id):
@@ -48,7 +56,7 @@ def inscripcion(id):
             cuenta=current_user,
             fecha=nowDateTime,
             preinscripcion=False,
-            ingreso=ing,
+            precio=paq.precio,
             asistencia_validada=False,
         )
         
@@ -62,6 +70,11 @@ def inscripcion(id):
         qr = qrcode.make(str(primary_key))
         qr_path = f"app/static/qr/{primary_key}.png"
         qr.save(qr_path)
+
+        webpage = "http://127.0.0.1:5000/"
+        recibo_url = url_for('inscripcion.recibo', id=primary_key)
+        webbrowser.open(webpage+recibo_url, "_blank")
+        print("Recibo")
 
         flash('Inscripcion completa')
         return redirect(url_for('inscripcion.evento', id=eve.id))
