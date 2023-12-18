@@ -8,4 +8,4 @@ from app.extensions import db
 @bp.route('/')
 def index():
     even = db.Evento.select(lambda e : True)
-    return render_template("index.html", eventos=even)
+    return render_template("index.html", eventos=even, config=False)

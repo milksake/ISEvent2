@@ -12,8 +12,14 @@ from pony.orm import commit
 @bp.route('/eventos')
 @login_required
 def eventos():
-    even = db.Evento.select()
-    return render_template("index.html", eventos=even)
+    even = None
+    if current_user.rol == "admin":
+        even = db.Evento.select()
+    elif current_user.rol == "encargado":
+        even = db.Evento.select(lambda e: e in current_user.comites.eventos)
+    else:
+        abort(403)
+    return render_template("index.html", eventos=even, config=True)
 # FIN ----------------------------------------------------------------------------------------------------
 
 ############
@@ -25,7 +31,7 @@ def añadirEvento():
     if request.method == 'POST':
         file = request.files['imagen']
         if not file or file.filename == '' or file.filename.split('.')[-1].lower() not in ['jpg', 'png', 'jpeg']:
-            flash('Seleccione una imágen valida')
+            flash('Seleccione una imagen válida')
             return redirect(url_for('main.index'))
         nom = request.form['nombre']
         ev = db.Evento.get(nombre=nom)
@@ -48,7 +54,13 @@ def añadirEvento():
         file.save("./app/" + url_for('static', filename=f"imgs/eventos/{newEve.id}.png"))
         flash("Evento agregado")
         return redirect(url_for('config.eventos'))
-    comits = db.Comite.select()
+    comits = None
+    if current_user.rol == "admin":
+        comits = db.Comite.select()
+    elif current_user.rol == "encargado":
+        comits = current_user.comites
+    else:
+        abort(403)
     return render_template("añadirEvento.html", comites=comits)
 # FIN ----------------------------------------------------------------------------------------------------
 
@@ -86,7 +98,15 @@ def modificarEvento(id):
 
         flash("Evento modificado")
         return redirect(url_for('config.eventos'))
-    comits = db.Comite.select()
+    comits = None
+    if current_user.rol == "admin":
+        comits = db.Comite.select()
+    elif current_user.rol == "encargado":
+        if ev not in current_user.comites.eventos:
+            abort(403)
+        comits = [cc for cc in current_user.comites if cc != ev.comite]
+    else:
+        abort(403)
     return render_template("añadirEvento.html", evento=ev, comites=comits)
 #FIN
 
@@ -98,12 +118,20 @@ def modificarEvento(id):
 @login_required
 def paquetes(id=None):
     if not id:
-        evess = db.Evento.select(lambda e : True)
+        evess = None
+        if current_user.rol == "admin":
+            evess = db.Evento.select()
+        elif current_user.rol == "encargado":
+            evess = db.Evento.select(lambda e: e in current_user.comites.eventos)
+        else:
+            abort(403)
         return render_template("paqueteUI.html", eventos=evess)
     eve = db.Evento.get(id=int(id))
     if (not eve):
         flash("Ese evento no existe")
         return redirect(url_for("main.index"))
+    if current_user.rol != "admin" and not (current_user.rol == "encargado" and eve in current_user.comites.eventos):
+        abort(403)
     return render_template("paqueteUI.html", evento=eve)
 
 ############
@@ -111,11 +139,13 @@ def paquetes(id=None):
 ############
 @bp.route('/añadirPaquete/<id>', methods=['GET', 'POST'])
 @login_required
-def añadirPaquete(id = None):
+def añadirPaquete(id):
     eve = db.Evento.get(id=int(id))
     if not eve:
         flash("No existe ese evento")
         return redirect(url_for('main.index'))
+    if current_user.rol != "admin" and not (current_user.rol == "encargado" and eve in current_user.comites.eventos):
+        abort(403)
     if request.method == 'POST':
         acts_id = request.form.getlist('actividades')
         if len(acts_id) == 0:
@@ -141,6 +171,8 @@ def añadirPaquete(id = None):
 @login_required
 def modificarPaquete(id):
     paq = db.Paquete.get(id=int(id))
+    if current_user.rol != "admin" and not (current_user.rol == "encargado" and paq.evento in current_user.comites.eventos):
+        abort(403)
     if not paq:
         flash("No existe ese paquete")
         return redirect(url_for('main.index'))
@@ -165,6 +197,8 @@ def modificarPaquete(id):
 @bp.route('/ambientes')
 @login_required
 def ambientes():
+    if current_user.rol not in ['admin', 'encargado']:
+        abort(403)
     amb = db.Ambiente.select(lambda a: request.args.get("query", default="") in a.nombre)
     return render_template("ambienteUI.html", ambientes=amb)
 # FIN ----------------------------------------------------------------------------------------------------
@@ -175,6 +209,8 @@ def ambientes():
 @bp.route('/añadirAmbiente', methods=['GET', 'POST'])
 @login_required
 def añadirAmbiente():
+    if current_user.rol not in ['admin', 'encargado']:
+        abort(403)
     if request.method == 'POST':
         file = request.files['imagen']
         if not file or file.filename == '' or file.filename.split('.')[-1].lower() not in ['jpg', 'png', 'jpeg']:
@@ -202,6 +238,8 @@ def añadirAmbiente():
 @bp.route('/modificarAmbientes/<id>', methods=['GET','POST'])
 @login_required
 def modificarAmbiente(id):
+    if current_user.rol not in ['admin', 'encargado']:
+        abort(403)
     amb = db.Ambiente.get(id=int(id))
     if not amb:
         flash("No existe ese ambiente")
@@ -233,16 +271,22 @@ def modificarAmbiente(id):
 @bp.route('/materiales/<id>')
 @login_required
 def materiales(id = None):
-    #if current_user.rol != "admin":
-    #    abort(403)
     if id:
         eve = db.Evento.get(id=int(id))
         if not eve:
             flash("Ese evento no existe")
             return redirect(url_for('main.index'))
+        if current_user.rol != "admin" and not (current_user.rol == "encargado" and eve in current_user.comites.eventos):
+            abort(403)
         mat = db.Material.select(lambda m : m.actividad.evento.id == int(id))
         return render_template("materialUI.html", materiales=mat, evento=eve)
-    eves = db.Evento.select()
+    eves = None
+    if current_user.rol == "admin":
+        eves = db.Evento.select()
+    elif current_user.rol == "encargado":
+        eves = db.Evento.select(lambda e: e in current_user.comites.eventos)
+    else:
+        abort(403)
     return render_template('materialUI.html', eventos=eves)
 # FIN ----------------------------------------------------------------------------------------------------
 
@@ -252,12 +296,12 @@ def materiales(id = None):
 @bp.route('/añadirMaterial/<id>', methods=['GET', 'POST'])
 @login_required
 def añadirMaterial(id):
-    #if current_user.rol != "admin":
-    #    abort(403)
     eve = db.Evento.get(id=int(id))
     if not eve:
         flash("Ese evento no es válido")
         return redirect(url_for('main.index'))
+    if current_user.rol != "admin" and not (current_user.rol == "encargado" and eve in current_user.comites.eventos):
+            abort(403)
     if request.method == 'POST':
         act = db.Actividad.get(id=int(request.form['actividad']))
         if not act:
@@ -283,12 +327,12 @@ def añadirMaterial(id):
 @bp.route('/modificarMaterial/<id>', methods=['GET', 'POST'])
 @login_required
 def modificarMaterial(id):
-    #if current_user.rol != "admin":
-    #    abort(403)
     mat = db.Material.get(id=int(id))
     if not mat:
         flash("Ese material no es válido")
         return redirect(url_for('main.index'))
+    if current_user.rol != "admin" and not (current_user.rol == "encargado" and mat.actividad.evento in current_user.comites.eventos):
+        abort(403)
     if request.method == 'POST':
         act = db.Actividad.get(id=int(request.form['actividad']))
         if not act:
@@ -312,8 +356,13 @@ def modificarMaterial(id):
 @bp.route('/actividades')
 @login_required
 def actividades():
+    act = None
+    if current_user.rol == "admin":
+        act = db.Actividad.select()
+    elif current_user.rol == "encargado": 
+        act = db.Actividad.select(lambda a : a.evento in current_user.comites.eventos)
     q = request.args.get("query", default="")
-    act = db.Actividad.select(lambda a: q in a.nombre or q in a.evento.nombre or q in a.tipo)
+    act = act.filter(lambda a: q in a.nombre or q in a.evento.nombre or q in a.tipo)
     return render_template("actividadUI.html", actividades=act) #variable de template
 # FIN ----------------------------------------------------------------------------------------------------
 
@@ -332,9 +381,8 @@ def añadirActividad():
         descripcion = form.descripcion.data
         evento= form.evento.data
         ambiente= form.ambiente.data
-
         evento = db.Evento.get(nombre= evento)
-        if not evento:
+        if not evento or (current_user.rol != "admin" and not (current_user.rol == "encargado" and evento not in current_user.comites.eventos)):
             flash("Evento no válido")
             return redirect(url_for('config.actividades'))
         ambiente = db.Ambiente.get(nombre= ambiente)
@@ -349,7 +397,7 @@ def añadirActividad():
                      tipo= tipo,
                      descripcion= descripcion,
                      evento= evento,
-                     ambiente= ambiente,
+                     ambiente= ambiente
                     )
         flash("Actividad agregada")
         return redirect(url_for('config.actividades'))
@@ -362,12 +410,14 @@ def añadirActividad():
 @bp.route('/modificarActividades/<id>', methods=['GET','POST'])
 @login_required
 def modificarActividad(id):
+    act = db.Actividad.get(id=int(id))
+    if not act:
+        flash("No existe esa actividad")
+        return redirect(url_for('main.index'))
+    if current_user.rol != "admin" and not (current_user.rol == "encargado" and act.evento in current_user.comites.eventos):
+            abort(403)
     form = FormValidarActividad()
     if request.method == 'POST':
-        act = db.Actividad.get(id=int(id))
-        if not act:
-            flash("No existe esa actividad")
-            return redirect(url_for('main.index'))
         
         act.nombre = form.nombre.data
         act.fechaInicio = form.fechaInicio.data
@@ -386,3 +436,38 @@ def modificarActividad(id):
         return redirect(url_for('config.actividades'))
     return render_template("añadirActividad.html",form= form)
 # FIN ----------------------------------------------------------------------------------------------------
+
+############
+# CF-17-03 #
+############
+@bp.route('/agregarExpositor', methods=['GET', 'POST'])
+@login_required
+def agregarExpositor():
+    if current_user.rol not in ["admin", "encargado"]:
+        abort(403)
+    # Obtén el expositor (si existe) y las actividades
+    expositor_id = request.args.get('expositor_id')
+    expositor = db.Expositor.get(id=expositor_id) if expositor_id else None
+    actividades = db.Actividad.select()
+
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        correo = request.form['correo']
+        descripcion = request.form['descripcion']
+        actividades_ids = [int(id) for id in request.form.getlist('actividades')]  # Obtén las actividades seleccionadas
+        exp = db.Expositor.get(nombre=nombre)
+        
+        if exp:
+            db.Expositor.delete(exp)
+
+        db.Expositor(
+                nombre=nombre,
+                correo=correo,
+                descripcion=descripcion,
+                actividades=[db.Actividad[id] for id in actividades_ids]
+            )
+
+        return redirect(url_for('config.actividades'))
+
+    # Lógica para la parte GET del método, renderizar formulario, etc.
+    return render_template('añadirExpositor.html', actividades=actividades, expositor=expositor)

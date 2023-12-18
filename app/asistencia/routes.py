@@ -1,7 +1,7 @@
 from flask import jsonify
 from app.asistencia import bp
-from flask import render_template, request, flash, redirect, url_for
-from flask_login import login_required
+from flask import render_template, request, flash, redirect, url_for, abort
+from flask_login import login_required, current_user
 from app.extensions import db
 from pony.orm import select, commit
 
@@ -14,12 +14,20 @@ from pony.orm import select, commit
 @login_required
 def asistencia(id = None):
     if not id:
-        eves = db.Evento.select()
+        eves = None
+        if current_user.rol == "admin":
+            eves = db.Evento.select()
+        elif current_user.rol != "ninguno":
+            eves = db.Evento.select(lambda e: e in current_user.comites.eventos)
+        else:
+            abort(403)
         return render_template("asistenciaUI.html", eventos=eves)
     act = db.Actividad.get(id=int(id))
     if not act:
         flash("Esa actividad no existe.")
         return redirect(url_for('main.index'))
+    if current_user.rol != "admin" and not (current_user.rol != "ninguno" and act.evento in current_user.comites.eventos):
+        abort(403)
     if request.method == 'POST':
         ins_id = request.form.getlist('asistencia')
         for in_id in ins_id:
@@ -45,12 +53,20 @@ def asistencia(id = None):
 @bp.route('/materiales/<id>', methods=['GET', 'POST'])
 def entrega(id = None):
     if not id:
-        eves = db.Evento.select()
+        eves = None
+        if current_user.rol == "admin":
+            eves = db.Evento.select()
+        elif current_user.rol != "ninguno":
+            eves = db.Evento.select(lambda e: e in current_user.comites.eventos)
+        else:
+            abort(403)
         return render_template("entrega.html", eventos=eves)
     
     act = db.Actividad.get(id=int(id))
     if not act:
         flash("Esa actividad no existe.")
+    if current_user.rol != "admin" and not (current_user.rol != "ninguno" and act.evento in current_user.comites.eventos):
+        abort(403)
         return redirect(url_for('main.index'))
     if request.method == 'POST':
         mensaje = ""

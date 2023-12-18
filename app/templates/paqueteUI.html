@@ -35,9 +35,11 @@ E-vent
 {% else %}
     <h2>Elige Evento</h2>
     <br>
+    <ul>
     {% for eve in eventos %}
-        <a>{{ eve.id }}: <a href="{{ url_for('config.paquetes', id=eve.id) }}">{{ eve.nombre }}</a>
+        <li><a href="{{ url_for('config.paquetes', id=eve.id) }}">{{ eve.nombre }}</a></li>
     {% endfor %}
+    </ul>
     
 {% endif %}
 
