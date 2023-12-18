@@ -11,7 +11,7 @@ E-vent
 <div class="container">
     <h1>Eventos</h1>
     <br>
-    {% if current_user.is_authenticated and current_user.rol == "admin" %}
+    {% if config %}
     <a class="btn" style="margin-bottom: 0;" href="{{ url_for('config.añadirEvento') }}">
         <button type="button">
             Agregar evento
@@ -23,7 +23,7 @@ E-vent
     {%for evento in eventos%}
         <div style="border: solid gray; padding:20px; display:flex; justify-content:space-between; margin-bottom:20px;">
             <div>
-            {% if current_user.is_authenticated and current_user.rol == "admin" %}
+            {% if config %}
                 <h2><a href="{{ url_for('config.modificarEvento', id=evento.id) }}">{{evento.nombre}}</a></h2>
             {% else %}
             <h2><a href="{{ url_for('inscripcion.evento', id=evento.id) }}">{{evento.nombre}}</a></h2>

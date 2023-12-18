@@ -11,11 +11,11 @@
             <div>
                 <a href="/">Inicio</a>
                 {% if current_user.is_authenticated %}
-                    {% if current_user.rol == "admin" %}
+                    {% if current_user.rol == "admin" or current_user.rol == "encargado" %}
                         <div class="dropdown">
                             <div>Configuracion</div>
                             <div class="dropdown-content">
-                                <a href="{{ url_for('main.index')}}">Eventos</a>
+                                <a href="{{ url_for('config.eventos')}}">Eventos</a>
                                 <a href="{{ url_for('config.ambientes')}}">Ambientes</a>
                                 <a href="{{ url_for('config.actividades')}}">Actividades</a>
                                 <a href="{{ url_for('config.paquetes') }}">Paquetes</a>
@@ -24,6 +24,8 @@
                             </div>
                         </div>
                         <a href="{{ url_for('caja.caja') }}">Caja</a>
+                    {% endif %}
+                    {% if current_user.rol == "admin" %}
                         <div class="dropdown">
                             <div>Gestion de Usuarios</div>
                             <div class="dropdown-content">
@@ -31,15 +33,8 @@
                                 <a href="{{ url_for('gestion.comites')}}">Comités</a>
                             </div>
                         </div>
-                        <div class="dropdown">
-                            <div>Reportes</div>
-                            <div class="dropdown-content">
-                                <a href="{{ url_for('reporte.reporteInscritos')}}">Inscritos</a>
-                                <a href="{{ url_for('reporte.reporteInscritos')}}">Caja</a>
-                                <a href="{{ url_for('reporte.reporteAsistencias')}}">Asistencias</a>
-                                <a href="{{ url_for('reporte.reporteMateriales')}}">Materiales</a>
-                            </div>
-                        </div>
+                    {% endif %}
+                    {% if current_user.rol == "admin" or current_user.rol == "encargado" or current_user.rol == "colaborador" %}
                         <div class="dropdown">
                             <div>Asistencias y Materiales</div>
                             <div class="dropdown-content">
@@ -47,14 +42,17 @@
                                 <a href="{{ url_for('asistencia.entrega')}}">Entrega de Materiales</a>
                             </div>
                         </div>
-                    {% else %}
+                    {% endif %}
+                    {% if current_user.rol == "admin" or current_user.rol == "encargado" %}
                         <div class="dropdown">
-                            <div>Pre-inscripciones</div>
+                            <div>Reportes</div>
                             <div class="dropdown-content">
-                                <a href="{{ url_for('main.index')}}">Preinscripciones</a>
-                                <a href="{{ url_for('main.index')}}">Inscripciones</a>
+                                <a href="{{ url_for('reporte.reporteInscritos')}}">Inscritos</a>
+                                <a href="{{ url_for('caja.caja')}}">Caja</a>
+                                <a href="{{ url_for('reporte.reporteAsistencias')}}">Asistencias</a>
+                                <a href="{{ url_for('reporte.reporteMateriales')}}">Materiales</a>
                             </div>
-                        </div>                      
+                        </div>              
                     {% endif %}
                 {% endif %}
                 

@@ -1,5 +1,5 @@
 from app.reporte import bp
-from flask import render_template, request, flash, url_for, redirect, send_file
+from flask import render_template, request, flash, url_for, redirect, send_file, abort
 from flask_login import current_user, login_required
 from app.extensions import db
 from pony.orm import group_concat, select
@@ -25,12 +25,20 @@ def generarExcel(titulos, datos, func):
 @login_required
 def reporteInscritos(id = None):
     if not id:
-        eves = db.Evento.select()
+        eves = None
+        if current_user.rol == "admin":
+            eves = db.Evento.select()
+        elif current_user.rol == "encargado":
+            eves = db.Evento.select(lambda e: e in current_user.comites.eventos)
+        else:
+            abort(403)
         return render_template("reporteInscritos.html", eventos=eves)
     eve = db.Evento.get(id=int(id))
     if not eve:
         flash("Ese evento no existe.")
         return redirect(url_for('main.index'))
+    if current_user.rol != "admin" and not (current_user.rol == "encargado" and eve in current_user.comites.eventos):
+        abort(403)
     ins = db.Inscripcion.select(lambda i: i.paquete.evento.id == id)
     rol = request.args.get('rol')
     if rol and rol != "None":
@@ -55,12 +63,20 @@ def reporteInscritos(id = None):
 @login_required
 def reporteAsistencias(id = None):
     if not id:
-        eves = db.Evento.select()
+        eves = None
+        if current_user.rol == "admin":
+            eves = db.Evento.select()
+        elif current_user.rol == "encargado":
+            eves = db.Evento.select(lambda e: e in current_user.comites.eventos)
+        else:
+            abort(403)
         return render_template("reporteAsistencias.html", eventos=eves)
     eve = db.Evento.get(id=int(id))
     if not eve:
         flash("Ese evento no existe.")
         return redirect(url_for('main.index'))
+    if current_user.rol != "admin" and not (current_user.rol == "encargado" and eve in current_user.comites.eventos):
+        abort(403)
     query = select(i for i in db.Inscripcion if i.paquete.evento.id == int(id))
     acts = select(a for a in db.Actividad if a.evento.id == int(id))
     if request.method == 'POST':
@@ -75,12 +91,20 @@ def reporteAsistencias(id = None):
 @login_required
 def reporteMateriales(id = None):
     if not id:
-        eves = db.Evento.select()
+        eves = None
+        if current_user.rol == "admin":
+            eves = db.Evento.select()
+        elif current_user.rol == "encargado":
+            eves = db.Evento.select(lambda e: e in current_user.comites.eventos)
+        else:
+            abort(403)
         return render_template("reporteMateriales.html", eventos=eves)
     eve = db.Evento.get(id=int(id))
     if not eve:
         flash("Ese evento no existe.")
         return redirect(url_for('main.index'))
+    if current_user.rol != "admin" and not (current_user.rol == "encargado" and eve in current_user.comites.eventos):
+        abort(403)
     query = select(m for m in db.Material if m.actividad.evento.id == int(id))
     if request.method == 'POST':
         f = lambda m : [m.nombre, m.cantidad, m.tipo, m.actividad.nombre]
@@ -95,6 +119,8 @@ def reporteCaja(tipo, id):
     if not eve:
         flash("Ese evento no existe.")
         return redirect(url_for('main.index'))
+    if current_user.rol != "admin" and not (current_user.rol == "encargado" and eve in current_user.comites.eventos):
+        abort(403)
     if request.method == 'POST':
         query = None
         if tipo == 'ingresos':
