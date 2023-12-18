@@ -20,11 +20,21 @@ E-vent
         </tr>
         {% for asistencia in asistencias %}     
             <tr>
-                <td>{{ asistencia[0].cuenta.nombre }}</td>
-                {% for presente in asistencia[1] %}
-                    <td>{% if presente %}&#x2705;{% else %}&#10060;{% endif %}
-                    </td>
+                <td>{{asistencia[0].cuenta.nombre}}</td>
+                {% for act in evento.actividades %}
+                    {% set band=0 %}
+                    {%if act in asistencia[0].asistencias%}
+                        <td>&#x2705;</td>
+                    {% else %}
+                        <td>&#10060;</td>
+                    {% endif %}
                 {% endfor %}
+
+                <!-- {% for presente in asistencia[1] %} -->
+                    <!-- <td>{{asistencia[0]}}</td> -->
+                    <!-- <td>{% if presente %}&#x2705;{% else %}&#10060;{% endif %} -->
+                    <!-- </td> -->
+                <!-- {% endfor %} -->
                 
             </tr>
         {% endfor %}

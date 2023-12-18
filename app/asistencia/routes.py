@@ -27,6 +27,8 @@ def asistencia(id = None):
             if toUP:
                 toUP.asistencia_validada= True
                 toUP.asistencias.add(act)
+                for act in toUP.asistencias:
+                    print(act.nombre)
         flash('Asistencia guardada')
         return redirect(url_for('main.index'))
 

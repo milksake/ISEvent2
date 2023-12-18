@@ -64,7 +64,7 @@ qrcode.callback = (respuesta) => {
     cb_asistencia= document.getElementById("cb_asistencia"+respuesta);
     cb_asistencia.checked= true;
     // console.log(respuesta);
-    Swal.fire(respuesta);
+    Swal.fire("Escaneo exitoso");
     activarSonido();
     encenderCamara();    
     cerrarCamara();    

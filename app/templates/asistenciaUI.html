@@ -80,10 +80,10 @@ E-vent
     <h2>Elige Actividad</h2>
     <br>
     {% for eve in eventos %}
-        <h3 class="showActs">{{ eve.nombre }}&#9662</h3>
-        <ul style="display: none;">
+        <h3 id="showActs{{eve.id}}", class="showActs">{{ eve.nombre }}&#9662</h3>
+        <ul id= "acts{{eve.id}}", style="display: none;">
             {% for act in eve.actividades %}
-            <li><a href="{{ url_for('asistencia.asistencia', id=act.id) }}">{{ act.id }}: {{ act.nombre }}</a></li>
+            <li><a href="{{ url_for('asistencia.asistencia', id=act.id) }}">{{ act.nombre }}</a></li>
             {% endfor %}
         </ul>
     {% endfor %}

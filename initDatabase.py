@@ -3,6 +3,8 @@ from pony.orm import db_session
 from werkzeug.security import generate_password_hash
 from datetime import datetime
 from app.extensions import db
+import random
+import qrcode
 
 @db_session
 def createUsers():
@@ -700,10 +702,96 @@ def createEventos():
         actividades=[act_presentacion_talentos, act_exhibicion_arte, act_comedia_stand_up]
     )
 
+# INICIO CREACION DE PAQUETES E INSCRIPCIONES
 @db_session
-def createInscritos():
-    pass
+def createRandomIngreso():
+    year= 2023
+    month= random.randint(1,12)
+    day= random.randrange(1,28)
+    hour= random.randint(0,23)
+    minute= random.randint(0,59)
+    paquete= db.Paquete.get(id= random.randint(1,14))
+    nuevoIngreso= db.Ingreso(
+        monto= paquete.precio,
+        descripcion= "Nueva inscripción.",
+        fecha= datetime(year,month,day,hour,minute),
+        evento= db.Evento.get(id= random.randint(1,8)),
+    )
+    db.commit()
+    nuevaInscripcion= db.Inscripcion(
+        preinscripcion= 0,
+        documentoId= str(random.randrange(70000000, 80000000)),
+        fecha= datetime(year,month,day,hour,minute),
+        asistencia_validada= 0,
+        paquete= paquete,
+        cuenta= db.Cuenta.get(id= random.randint(1,14)),
+        ingreso= nuevoIngreso,
+        asistencias= [],
+        precio= paquete.precio,
+    )
+    db.commit()
+    nuevoIngreso.inscripcion= nuevaInscripcion
 
+    primary_key= nuevoIngreso.inscripcion.id
+    # Generar el código QR de los inscritos
+    nombre_qr= nuevoIngreso.inscripcion.cuenta.nombre
+    paquete_qr= ''
+    for act in paquete.actividades:
+        paquete_qr+= act.nombre+','
+    qr = qrcode.make(str(primary_key))
+    qr_path = f"app/static/qr/{nombre_qr+'-'+paquete_qr}.png"
+    qr.save(qr_path)
+
+@db_session
+def createIngresos():
+    for i in range(15):
+        createRandomIngreso()
+    
+# FIN CREACION DE PAQUETES E INSCRIPCIONES
+
+# INICIO CREACION DE EGRESOS Y MATERIALES
+@db_session
+def createRandomEgreso(nombre,tipo):
+    year= 2023
+    month= random.randint(1,12)
+    day= random.randrange(1,28)
+    hour= random.randint(0,23)
+    minute= random.randint(0,59)
+
+    nuevoEgreso= db.Egreso(
+        monto= random.randint(10,100),
+        descripcion= 'Compra de nuevo material.',
+        fecha= datetime(year,month,day,hour,minute),
+        evento= db.Evento.get(id= random.randint(1,8)),
+    )
+    db.commit()
+    nuevoMaterial= db.Material(
+        nombre = nombre,
+        cantidad = random.randint(1,20),
+        tipo = tipo,
+        actividad = random.randint(1,32),
+        egreso = db.Egreso.get(id= nuevoEgreso.id),
+    )
+    db.commit()
+    nuevoEgreso.material= nuevoMaterial
+    nuevoEgreso.descripcion= 'Compra de nuevo material: '+nuevoMaterial.nombre
+
+
+@db_session
+def createEgresos():
+    nombres= ["Acero", "Aluminio", "Cobre", "Vidrio", "Plástico", "Madera", "Piedra", "Papel", "Cartón", "Goma", "Hierro", "Latón", "Nylon", "Tela", "Caucho", "Cemento", "Titanio", "Fibra de vidrio", "Porcelana", "Platino",
+            "Tungsteno", "Cromo", "Silicio", "Bambú", "Cerámica", "Granito", "Mármol", "Zinc", "Plomo", "Polietileno", "Polipropileno", "Oro", "Plata", "Bronce", "Níquel", "Resina", "Fibra de carbono", "Cuero", "Corcho"]
+
+    tipos = ["Escritorio", "Arte", "Oficina", "Manualidades", "Juguetes", "Limpieza", "Construcción", "Electrónica", "Cocina",
+         "Herramientas", "Pintura", "Material escolar", "Papelaría", "Adhesivos", "Corte", "Escuela", "Artículos de escritura", "Decoración", "Iluminación",
+         "Costura", "Bricolaje", "Hardware", "Baterías", "Lámparas"]
+
+    for i in range(len(nombres)):
+        tipo= tipos[random.randint(0, len(tipos) - 1)]
+        createRandomEgreso(nombres[i],tipo)
+    
+# FIN CRECION DE EGRESOS Y MATERIALES
+        
 @db_session
 def createPosers():
     db.Expositor(
@@ -724,3 +812,5 @@ createUsers()
 createAmbientes()
 createEventos()
 createPosers()
+createIngresos()
+createEgresos()
