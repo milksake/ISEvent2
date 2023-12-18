@@ -709,7 +709,8 @@ def createPosers():
     db.Expositor(
         nombre="Javier Ibaerrechea",
         correo="javier@mail.com",
-        descripcion="Javier es un estudiante de cuarto año de la carrera Derecho, uno de los alumnos más destacados con un promedio que lo hace destacar y un punto de vista diferente."
+        descripcion="Javier es un estudiante de cuarto año de la carrera Derecho, uno de los alumnos más destacados con un promedio que lo hace destacar y un punto de vista diferente.",
+        actividades=[db.Actividad.get(nombre="Conoce a tus compañeros"), db.Actividad.get(nombre="Conoce la plataforma virtual")]
     )
 config = Config
 config.PONY['create_db'] = True

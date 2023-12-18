@@ -332,7 +332,6 @@ def añadirActividad():
         descripcion = form.descripcion.data
         evento= form.evento.data
         ambiente= form.ambiente.data
-
         evento = db.Evento.get(nombre= evento)
         if not evento:
             flash("Evento no válido")
@@ -349,7 +348,7 @@ def añadirActividad():
                      tipo= tipo,
                      descripcion= descripcion,
                      evento= evento,
-                     ambiente= ambiente,
+                     ambiente= ambiente
                     )
         flash("Actividad agregada")
         return redirect(url_for('config.actividades'))
@@ -386,3 +385,36 @@ def modificarActividad(id):
         return redirect(url_for('config.actividades'))
     return render_template("añadirActividad.html",form= form)
 # FIN ----------------------------------------------------------------------------------------------------
+from pony.orm import delete
+############
+# CF-17-03 #
+############
+@bp.route('/agregarExpositor', methods=['GET', 'POST'])
+@login_required
+def agregarExpositor():
+    # Obtén el expositor (si existe) y las actividades
+    expositor_id = request.args.get('expositor_id')
+    expositor = db.Expositor.get(id=expositor_id) if expositor_id else None
+    actividades = db.Actividad.select()
+
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        correo = request.form['correo']
+        descripcion = request.form['descripcion']
+        actividades_ids = [int(id) for id in request.form.getlist('actividades')]  # Obtén las actividades seleccionadas
+        exp = db.Expositor.get(nombre=nombre)
+        
+        if exp:
+            db.Expositor.delete(exp)
+
+        db.Expositor(
+                nombre=nombre,
+                correo=correo,
+                descripcion=descripcion,
+                actividades=[db.Actividad[id] for id in actividades_ids]
+            )
+
+        return redirect(url_for('config.actividades'))
+
+    # Lógica para la parte GET del método, renderizar formulario, etc.
+    return render_template('añadirExpositor.html', actividades=actividades, expositor=expositor)
