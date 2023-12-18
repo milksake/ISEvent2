@@ -75,7 +75,7 @@ def createUsers():
 @db_session
 def createAmbientes():
     # Lista sin repetidos
-    ambientes_sin_repetir = [
+    ambientes = [
         "Sala de Aula",
         "Sala de Auditorio",
         "Aulas Creativas",
@@ -99,14 +99,40 @@ def createAmbientes():
         "Área de Networking",
     ]
 
+    descripciones = [
+        "Una sala de aula es un espacio destinado al aprendizaje y la enseñanza. Suele estar equipada con mesas, sillas y pizarras. Aquí, los estudiantes y profesores se reúnen para explorar y compartir conocimientos.",
+        "Una sala de auditorio es un lugar diseñado para conferencias, presentaciones y eventos. Suele contar con asientos dispuestos en filas, un escenario y equipo de audiovisual para brindar una experiencia educativa o de entretenimiento.",
+        "Las aulas creativas son espacios inspiradores donde la imaginación y la innovación florecen. Equipadas con recursos variados, fomentan el pensamiento creativo y el desarrollo de habilidades artísticas y técnicas.",
+        "El patio es un espacio al aire libre destinado al recreo y la relajación. Puede incluir áreas verdes, bancos y juegos, ofreciendo un entorno agradable para actividades sociales y físicas.",
+        "El área de juegos es un lugar diseñado para la diversión y el entretenimiento. Equipada con estructuras para trepar, columpios y juegos interactivos, promueve el ejercicio y la interacción social entre niños y adultos.",
+        "Un salón temático es un espacio decorado de manera única para reflejar un tema específico. Puede utilizarse para eventos, fiestas o actividades relacionadas con la temática elegida.",
+        "El área de cine es un lugar equipado con proyectores y asientos cómodos para la proyección de películas y eventos audiovisuales. Proporciona una experiencia cinematográfica inmersiva.",
+        "Un campo deportivo es un espacio al aire libre dedicado a actividades físicas y deportivas. Puede incluir canchas de fútbol, baloncesto, tenis u otros deportes, ofreciendo oportunidades para la competición y el ejercicio.",
+        "Una pista de atletismo es un recorrido circular diseñado para carreras y eventos deportivos. Suele contar con carriles específicos para diferentes disciplinas atléticas como la carrera, el salto y el lanzamiento.",
+        "Una cancha de vóley playa es un área de arena destinada a juegos de vóley playa. Ofrece un entorno informal y relajado para disfrutar de este deporte en un ambiente playero.",
+        "Un salón de debates es un espacio donde se llevan a cabo discusiones formales sobre temas específicos. Puede utilizarse para eventos académicos, políticos o comunitarios que fomenten la expresión de ideas y la argumentación.",
+        "Un área de servicio es un espacio destinado a brindar comodidades y recursos a las personas. Puede incluir áreas de descanso, máquinas expendedoras y servicios básicos para satisfacer necesidades específicas.",
+        "Un salón de juegos es un lugar equipado con mesas de juegos como billar, ping pong y juegos de mesa. Ofrece un ambiente recreativo para socializar y disfrutar de diversas actividades lúdicas.",
+        "Una sala de talleres es un espacio diseñado para actividades prácticas y creativas. Puede utilizarse para clases, talleres y actividades que fomenten el aprendizaje práctico y la experimentación.",
+        "Una sala de conferencias es un espacio formal para presentaciones, charlas y eventos. Suele contar con asientos cómodos, equipo audiovisual y un escenario, proporcionando un entorno propicio para el intercambio de conocimientos.",
+        "Una reserva natural es un área protegida que conserva la biodiversidad y los ecosistemas naturales. Ofrece oportunidades para la observación de la naturaleza y la educación ambiental.",
+        "El escenario principal es un área destinada a presentaciones y actuaciones destacadas. Puede encontrarse en teatros, salas de conciertos o eventos, proporcionando un lugar central para espectáculos y actuaciones en vivo.",
+        "Una galería de arte es un espacio dedicado a la exhibición y apreciación de obras de arte. Proporciona un entorno cultural para la contemplación de diversas expresiones artísticas.",
+        "Una sala de danza es un espacio diseñado para prácticas y presentaciones de danza. Suele contar con espejos, barras y un suelo adecuado para facilitar la expresión artística a través del movimiento.",
+        "Una sala de laboratorio es un espacio equipado con herramientas y equipos especializados para la realización de experimentos y análisis. Se utiliza en entornos educativos y científicos para investigaciones y descubrimientos.",
+        "Un área de networking es un espacio diseñado para facilitar la interacción y la conexión entre individuos. Puede incluir zonas de encuentro, eventos sociales y recursos para fomentar relaciones profesionales y personales.",
+    ]
+
+
     # Capacidad genérica para los ambientes
     capacidad = 50  # Puedes ajustar este valor según tus necesidades
 
     # Crear objetos db.Ambiente para cada elemento de la lista
-    for ambiente_nombre in ambientes_sin_repetir:
+    for ambiente_nombre, descripcion in zip(ambientes, descripciones):
         db.Ambiente(nombre=ambiente_nombre,
-                    aforo=capacidad,
-                    descripcion=f"Descripción de {ambiente_nombre}.")
+        aforo=capacidad,
+        descripcion=descripcion
+        )
 
 @db_session
 def createEventos():
@@ -265,7 +291,7 @@ def createEventos():
 
     # Paquete actualizado
     p1_feria_club = db.Paquete(
-        precio=0.00,
+        precio=10.00,
         rol="Estudiante",
         evento=feria_club,
         actividades=[act_presentacion_clubes, act_forma_club, act_talleres_creativos, act_debate_club, act_servicio_comunitario, act_torneo_esport]
@@ -333,7 +359,7 @@ def createEventos():
 
     # Paquete actualizado para la Fiesta de Bienvenida al Semestre
     p1_fiesta_bienvenida = db.Paquete(
-        precio=0.00,
+        precio=10.00,
         rol="Estudiante",
         evento=fiesta_bienvenida,
         actividades=[act_karaoke_noche, act_juegos_sociales, act_noche_tematica, act_cine_al_aire_libre]
@@ -342,7 +368,7 @@ def createEventos():
     # Nuevo paquete para la Fiesta de Bienvenida al Semestre
     p2_fiesta_bienvenida = db.Paquete(
         precio=5.00,  # Se establece un precio para este paquete
-        rol="Estudiante",
+        rol="Invitado",
         evento=fiesta_bienvenida,
         actividades=[act_karaoke_noche, act_juegos_sociales, act_noche_tematica, act_cine_al_aire_libre]
     )
@@ -407,7 +433,7 @@ def createEventos():
 
     # Paquete 1 para Competencias Deportivas
     p1_competencias_deportivas = db.Paquete(
-        precio=0.00,
+        precio=15.00,
         rol="Estudiante",
         evento=competencias_deportivas,
         actividades=[act_torneo_futbol, act_carrera_atletica, act_voley_playa, act_gimnasia_artistica]
@@ -415,8 +441,8 @@ def createEventos():
 
     # Paquete 2 para Competencias Deportivas
     p2_competencias_deportivas = db.Paquete(
-        precio=10.00,
-        rol="Estudiante",
+        precio=5.00,
+        rol="Invitado",
         evento=competencias_deportivas,
         actividades=[act_torneo_futbol, act_carrera_atletica, act_voley_playa, act_gimnasia_artistica]
     )
@@ -482,7 +508,7 @@ def createEventos():
 
     # Paquete 1 para la Semana de la Sostenibilidad
     p1_semana_sostenibilidad = db.Paquete(
-        precio=0.00,
+        precio=20.00,
         rol="Estudiante",
         evento=semana_sostenibilidad,
         actividades=[act_semana_sostenibilidad, act_taller_reciclaje, act_charla_consumo_responsable, act_excursion_naturaleza]
