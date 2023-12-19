@@ -19,6 +19,6 @@ Paquete: {{ recibo.paquete.id }}
 <br>
 Evento: {{ recibo.paquete.evento.nombre }}
 <br>
-
+<img src="{{url_for('static', filename='qr/'~recibo.id~'.png')}}"> 
 </div>
 {%endblock%}
