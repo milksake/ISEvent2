@@ -1,7 +1,7 @@
 {%extends "layout.html"%}
 
 {%block title%}
-Agregar ambiente
+Agregar evento
 {%endblock%}
 
 {%block estilos%}
@@ -50,7 +50,7 @@ Agregar ambiente
                 <input type="text" name="tipo" autocomplete="off" {% if evento %}value="{{ evento.tipo }}"{% endif %} required>
             </div>
             <div class="input-box">
-                <label>Comite</label>
+                <label>Comité</label>
                 <br>
                 <select name="comite">
                     {% if evento %}
