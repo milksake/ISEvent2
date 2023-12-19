@@ -7,6 +7,9 @@ from datetime import datetime
 from openpyxl import Workbook
 from openpyxl.styles import Font
 
+############
+# CF-27-01 #
+############
 def generarExcel(titulos, datos, func):
     wb = Workbook()
     ws = wb.active
@@ -19,7 +22,11 @@ def generarExcel(titulos, datos, func):
             cell.font = ft
     
     wb.save("./app" + url_for('static', filename="archivos/reporte.xlsx"))
-
+# FIN
+    
+############
+# CF-27-02 #
+############
 @bp.route('/inscritos/')
 @bp.route('/inscritos/<id>', methods=['GET', 'POST'])
 @login_required
@@ -58,6 +65,9 @@ def reporteInscritos(id = None):
         return send_file("./"+ url_for('static', filename="archivos/reporte.xlsx"), download_name=f'reporte inscripciones {eve.nombre}.xlsx')
     return render_template("reporteInscritos.html", inscripciones=ins, evento=eve)
 
+############
+# CF-27-03 #
+############
 @bp.route('/asistencias/')
 @bp.route('/asistencias/<id>', methods=['GET', 'POST'])
 @login_required
@@ -86,6 +96,9 @@ def reporteAsistencias(id = None):
     query = [[i, [a for a in select(a in i.asistencias for a in acts)]] for i in query]
     return render_template('reporteAsistencias.html', asistencias=query, evento=eve)
 
+############
+# CF-27-04 #
+############
 @bp.route('/materiales/')
 @bp.route('/materiales/<id>', methods=['GET', 'POST'])
 @login_required
@@ -112,6 +125,9 @@ def reporteMateriales(id = None):
         return send_file("./"+ url_for('static', filename="archivos/reporte.xlsx"), download_name=f'reporte materiales {eve.nombre}.xlsx')
     return render_template('reporteMateriales.html', materiales=query, nombreEvento=eve.nombre)
 
+############
+# CF-27-05 #
+############
 @bp.route('/<tipo>/<id>', methods=['GET', 'POST'])
 @login_required
 def reporteCaja(tipo, id):

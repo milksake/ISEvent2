@@ -20,12 +20,15 @@ def evento(id):
     return render_template("eventoUI.html", evento=eve, fechaActual=datetime.now().replace(second=0, microsecond=0))
 # FIN
 
-# Funcion del recibo
+############
+# CF-06-01 #
+############
 @bp.route('/recibo/<id>')
 @login_required
 def recibo(id):
     recibo = db.Inscripcion.get(id=int(id))
     return render_template("reciboUI.html", recibo=recibo)
+# FIN
 
 ############
 # CF-04-02 #
