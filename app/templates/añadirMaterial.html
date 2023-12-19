@@ -1,51 +1,95 @@
-{%extends "layout.html"%}
+{% extends "layout.html" %}
 
-{%block title%}
-Material
-{%endblock%}
+{% block title %}
+    Material
+{% endblock %}
 
-{%block estilos%}
-{%endblock%}
+{% block estilos %}
+    <style>
+        .page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-{%block contenido%}
-<div class="page">
-    
-    <div class="form">
-        <h1>Material</h1>
-        <br>
-        <form action="" method="post">
-            <div class="input-box">
-                <label>Nombre</label>
-                <br>
-                <input type="text" name="nombre" autocomplete="off" required>
-            </div>
-            <div class="input-box">
-                <label>Tipo</label>
-                <br>
-                <input type="text" name="tipo" autocomplete="off" required>
-            </div>
-            <div class="input-box">
-                <label>Cantidad</label>
-                <br>
-                <input type="number" name="cantidad" autocomplete="off" required>
-            </div>
-            <div class="input-box">
-                <label>Costo</label>
-                <br>
-                <input type="number" name="costo" step="0.01" min="0" autocomplete="off" required>
-            </div>
-            <div class="input-box">
-                <label>Actividad</label>
-                <br>
-                <select name="actividad">
-                    {% for actividad in actividades %}
-                        <option value="{{ actividad.id }}">{{ actividad.nombre }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <button class="btn" type="submit">Guardar</button>
-        </form>
+        .form {
+            width: 50%;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        label,
+        input,
+        select {
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        input,
+        select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+{% endblock %}
+
+{% block contenido %}
+    <div class="page">
+        <div class="form">
+            <h1>Material</h1>
+            <form action="" method="post">
+                <div>
+                    <label for="nombre">Nombre</label>
+                    <br>
+                    <input type="text" name="nombre" autocomplete="off" required>
+                </div>
+                <div>
+                    <label for="tipo">Tipo</label>
+                    <br>
+                    <input type="text" name="tipo" autocomplete="off" required>
+                </div>
+                <div>
+                    <label for="cantidad">Cantidad</label>
+                    <br>
+                    <input type="number" name="cantidad" autocomplete="off" required>
+                </div>
+                <div>
+                    <label for="costo">Costo</label>
+                    <br>
+                    <input type="number" name="costo" step="0.01" min="0" autocomplete="off" required>
+                </div>
+                <div>
+                    <label for="actividad">Actividad</label>
+                    <br>
+                    <select name="actividad">
+                        {% for actividad in actividades %}
+                            <option value="{{ actividad.id }}">{{ actividad.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <button type="submit">Guardar</button>
+                </div>
+            </form>
+        </div>
     </div>
-
-</div>
-{%endblock%}
+{% endblock %}

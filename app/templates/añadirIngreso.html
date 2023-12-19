@@ -1,37 +1,79 @@
-{%extends "layout.html"%}
+{% extends "layout.html" %}
 
-{%block title%}
-{{title}}
-{%endblock%}
+{% block title %}
+    {{ title }}
+{% endblock %}
 
-{%block estilos%}
-{%endblock%}
+{% block estilos %}
+    <style>
+        .page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-{%block contenido%}
-<div class="page">
-    
-    <div class="form">
-        <h1>{{title}}</h1>
-        <br>
-        <form action="" method="post">
-            <div class="input-box">
-                <label>Monto</label>
-                <br>
-                <input type="number" name="monto" step="0.01" min="0" autocomplete="off" required>
-            </div>
-            <div class="input-box">
-                <label>Descripción</label>
-                <br>
-                <input type="text" name="descripcion" autocomplete="off" required>
-            </div>
-            <div class="input-box">
-                <label>Fecha</label>
-                <br>
-                <input type="datetime-local" name="fecha" autocomplete="off" required>
-            </div>         
-            <button class="btn" type="submit">Guardar</button>
-        </form>
+        .form {
+            width: 50%;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        label,
+        input {
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+{% endblock %}
+
+{% block contenido %}
+    <div class="page">
+        <div class="form">
+            <h1>{{ title }}</h1>
+            <form action="" method="post">
+                <div>
+                    <label for="monto">Monto</label>
+                    <br>
+                    <input type="number" name="monto" step="0.01" min="0" autocomplete="off" required>
+                </div>
+                <div>
+                    <label for="descripcion">Descripción</label>
+                    <br>
+                    <input type="text" name="descripcion" autocomplete="off" required>
+                </div>
+                <div>
+                    <label for="fecha">Fecha</label>
+                    <br>
+                    <input type="datetime-local" name="fecha" autocomplete="off" required>
+                </div>
+                <div>
+                    <button type="submit">Guardar</button>
+                </div>
+            </form>
+        </div>
     </div>
-
-</div>
-{%endblock%}
+{% endblock %}

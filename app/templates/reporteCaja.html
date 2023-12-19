@@ -1,32 +1,74 @@
-{%extends "layout.html"%}
+{% extends "layout.html" %}
 
-{%block title%}
-Login
-{%endblock%}
+{% block title %}
+    {{ title }}
+{% endblock %}
 
-{%block estilos%}
-{%endblock%}
+{% block estilos %}
+    <style>
+        .page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-{%block contenido%}
-<div class="page">
-    
-    <div class="form">
-        <h1>Reporte de {{ tipo|capitalize }}</h1>
-        <br>
-        <form action="" method="post">
-            <div class="input-box">
-                <label>Fecha de Inicio</label>
-                <br>
-                <input type="datetime-local" name="fechaIni" autocomplete="off">
-            </div>
-            <div class="input-box">
-                <label>Fecha de Fin</label>
-                <br>
-                <input type="datetime-local" name="fechaFin" autocomplete="off">
-            </div>
-            <button class="btn" type="submit">Generar</button>
-        </form>
+        .form {
+            width: 50%;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        label,
+        input {
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+{% endblock %}
+
+{% block contenido %}
+    <div class="page">
+        <div class="form">
+            <h1>Reporte de {{ tipo|capitalize }}</h1>
+            <form action="" method="post">
+                <div>
+                    <label for="fechaIni">Fecha de Inicio</label>
+                    <br>
+                    <input type="datetime-local" name="fechaIni" autocomplete="off">
+                </div>
+                <div>
+                    <label for="fechaFin">Fecha de Fin</label>
+                    <br>
+                    <input type="datetime-local" name="fechaFin" autocomplete="off">
+                </div>
+                <div>
+                    <button type="submit">Generar</button>
+                </div>
+            </form>
+        </div>
     </div>
-
-</div>
-{%endblock%}
+{% endblock %}

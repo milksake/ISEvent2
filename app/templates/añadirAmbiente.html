@@ -1,48 +1,93 @@
-{%extends "layout.html"%}
+{% extends "layout.html" %}
 
-{%block title%}
-Agregar ambiente
-{%endblock%}
+{% block title %}
+    Agregar ambiente
+{% endblock %}
 
-{%block estilos%}
-{%endblock%}
+{% block estilos %}
+    <style>
+        .page {
+            display: flex;
+            justify-content: space-between;
+        }
 
-{%block contenido%}
-<div class="page">
-    <div style="display: flex; justify-content:space-between">
-    <div class="form">
-        <h1>Ambiente</h1>
-        <br>
-        <form action="" method="post" enctype="multipart/form-data">
-            <div class="input-box">
-                <label>Nombre</label>
-                <br>
-                <input type="text" name="nombre" autocomplete="off" {% if ambiente %}value="{{ ambiente.nombre }}"{% endif %} required>
-            </div>
-            <div class="input-box">
-                <label>Descripción</label>
-                <br>
-                <input type="text" name="descripcion" autocomplete="off" {% if ambiente %}value="{{ ambiente.descripcion }}"{% endif %} required>
-            </div>
-            <div class="input-box">
-                <label>Aforo</label>
-                <br>
-                <input type="number" name="aforo" autocomplete="off" {% if ambiente %}value="{{ ambiente.aforo }}"{% endif %} required>
-            </div>
-            <div class="input-box">
-                <label>Imagen</label>
-                {% if ambiente %}(solo si se quiere cambiar){% endif %}
-                <br>
-                <input type="file" name="imagen" accept="image/png, image/jpg, image/jpeg" autocomplete="off" {% if not ambiente %}required{% endif %}>
-            </div>
-            <button class="btn" type="submit">Guardar</button>
-        </form>
+        .form {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .input-box {
+            margin-bottom: 20px;
+        }
+
+        .input-box label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .input-box input[type="file"] {
+            margin-top: 5px;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        img {
+            max-width: 100%;
+            max-height: 450px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block contenido %}
+    <div class="page">
+        <div class="form">
+            <h1>Ambiente</h1>
+            <form action="" method="post" enctype="multipart/form-data">
+                <div class="input-box">
+                    <label>Nombre</label>
+                    <input type="text" name="nombre" autocomplete="off" {% if ambiente %}value="{{ ambiente.nombre }}"{% endif %} required>
+                </div>
+                <div class="input-box">
+                    <label>Descripción</label>
+                    <input type="text" name="descripcion" autocomplete="off" {% if ambiente %}value="{{ ambiente.descripcion }}"{% endif %} required>
+                </div>
+                <div class="input-box">
+                    <label>Aforo</label>
+                    <input type="number" name="aforo" autocomplete="off" {% if ambiente %}value="{{ ambiente.aforo }}"{% endif %} required>
+                </div>
+                <div class="input-box">
+                    <label>Imagen</label>
+                    {% if ambiente %}(solo si se quiere cambiar){% endif %}
+                    <input type="file" name="imagen" accept="image/png, image/jpg, image/jpeg" autocomplete="off" {% if not ambiente %}required{% endif %}>
+                </div>
+                <button class="btn" type="submit">Guardar</button>
+            </form>
+        </div>
+        <div>
+            {% if ambiente %}
+                <img src="{{ url_for('static', filename='imgs/ambientes/' ~ ambiente.id ~ '.png') }}" alt="{{ ambiente.nombre }}">
+            {% endif %}
+        </div>
     </div>
-    <div>
-        {% if ambiente %}
-            <img style="max-height: 450px;" src="{{ url_for('static', filename='imgs/ambiente/' ~ ambiente.id ~ '.png') }}" alt="{{ ambiente.nombre }}">
-        {% endif %}
-    </div>
-    </div>
-</div>
-{%endblock%}
+{% endblock %}

@@ -1,47 +1,101 @@
-{%extends "layout.html"%}
+{% extends "layout.html" %}
 
-{%block estilos%}
-{%endblock%}
+{% block estilos %}
+    <style>
+        h2 {
+            color: #007bff;
+        }
 
-{%block title%}
-E-vent
-{%endblock%}
+        form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-{%block contenido%}
-<h2>Cambiar Roles</h2>
-<br>
-<form action="">
-    <input type="text" placeholder="Buscar.." name="query">
-    <button class="btn" type="submit" style="margin-bottom: 0;">Buscar</button>
-</form>
-<br>
-<form action="" method="post">
-    <table>
-        <tr>
-            <th>Cuenta</th>
-            <th>Correo</th>
-            <th>Rol Actual</th>
-            <th>Nuevo Rol</th>
-        </tr>
-        {% for cuenta in cuentas %}
-        <tr>
-            <td>{{ cuenta.nombre }}</td>
-            <td>{{ cuenta.correo }}</td>
-            <td>{{ cuenta.rol|capitalize }}</td>
-            <td>
-            <select name="{{ cuenta.nombre }}" id="rol">
-                <option value="no">No cambiar</option>
-                <option value="admin">Administrador</option>
-                <option value="colaborador">Colaborador</option>
-                <option value="encargado">Encargado</option>
-                <option value="ninguno">Ninguno</option>
-            </select>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        select {
+            padding: 8px;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        input[type="text"], select {
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+    E-vent
+{% endblock %}
+
+{% block contenido %}
+    <h2>Cambiar Roles</h2>
     <br>
-    <button class="btn" type="submit" style="margin-bottom: 0;">Guardar</button>
-</form>
-
-{%endblock%}
+    <form action="">
+        <input type="text" placeholder="Buscar.." name="query">
+        <button class="btn" type="submit">Buscar</button>
+    </form>
+    <br>
+    <form action="" method="post">
+        <table>
+            <tr>
+                <th>Cuenta</th>
+                <th>Correo</th>
+                <th>Rol Actual</th>
+                <th>Nuevo Rol</th>
+            </tr>
+            {% for cuenta in cuentas %}
+                <tr>
+                    <td>{{ cuenta.nombre }}</td>
+                    <td>{{ cuenta.correo }}</td>
+                    <td>{{ cuenta.rol|capitalize }}</td>
+                    <td>
+                        <select name="{{ cuenta.nombre }}" id="rol">
+                            <option value="no">No cambiar</option>
+                            <option value="admin">Administrador</option>
+                            <option value="colaborador">Colaborador</option>
+                            <option value="encargado">Encargado</option>
+                            <option value="ninguno">Ninguno</option>
+                        </select>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <button class="btn" type="submit">Guardar</button>
+    </form>
+{% endblock %}

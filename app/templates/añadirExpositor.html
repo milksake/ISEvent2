@@ -1,49 +1,92 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Agregar expositor
+    Agregar expositor
 {% endblock %}
 
 {% block estilos %}
-<style>
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 10px;
-    }
-    th, td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-    }
-</style>
+    <style>
+        .page {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .input-box {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 {% endblock %}
 
 {% block contenido %}
-<div class="page">
-    
-    <div class="form">
-        <h1>{{ title }}</h1>
-        <br>
-        <form action="" method="post">
+    <div class="page">
+        <div class="form">
+            <h1>{{ title }}</h1>
+
             <div class="input-box">
                 <label>Nombre</label>
-                <br>
                 <input type="text" name="nombre" autocomplete="off" required>
             </div>
+
             <div class="input-box">
                 <label>Correo</label>
-                <br>
                 <input type="email" name="correo" autocomplete="off" required>
             </div>
+
             <div class="input-box">
                 <label>Descripción</label>
-                <br>
                 <input type="text" name="descripcion" autocomplete="off" required>
             </div>
+
             <div class="input-box">
                 <label>Actividades</label>
-                <br>
                 <table>
                     <tr>
                         <th>Nombre</th>
@@ -60,9 +103,8 @@ Agregar expositor
                     {% endfor %}
                 </table>
             </div>
-            <button class="btn" type="submit">Guardar</button>
-        </form>
-    </div>
 
-</div>
+            <button type="submit">Guardar</button>
+        </div>
+    </div>
 {% endblock %}

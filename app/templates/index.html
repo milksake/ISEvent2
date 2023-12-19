@@ -1,49 +1,98 @@
-{%extends "layout.html"%}
+{% extends "layout.html" %}
 
-{%block estilos%}
-{%endblock%}
+{% block estilos %}
+    <style>
+        body {
+            background-color: #f8f8f8;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
 
-{%block title%}
-E-vent
-{%endblock%}
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
 
-{%block contenido%}
-<div class="container">
-    <h1>Eventos</h1>
-    <br>
-    {% if config %}
-    <a class="btn" style="margin-bottom: 0;" href="{{ url_for('config.añadirEvento') }}">
-        <button type="button">
-            Agregar evento
-        </button>
-    </a>
-    <br>
-    <br>
-    {% endif %}
-    {%for evento in eventos%}
-        <div style="border: solid gray; padding:20px; display:flex; justify-content:space-between; margin-bottom:20px;">
-            <div>
-            {% if config %}
-                <h2><a href="{{ url_for('config.modificarEvento', id=evento.id) }}">{{evento.nombre}}</a></h2>
-            {% else %}
-            <h2><a href="{{ url_for('inscripcion.evento', id=evento.id) }}">{{evento.nombre}}</a></h2>
-            {% endif %}
-            <br>
-            <div><b>Inicio:</b> {{ evento.fechaInicio|default('Sin fecha', true) }}</div>
-            <div><b>Fin:</b> {{ evento.fechaFin|default('Sin fecha', true) }}</div>
-            <div><b>Tipo:</b> {{ evento.tipo }}</div>
-            <br>
-            <p>{{ evento.descripcion }}</p>
+        h1 {
+            color: #333;
+        }
+
+        .btn {
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .evento {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .evento img {
+            max-height: 200px;
+            border-radius: 5px;
+        }
+
+        .evento-info {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        /* Agrega más estilos según tus necesidades */
+    </style>
+{% endblock %}
+
+{% block title %}
+    E-vent
+{% endblock %}
+
+{% block contenido %}
+    <div class="container">
+        <h1>Eventos</h1>
+
+        {% if config %}
+            <a class="btn" href="{{ url_for('config.añadirEvento') }}">Agregar evento</a>
             <br><br>
-            {% if config %}
-                <a href="{{ url_for('config.adaptarEvento', id=evento.id) }}"><button type="button">Adaptar Evento</button></a>
-            {% endif %}
+        {% endif %}
+
+        {% for evento in eventos %}
+            <div class="evento">
+                <div class="evento-info">
+                    {% if config %}
+                        <h2><a href="{{ url_for('config.modificarEvento', id=evento.id) }}">{{ evento.nombre }}</a></h2>
+                    {% else %}
+                        <h2><a href="{{ url_for('inscripcion.evento', id=evento.id) }}">{{ evento.nombre }}</a></h2>
+                    {% endif %}
+                    
+                    <div><b>Inicio:</b> {{ evento.fechaInicio|default('Sin fecha', true) }}</div>
+                    <div><b>Fin:</b> {{ evento.fechaFin|default('Sin fecha', true) }}</div>
+                    <div><b>Tipo:</b> {{ evento.tipo }}</div>
+
+                    <p>{{ evento.descripcion }}</p>
+
+                    {% if config %}
+                        <a href="{{ url_for('config.adaptarEvento', id=evento.id) }}" class="btn">Adaptar Evento</a>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <img src="{{ url_for('static', filename='imgs/eventos/'~ evento.id ~ '.png') }}" alt="{{ evento.nombre }}">
+                </div>
             </div>
-            <div>
-                <img style="max-height: 400px;" src="{{ url_for('static', filename='imgs/eventos/'~ evento.id ~ '.png') }}" alt="">
-            </div>
-            
-        </div>
-    {%endfor%}
-</div>
-{%endblock%}
+        {% endfor %}
+    </div>
+{% endblock %}

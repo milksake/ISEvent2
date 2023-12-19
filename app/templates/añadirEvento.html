@@ -1,76 +1,129 @@
-{%extends "layout.html"%}
+{% extends "layout.html" %}
 
-{%block title%}
-Agregar evento
-{%endblock%}
+{% block title %}
+    Agregar evento
+{% endblock %}
 
-{%block estilos%}
-{%endblock%}
+{% block estilos %}
+    <style>
+        .page {
+            display: flex;
+            justify-content: center;
+        }
 
-{%block contenido%}
-<div class="page">
-    <div style="display: flex; justify-content:space-between">
-    <div class="form">
-        {% if evento %}
-            <h1>Modificar Evento</h1>
-        {% else %}
-            <h1>Añadir Evento</h1>
-        {% endif %}
-        <br>
-        <form action="" method="post" enctype="multipart/form-data">
-            <div class="input-box">
-                <label>Nombre</label>
-                <br>
-                <input type="text" name="nombre" autocomplete="off" {% if evento %}value="{{ evento.nombre }}"{% endif %} required>
+        .form {
+            width: 50%;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .input-box {
+            margin-bottom: 20px;
+        }
+
+        .input-box label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-box input, .input-box select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .image-container {
+            width: 40%;
+        }
+
+        .image-container img {
+            max-height: 450px;
+            border-radius: 5px;
+        }
+    </style>
+{% endblock %}
+
+{% block contenido %}
+    <div class="page">
+        <div class="flex-container">
+            <div class="form">
+                {% if evento %}
+                    <h1>Modificar Evento</h1>
+                {% else %}
+                    <h1>Añadir Evento</h1>
+                {% endif %}
+                <form action="" method="post" enctype="multipart/form-data">
+                    <div class="input-box">
+                        <label>Nombre</label>
+                        <input type="text" name="nombre" autocomplete="off" {% if evento %}value="{{ evento.nombre }}"{% endif %} required>
+                    </div>
+                    <div class="input-box">
+                        <label>Descripción</label>
+                        <input type="text" name="descripcion" autocomplete="off" {% if evento %}value="{{ evento.descripcion }}"{% endif %} required>
+                    </div>
+                    <div class="input-box">
+                        <label>Fecha de Inicio de Inscripciones</label>
+                        <input type="datetime-local" name="fechaInscripcionIni" autocomplete="off" {% if evento %}value="{{ evento.fechaInscripcionInicio.strftime('%Y-%m-%dT%H:%M') }}"{% endif %} required>
+                    </div>
+                    <div class="input-box">
+                        <label>Fecha de Fin de Inscripciones</label>
+                        <input type="datetime-local" name="fechaInscripcionFin" autocomplete="off" {% if evento %}value="{{ evento.fechaInscripcionFin.strftime('%Y-%m-%dT%H:%M') }}"{% endif %} required>
+                    </div>            
+                    <div class="input-box">
+                        <label>Imagen</label>
+                        {% if evento %}(solo si se quiere cambiar){% endif %}
+                        <input type="file" name="imagen" accept="image/png, image/jpg, image/jpeg" autocomplete="off" {% if not evento %}required{% endif %}>
+                    </div>
+                    <div class="input-box">
+                        <label>Tipo</label>
+                        <input type="text" name="tipo" autocomplete="off" {% if evento %}value="{{ evento.tipo }}"{% endif %} required>
+                    </div>
+                    <div class="input-box">
+                        <label>Comité</label>
+                        <select name="comite">
+                            {% if evento %}
+                                <option value="{{ evento.comite.id }}" selected>{{ evento.comite.nombre }}</option>
+                            {% endif %}
+                            {% for comite in comites %}
+                                <option value="{{ comite.id }}">{{ comite.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button class="btn" type="submit">Guardar</button>
+                </form>
             </div>
-            <div class="input-box">
-                <label>Descripción</label>
-                <br>
-                <input type="text" name="descripcion" autocomplete="off" {% if evento %}value="{{ evento.descripcion }}"{% endif %} required>
+            <div class="image-container">
+                {% if evento %}
+                    <img src="{{ url_for('static', filename='imgs/eventos/' ~ evento.id ~ '.png') }}" alt="{{ evento.nombre }}">
+                {% endif %}
             </div>
-            <div class="input-box">
-                <label>Fecha de Inicio de Inscripciones</label>
-                <br>
-                <input type="datetime-local" name="fechaInscripcionIni" autocomplete="off" {% if evento %}value="{{ evento.fechaInscripcionInicio.strftime('%Y-%m-%dT%H:%M') }}"{% endif %} required>
-            </div>
-            <div class="input-box">
-                <label>Fecha de Fin de Inscripciones</label>
-                <br>
-                <input type="datetime-local" name="fechaInscripcionFin" autocomplete="off" {% if evento %}value="{{ evento.fechaInscripcionFin.strftime('%Y-%m-%dT%H:%M') }}"{% endif %} required>
-            </div>            
-            <div class="input-box">
-                <label>Imagen</label>
-                {% if evento %}(solo si se quiere cambiar){% endif %}
-                <br>
-                <input type="file" name="imagen" accept="image/png, image/jpg, image/jpeg" autocomplete="off" {% if not evento %}required{% endif %}>
-            </div>
-            <div class="input-box">
-                <label>Tipo</label>
-                <br>
-                <input type="text" name="tipo" autocomplete="off" {% if evento %}value="{{ evento.tipo }}"{% endif %} required>
-            </div>
-            <div class="input-box">
-                <label>Comité</label>
-                <br>
-                <select name="comite">
-                    {% if evento %}
-                        <option value="{{ evento.comite.id }}" selected>{{ evento.comite.nombre }}</option>
-                    {% endif %}
-                    {% for comite in comites %}
-                        <option value="{{ comite.id }}">{{ comite.nombre }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            
-            <button class="btn" type="submit">Guardar</button>
-        </form>
+        </div>
     </div>
-    <div>
-        {% if evento %}
-            <img style="max-height: 450px;" src="{{ url_for('static', filename='imgs/eventos/' ~ evento.id ~ '.png') }}" alt="{{ evento.nombre }}">
-        {% endif %}
-    </div>
-    </div>
-
-</div>
-{%endblock%}
+{% endblock %}

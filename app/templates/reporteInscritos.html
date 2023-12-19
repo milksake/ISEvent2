@@ -1,84 +1,160 @@
-{%extends "layout.html"%}
+{% extends "layout.html" %}
 
-{%block estilos%}
-{%endblock%}
+{% block estilos %}
+<style>
+    h2 {
+        color: #007bff;
+    }
 
-{%block title%}
-E-vent
-{%endblock%}
+    form.horizontal {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
 
-{%block contenido%}
-{% if evento %}
-    <h2>Reporte de Inscritos de {{ evento.nombre }}</h2>
-    <br>
-    <form action="" class="horizontal">
-        <div>
-        <label>Paquete</label>
-        <select name="actividades">
-            <option value="None">Todos</option>
-            {% set actStrings = [] %}
-            {% for paquete in evento.paquetes %}
-                {{ actStrings.append(paquete.actividades|join(", ", attribute='nombre')) }}
+    form.horizontal div {
+        margin-right: 10px;
+    }
+
+    form.horizontal select,
+    form.horizontal input {
+        padding: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #ddd;  /* Cambiado a #ddd */
+        padding: 12px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .btn {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 10px;  /* Agregado margen superior */
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    ul li {
+        margin-bottom: 8px;
+    }
+
+    li a {
+        text-decoration: none;
+        color: #007bff;
+        transition: color 0.3s ease;
+        font-weight: bold;
+    }
+
+    a:hover {
+        color: #0056b3;
+    }
+</style>
+{% endblock %}
+
+{% block title %}
+    E-vent
+{% endblock %}
+
+{% block contenido %}
+    {% if evento %}
+        <h2 class="mb-4">Reporte de Inscritos de {{ evento.nombre }}</h2>
+
+        <form action="" class="horizontal">
+            <div>
+                <label>Paquete</label>
+                <select name="actividades">
+                    <option value="None">Todos</option>
+                    {% set actStrings = [] %}
+                    {% for paquete in evento.paquetes %}
+                        {{ actStrings.append(paquete.actividades|join(", ", attribute='nombre')) }}
+                    {% endfor %}
+                    {% for actS in actStrings | unique %}
+                        <option value="{{ actS }}">{{ actS }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label>Rol </label>
+                <select name="rol">
+                    <option value="None">Todos</option>
+                    {% set roles = [] %}
+                    {% for paquete in evento.paquetes %}
+                        {{ roles.append(paquete.rol) }}
+                    {% endfor %}
+                    {% for rol in roles | unique %}
+                        <option value="{{ rol }}">{{ rol }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label>Fecha Inicio </label>
+                <input type="datetime-local" name="fechaIni">
+            </div>
+            <div>
+                <label>Fecha Fin </label>
+                <input type="datetime-local" name="fechaFin">
+            </div>
+            <button class="btn" type="submit">Aplicar Filtros</button>
+        </form>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Cuenta</th>
+                    <th>Actividades</th>
+                    <th>Rol</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inscripcion in inscripciones %}     
+                    <tr>
+                        <td>{{ inscripcion.cuenta.nombre }}</td>
+                        <td>{{ inscripcion.paquete.actividades|join(', ', attribute='nombre') }}</td>
+                        <td>{{ inscripcion.paquete.rol }}</td>
+                        <td>{{ inscripcion.fecha }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <form action="" method="post">
+            <button class="btn">Exportar</button>
+        </form>
+    {% else %}
+        <h2 class="mb-4">Elige Evento</h2>
+
+        <ul>
+            {% for eve in eventos %}
+                <li><a href="{{ url_for('reporte.reporteInscritos', id=eve.id) }}">{{ eve.nombre }}</a></li>
             {% endfor %}
-            {% for actS in actStrings | unique %}
-                <option value="{{ actS }}">{{ actS }}</option>
-            {% endfor %}
-        </select>
-        </div>
-        <div>
-        <label>Rol </label>
-        <select name="rol">
-            <option value="None">Todos</option>
-            {% set roles = [] %}
-            {% for paquete in evento.paquetes %}
-                {{ roles.append(paquete.rol) }}
-            {% endfor %}
-            {% for rol in roles | unique %}
-                <option value="{{ rol }}">{{ rol }}</option>
-            {% endfor %}
-        </select>
-        </div>
-        <div>
-        <label>Fecha Inicio </label>
-        <input type="datetime-local" name="fechaIni">
-        </div>
-        <div>
-        <label>Fecha Fin </label>
-        <input type="datetime-local" name="fechaFin">
-        </div>
-        <button class="btn" type="submit" style="margin-bottom: 0;">Aplicar Filtros</button>
-    </form>
-    <br>
-    <table>
-        <tr>
-            <th>Cuenta</th>
-            <th>Actividades</th>
-            <th>Rol</th>
-            <th>Fecha</th>
-        </tr>
-        {% for inscripcion in inscripciones %}     
-            <tr>
-                <td>{{ inscripcion.cuenta.nombre }}</td>
-                <td>{{ inscripcion.paquete.actividades|join(', ', attribute='nombre') }}</td>
-                <td>{{ inscripcion.paquete.rol }}</td>
-                <td>{{ inscripcion.fecha }}</td>
-            </tr>
-        {% endfor %}
-    </table>
-    <br>
-    <form action="" method="post">
-        <button>Exportar</button>
-    </form>
-{% else %}
-    <h2>Elige Evento</h2>
-    <br>
-    <ul>
-    {% for eve in eventos %}
-        <li><a href="{{ url_for('reporte.reporteInscritos', id=eve.id) }}">{{ eve.nombre }}</a></li>
-    {% endfor %}
-    </ul>
-    
-{% endif %}
-
-
-{%endblock%}
+        </ul>
+    {% endif %}
+{% endblock %}

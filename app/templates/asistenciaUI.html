@@ -20,10 +20,58 @@
 </script>
 
 <style>
-    .showActs:hover {
-        color: grey;
-        cursor: pointer;
-    }
+    .showActs {
+            color: #007bff !important;
+            cursor: pointer !important;
+        }
+
+        .showActs:hover {
+            text-decoration: underline !important;
+        }
+
+        .btn-container {
+            margin: 20px 0 !important;
+        }
+
+        .btn-container button {
+            margin-right: 10px !important;
+        }
+
+        table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            margin-top: 20px !important;
+        }
+
+        th, td {
+            border: 1px solid #ddd !important;
+            padding: 12px !important;
+            text-align: left !important;
+        }
+
+        th {
+            background-color: #007bff !important;
+            color: #fff !important;
+        }
+
+        .checkbox-column {
+            text-align: center !important;
+        }
+
+        .btn-submit {
+            background-color: #28a745 !important;
+            color: #fff !important;
+            padding: 10px 15px !important;
+            border: none !important;
+            border-radius: 5px !important;
+            cursor: pointer !important;
+            margin-top: 10px !important;
+        }
+
+        .btn-submit:hover {
+            background-color: #218838 !important;
+        }
+        
 </style>
 {% endblock %}
 
@@ -40,9 +88,13 @@ E-vent
     <script src="{{ url_for('static', filename='scripts/qrCode.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <a id="btn-scan-qr" href="#">
+        <div style="text-align: center;">
         <img src="https://dab1nmslvvntp.cloudfront.net/wp-content/uploads/2017/07/1499401426qr_icon.svg" class="img-fluid text-center" width="175">
+        </div>
     </a>
-    <canvas hidden="" id="qr-canvas" class="img-fluid"></canvas>
+    <div style="text-align: center;">
+        <canvas hidden="" id="qr-canvas" class="img-fluid"></canvas>
+    </div>
     </div>
     <div class="row mx-5 my-3">
     <button class="btn btn-success btn-sm rounded-3 mb-2" onclick="encenderCamara()">Encender camara</button>
@@ -53,7 +105,7 @@ E-vent
     <form action="" method="post">
         <h3>Inscritos</h3>
         <br>
-        <table>
+        <table >
             <tr>
                 <th>Cuenta</th>
                 <th>Paquete</th>
@@ -65,16 +117,18 @@ E-vent
                     <td>{{ insc[0].cuenta.nombre }}</td>
                     <td>{{ insc[0].paquete.actividades.nombre | join(', ') }}</td>
                     <td>{{ insc[0].paquete.rol }}</td>
-                    {% if insc[1] %}
-                        <td>&#x2705;</td>
-                    {% else %}
-                        <td><input id= "cb_asistencia{{insc[0].id}}" type="checkbox" name="asistencia" value="{{ insc[0].id }}"></td>
-                    {% endif %}
+                    <td class="checkbox-column">
+                        {% if insc[1] %}
+                            &#x2705;
+                        {% else %}
+                            <input id="cb_asistencia{{insc[0].id}}" type="checkbox" name="asistencia" value="{{ insc[0].id }}">
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
         </table>
         <br>
-        <button class="btn" type="submit" style="margin-bottom: 0;">Guardar</button>
+        <button class="btn btn-submit" type="submit" style="margin-bottom: 0;">Guardar</button>
     </form>
 {% else %}
     <h2>Elige Actividad</h2>

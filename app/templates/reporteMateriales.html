@@ -1,46 +1,106 @@
-{%extends "layout.html"%}
+{% extends "layout.html" %}
 
-{%block estilos%}
-{%endblock%}
+{% block estilos %}
+<style>
+    h2 {
+        color: #007bff;
+        margin-bottom: 20px;
+    }
 
-{%block title%}
-E-vent
-{%endblock%}
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
 
-{%block contenido%}
-{% if nombreEvento %}
-    <h2>Reporte de Materiales de {{ nombreEvento }}</h2>
-    <br>
-    <table>
-        <tr>
-            <th>Material</th>
-            <th>Cantidad</th>
-            <th>Tipo</th>
-            <th>Actividad</th>
-        </tr>
-        {% for mat in materiales %}     
-            <tr>
-                <td>{{ mat.nombre }}</td>
-                <td>{{ mat.cantidad }}</td>
-                <td>{{ mat.tipo }}</td>
-                <td>{{ mat.actividad.nombre }}</td>
-            </tr>
-        {% endfor %}
-    </table>
-    <br>
-    <form action="" method="post">
-        <button>Exportar</button>
-    </form>
-{% else %}
-    <h2>Elige Evento</h2>
-    <br>
-    <ul>
-    {% for eve in eventos %}
-        <li><a href="{{ url_for('reporte.reporteMateriales', id=eve.id) }}">{{ eve.nombre }}</a></li>
-    {% endfor %}
-    </ul>
-    
-{% endif %}
+    th, td {
+        border: 1px solid #ddd;  /* Cambiado a #ddd */
+        padding: 12px;
+        text-align: left;
+    }
 
+    th {
+        background-color: #007bff;
+        color: #fff;
+    }
 
-{%endblock%}
+    .btn {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 10px;  /* Agregado margen superior */
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    ul li {
+        margin-bottom: 8px;
+    }
+
+    li a {
+        text-decoration: none;
+        color: #007bff;
+        transition: color 0.3s ease;
+        font-weight: bold;
+    }
+
+    a:hover {
+        color: #0056b3;
+    }
+</style>
+{% endblock %}
+
+{% block title %}
+    E-vent
+{% endblock %}
+
+{% block contenido %}
+    {% if nombreEvento %}
+        <h2>Reporte de Materiales de {{ nombreEvento }}</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Material</th>
+                    <th>Cantidad</th>
+                    <th>Tipo</th>
+                    <th>Actividad</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mat in materiales %}     
+                    <tr>
+                        <td>{{ mat.nombre }}</td>
+                        <td>{{ mat.cantidad }}</td>
+                        <td>{{ mat.tipo }}</td>
+                        <td>{{ mat.actividad.nombre }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <br>
+        <form action="" method="post">
+            <button class="btn">Exportar</button>
+        </form>
+    {% else %}
+        <h2>Elige Evento</h2>
+
+        <ul>
+            {% for eve in eventos %}
+                <li><a href="{{ url_for('reporte.reporteMateriales', id=eve.id) }}">{{ eve.nombre }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

@@ -1,47 +1,127 @@
-{%extends "layout.html"%}
+{% extends "layout.html" %}
 
-{%block estilos%}
-{%endblock%}
+{% block estilos %}
+    <style>
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
 
-{%block title%}
-E-vent
-{%endblock%}
+        .btn-container {
+            margin-bottom: 20px;
+        }
 
-{%block contenido%}
-{% if evento %}
-    <h2>Paquetes de {{ evento.nombre }}</h2>
-    <br>
-    <a class="btn" style="margin-bottom: 0;" href="{{ url_for('config.añadirPaquete', id=evento.id) }}">
-    <button type="button">
-        Agregar paquete
-    </button>
-    <br><br>
-    </a>
-    <table>
-        <tr>
-            <th>Rol</th>
-            <th>Actividades</th>
-            <th>Precio</th>
-        </tr>
-        {% for paquete in evento.paquetes %}
-        <tr>
-            <td>{{ paquete.rol }}</td>
-            <td>{% for actividad in paquete.actividades %}{{ actividad.nombre }} {% endfor %}</td>
-            <td>{{ paquete.precio }}</td>
-            <td><a href="{{ url_for('config.modificarPaquete', id=paquete.id) }}"><button type="button">Modificar</button></a></td>
-        </tr>
-        {% endfor %}
-    </table>
-{% else %}
-    <h2>Elige Evento</h2>
-    <br>
-    <ul>
-    {% for eve in eventos %}
-        <li><a href="{{ url_for('config.paquetes', id=eve.id) }}">{{ eve.nombre }}</a></li>
-    {% endfor %}
-    </ul>
-    
-{% endif %}
+        .btn {
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
 
+        .btn:hover {
+            background-color: #0056b3;
+        }
 
-{%endblock%}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .btn-modificar {
+            text-decoration: none;
+            background-color: #28a745;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .btn-modificar:hover {
+            background-color: #218838;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        li a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        li a:hover {
+            text-decoration: underline;
+        }
+
+        .empty-message {
+            color: #555;
+            font-style: italic;
+            margin-top: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+    E-vent
+{% endblock %}
+
+{% block contenido %}
+    {% if evento %}
+        <h2>Paquetes de {{ evento.nombre }}</h2>
+
+        <div class="btn-container">
+            <a class="btn" href="{{ url_for('config.añadirPaquete', id=evento.id) }}">
+                <button type="button">Agregar paquete</button>
+            </a>
+        </div>
+
+        {% if evento.paquetes %}
+            <table>
+                <tr>
+                    <th>Rol</th>
+                    <th>Actividades</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                </tr>
+                {% for paquete in evento.paquetes %}
+                    <tr>
+                        <td>{{ paquete.rol }}</td>
+                        <td>{% for actividad in paquete.actividades %}{{ actividad.nombre }} {% endfor %}</td>
+                        <td>{{ paquete.precio }}</td>
+                        <td><a class="btn-modificar" href="{{ url_for('config.modificarPaquete', id=paquete.id) }}">Modificar</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p class="empty-message">No hay paquetes disponibles para este evento.</p>
+        {% endif %}
+    {% else %}
+        <h2>Elige un Evento</h2>
+
+        <ul>
+            {% for eve in eventos %}
+                <li><a href="{{ url_for('config.paquetes', id=eve.id) }}">{{ eve.nombre }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

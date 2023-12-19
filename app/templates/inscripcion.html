@@ -1,54 +1,115 @@
-{%extends "layout.html"%}
+{% extends "layout.html" %}
 
-{%block title%}
-Inscripcion
-{%endblock%}
+{% block title %}
+    Inscripcion
+{% endblock %}
 
-{%block estilos%}
-{%endblock%}
+{% block estilos %}
+    <style>
+        .page {
+            display: flex;
+            justify-content: center;
+        }
 
-{%block contenido%}
-<div class="page">
-    
-    <div class="form">
-        <h1>Inscripcion para {{ evento.nombre }}</h1>
-        <br>
-        <h2>Paquetes</h2>
-        <br>
-        <table>
-            <tr>
-                <th>Rol</th>
-                <th>Actividades</th>
-                <th>Precio</th>
-            </tr>
-            {% for paquete in evento.paquetes %}
-            <tr>
-                <td>{{ paquete.rol|capitalize }}</td>
-                <td>{{ paquete.actividades|join(', ', attribute='nombre') }}</td>
-                <td>{{ paquete.precio }}</td>
-            </tr>
-            {% endfor %}
-        </table>
-        <br>
-        <form action="" method="post">
-            <div class="input-box">
-                <label>DNI</label>
-                <br>
-                <input type="text" name="docId" autocomplete="off" required>
-            </div>
-            <div class="input-box">
-                <select name="paquete">
-                {% for paquete in evento.paquetes %}
-                    <option value="{{ paquete.id }}">{{ paquete.rol|capitalize }} - {{ paquete.actividades|join(', ', attribute='nombre') }}</option>
-                {% endfor %}
-                </select>
-            </div>
+        .form {
+            width: 50%;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .input-box {
+            margin-bottom: 20px;
+        }
+
+        .input-box label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-box input, .input-box select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+{% endblock %}
+
+{% block contenido %}
+    <div class="page">
+        <div class="form">
+            <h1>Inscripcion para {{ evento.nombre }}</h1>
             
-            <button class="btn" type="submit">
-                Inscribirse
-            </button>
-        </form>
+            <h2>Paquetes</h2>
+            
+            <table>
+                <tr>
+                    <th>Rol</th>
+                    <th>Actividades</th>
+                    <th>Precio</th>
+                </tr>
+                {% for paquete in evento.paquetes %}
+                    <tr>
+                        <td>{{ paquete.rol|capitalize }}</td>
+                        <td>{{ paquete.actividades|join(', ', attribute='nombre') }}</td>
+                        <td>{{ paquete.precio }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            
+            <form action="" method="post">
+                <div class="input-box">
+                    <label>DNI</label>
+                    <input type="text" name="docId" autocomplete="off" required>
+                </div>
+                <div class="input-box">
+                    <label>Seleccione un paquete</label>
+                    <select name="paquete">
+                        {% for paquete in evento.paquetes %}
+                            <option value="{{ paquete.id }}">{{ paquete.rol|capitalize }} - {{ paquete.actividades|join(', ', attribute='nombre') }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button class="btn" type="submit">Inscribirse</button>
+            </form>
+        </div>
     </div>
-
-</div>
-{%endblock%}
+{% endblock %}

@@ -1,71 +1,130 @@
-{%extends "layout.html"%}
+{% extends "layout.html" %}
 
-{%block estilos%}
-{%endblock%}
+{% block estilos %}
+    <style>
+        .evento-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
 
-{%block title%}
-E-vent
-{%endblock%}
+        .evento-info {
+            flex: 1;
+            margin-right: 30px;
+        }
 
-{%block contenido%}
-<div style="display: flex; justify-content:space-between; gap:30px;">
-<div>
-    <a href="{{ url_for('inscripcion.evento', id=evento.id) }}"><h1>{{evento.nombre}}</h1></a>
-    <br>
-    <div><b>Inicio:</b> {{ evento.fechaInicio|default('Sin Fecha', true) }}</div>
-    <div><b>Fin:</b> {{ evento.fechaFin|default('Sin Fecha', true) }}</div>
-    <div><b>Tipo:</b> {{ evento.tipo }}</div>
-    <br>
-    <p>{{ evento.descripcion }}</p>
-    <br>
-    <h2>Actividades</h2>
-    <br>
-    <div style="display: flex; flex-wrap: wrap; gap:15px;">
-    {% for actividad in evento.actividades %}
-        <div style="border: solid gray; padding:20px;">
-            <h3>{{ actividad.nombre }}</h3>
-            <br>
-            <div><b>Inicio:</b> {{ actividad.fechaInicio }}</div>
-            <div><b>Fin:</b> {{ actividad.fechaFin }}</div>
-            <div><b>Tipo:</b> {{ actividad.tipo }}</div>
-            <div><b>Ambiente:</b> {{ actividad.ambiente.nombre }}</div>
-            <br>
-            <p>{{ actividad.descripcion }}</p>
-            {% if actividad.expositores|length > 0 %}            
-                <h4>Expositores</h4>
-                <ul>
-                {% for expositor in actividad.expositores %}
-                    <li>{{ expositor.nombre }}</li>
+        h1 {
+            margin: 0;
+            color: #333;
+        }
+
+        .info-item {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .actividades-container {
+            margin-top: 20px;
+        }
+
+        .actividad {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .expositores-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .btn-container {
+            margin-top: 20px;
+        }
+
+        .btn {
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .evento-img {
+            max-height: 450px;
+            border-radius: 5px;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+    E-vent
+{% endblock %}
+
+{% block contenido %}
+    <div class="evento-container">
+        <div class="evento-info">
+            <a href="{{ url_for('inscripcion.evento', id=evento.id) }}">
+                <h1>{{ evento.nombre }}</h1>
+            </a>
+            <div class="info-item"><b>Inicio:</b> {{ evento.fechaInicio|default('Sin Fecha', true) }}</div>
+            <div class="info-item"><b>Fin:</b> {{ evento.fechaFin|default('Sin Fecha', true) }}</div>
+            <div class="info-item"><b>Tipo:</b> {{ evento.tipo }}</div>
+            <p>{{ evento.descripcion }}</p>
+
+            <h2>Actividades</h2>
+            <div class="actividades-container">
+                {% for actividad in evento.actividades %}
+                    <div class="actividad">
+                        <h3>{{ actividad.nombre }}</h3>
+                        <div class="info-item"><b>Inicio:</b> {{ actividad.fechaInicio }}</div>
+                        <div class="info-item"><b>Fin:</b> {{ actividad.fechaFin }}</div>
+                        <div class="info-item"><b>Tipo:</b> {{ actividad.tipo }}</div>
+                        <div class="info-item"><b>Ambiente:</b> {{ actividad.ambiente.nombre }}</div>
+                        <p>{{ actividad.descripcion }}</p>
+
+                        {% if actividad.expositores|length > 0 %}
+                            <h4>Expositores</h4>
+                            <ul class="expositores-list">
+                                {% for expositor in actividad.expositores %}
+                                    <li>{{ expositor.nombre }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
                 {% endfor %}
-                </ul>
+            </div>
+
+            {% if fechaActual < evento.fechaInscripcionInicio %}
+                <div class="info-item"><b>Fecha de Inscripción:</b> {{ evento.fechaInscripcionInicio }}</div>
+                <div class="btn-container">
+                    <a class="btn" href="{{ url_for('inscripcion.preinscripcion', id=evento.id) }}">
+                        PreInscribirse
+                    </a>
+                </div>
+            {% elif fechaActual < evento.fechaInscripcionFin %}
+                <div class="info-item"><b>Fecha Límite de Inscripción:</b> {{ evento.fechaInscripcionFin }}</div>
+                <div class="btn-container">
+                    <a class="btn" href="{{ url_for('inscripcion.inscripcion', id=evento.id) }}">
+                        Inscribirse
+                    </a>
+                </div>
             {% endif %}
-            
         </div>
-    {% endfor %}
+
+        <div>
+            <img class="evento-img" src="{{ url_for('static', filename='imgs/eventos/' ~ evento.id ~ '.png') }}" alt="{{ evento.nombre }}">
+        </div>
     </div>
-    
-    {% if fechaActual < evento.fechaInscripcionInicio %}
-        <br>
-        <div><b>Fecha de Inscripción:</b> {{ evento.fechaInscripcionIni }}</div>
-        <br>
-        <a class="btn" style="margin-bottom: 0;" href="{{ url_for('inscripcion.preinscripcion', id=evento.id) }}">
-            <button type="button">
-                PreInscribirse
-            </button>
-        </a>
-    {% elif fechaActual < evento.fechaInscripcionFin %}
-        <br>
-        <div><b>Fecha Límite de Inscripción:</b> {{ evento.fechaInscripcionFin }}</div>
-        <br>
-        <a class="btn" style="margin-bottom: 0;" href="{{ url_for('inscripcion.inscripcion', id=evento.id) }}">
-            <button type="button">
-                Inscribirse
-            </button>
-        </a>
-    {% endif %}
-</div>
-<div>
-    <img style="max-height: 450px;" src="{{ url_for('static', filename='imgs/eventos/' ~ evento.id ~ '.png') }}" alt="{{ evento.nombre }}">
-</div>
-</div>
-{%endblock%}
+{% endblock %}

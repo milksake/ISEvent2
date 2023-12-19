@@ -1,41 +1,127 @@
-{%extends "layout.html"%}
+{% extends "layout.html" %}
 
-{%block estilos%}
-{%endblock%}
+{% block estilos %}
+    <style>
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
 
-{%block title%}
-E-vent
-{%endblock%}
+        .btn-container {
+            margin-bottom: 20px;
+        }
 
-{%block contenido%}
-{% if evento is defined %}
-    <h1>Materiales de {{ evento.nombre }}</h1>
-    <br>
-    <a class="btn" style="margin-bottom: 0;" href="{{ url_for('config.añadirMaterial', id=evento.id) }}"><button type="button">Agregar Material</button></a>
-    <br><br>
-    <table>
-        <tr>
-            <th>Nombre</th>
-            <th>Cantidad</th>
-            <th>Tipo</th>
-        </tr>
-        {% for material in materiales %}
-        <tr>
-                <td>{{ material.nombre }}</td>
-                <td>{{ material.cantidad }}</td>
-                <td>{{ material.tipo|capitalize }}</td>
-                <td><a class="btn" href="{{ url_for('config.modificarMaterial', id=material.id) }}">Modificar Material</a></td>
-            </tr>
+        .btn {
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .btn-modificar {
+            text-decoration: none;
+            background-color: #28a745;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .btn-modificar:hover {
+            background-color: #218838;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        li a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        li a:hover {
+            text-decoration: underline;
+        }
+
+        .empty-message {
+            color: #555;
+            font-style: italic;
+            margin-top: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+    E-vent
+{% endblock %}
+
+{% block contenido %}
+    {% if evento is defined %}
+        <h1>Materiales de {{ evento.nombre }}</h1>
+
+        <div class="btn-container">
+            <a class="btn" href="{{ url_for('config.añadirMaterial', id=evento.id) }}">
+                <button type="button">Agregar Material</button>
+            </a>
+        </div>
+
+        {% if materiales %}
+            <table>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Cantidad</th>
+                    <th>Tipo</th>
+                    <th>Acciones</th>
+                </tr>
+                {% for material in materiales %}
+                    <tr>
+                        <td>{{ material.nombre }}</td>
+                        <td>{{ material.cantidad }}</td>
+                        <td>{{ material.tipo|capitalize }}</td>
+                        <td><a class="btn-modificar" href="{{ url_for('config.modificarMaterial', id=material.id) }}">Modificar Material</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p class="empty-message">No hay materiales disponibles para este evento.</p>
+        {% endif %}
+    {% else %}
+        <h2>Elige un Evento</h2>
+
+        <ul>
+            {% for eve in eventos %}
+                <li><a href="{{ url_for('config.materiales', id=eve.id) }}">{{ eve.nombre }}</a></li>
             {% endfor %}
-    </table>
-{% else %}
-    <h2>Elige Evento</h2>
-    <br>
-    <ul>
-    {% for eve in eventos %}
-        <li><a href="{{ url_for('config.materiales', id=eve.id) }}">{{ eve.nombre }}</a></li>
-    {% endfor %}
-    </ul>
-{% endif %}
-
-{%endblock%}
+        </ul>
+    {% endif %}
+{% endblock %}

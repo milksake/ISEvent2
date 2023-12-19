@@ -1,53 +1,99 @@
-{%extends "layout.html"%}
+{% extends "layout.html" %}
 
-{%block title%}
-Agregar actividad
-{%endblock%}
+{% block title %}
+    Agregar actividad
+{% endblock %}
 
-{%block estilos%}
-{%endblock%}
+{% block estilos %}
+    <style>
+        form {
+            width: 50%;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 20px auto;
+        }
 
-{%block contenido%}
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
 
-{% if form.errors %}
-    <div style="color: red;">
-        {% for field, errors in form.errors.items() %}
-            <p>{{ field|capitalize }}: {{ errors|join(', ') }}</p>
-        {% endfor %}
-    </div>
-{% endif %}
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
 
-<form method="POST">
-    {{ form.hidden_tag() }}
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-    <label for="nombre">Nombre:</label>
-    {{ form.nombre(size=40) }}
-    <br>
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
 
-    <label for="fechaInicio">Fecha de Inicio:</label>
-    {{ form.fechaInicio }}
-    <br>
+        div.errors {
+            color: red;
+            margin-bottom: 10px;
+        }
 
-    <label for="fechaFin">Fecha de Fin:</label>
-    {{ form.fechaFin }}
-    <br>
+        div.errors p {
+            margin: 0;
+        }
+    </style>
+{% endblock %}
 
-    <label for="tipo">Tipo de Actividad:</label>
-    {{ form.tipo(size=20) }}
-    <br>
+{% block contenido %}
+    {% if form.errors %}
+        <div class="errors">
+            {% for field, errors in form.errors.items() %}
+                <p>{{ field|capitalize }}: {{ errors|join(', ') }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
 
-    <label for="descripcion">Descripción:</label>
-    {{ form.descripcion(cols=40, rows=5) }}
-    <br>
+    <form method="POST">
+        {{ form.hidden_tag() }}
 
-    <label for="evento">Evento:</label>
-    {{ form.evento(size=20) }}
-    <br>
+        <label for="nombre">Nombre:</label>
+        {{ form.nombre(size=40) }}
+        <br>
 
-    <label for="ambiente">Ambiente:</label>
-    {{ form.ambiente(size=20) }}
-    <br>
+        <label for="fechaInicio">Fecha de Inicio:</label>
+        {{ form.fechaInicio }}
+        <br>
 
-    <input type="submit" value="Guardar">
-</form>
-{%endblock%}
+        <label for="fechaFin">Fecha de Fin:</label>
+        {{ form.fechaFin }}
+        <br>
+
+        <label for="tipo">Tipo de Actividad:</label>
+        {{ form.tipo(size=20) }}
+        <br>
+
+        <label for="descripcion">Descripción:</label>
+        {{ form.descripcion(cols=40, rows=5) }}
+        <br>
+
+        <label for="evento">Evento:</label>
+        {{ form.evento(size=20) }}
+        <br>
+
+        <label for="ambiente">Ambiente:</label>
+        {{ form.ambiente(size=20) }}
+        <br>
+
+        <input type="submit" value="Guardar">
+    </form>
+{% endblock %}

@@ -1,24 +1,31 @@
-body, h1, h2, h3, p, a {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    text-decoration: none;
-}
+/* styles.css */
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
-    color: #333;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    background-color: #f8f8f8;
+    margin: 0;
 }
 
-header {
-    background-color: #333;
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+h1 {
+    color: #333;
+}
+
+.btn {
+    text-decoration: none;
+    background-color: #007bff;
     color: #fff;
-    padding: 20px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.btn:hover {
+    background-color: #0056b3;
 }
 
 .dropdown {
@@ -51,6 +58,12 @@ header {
     background-color: #ccc;
 }
 
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+}
+
 nav {
     display: flex;
     justify-content: space-between;
@@ -59,14 +72,6 @@ nav {
 nav>div>a, nav>div>div {
     color: #fff;
     margin: 0px 10px;
-}
-
-section {
-    margin: 20px;
-    padding: 50px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    flex: 2;
 }
 
 footer {
@@ -82,41 +87,4 @@ footer {
     margin: 10px;
     border-radius: 5px;
 }
-
-section a {
-    color: #007bff;
-}
-
-table {
-	border-collapse: collapse;
-}
-
-table td {
-    color: #636363;
-	border: 1px solid #dddfe1;
-    padding: 10px;
-}
-
-table th {
-    padding: 10px;
-	background-color: #54585d;
-	color: #ffffff;
-	border: 1px solid #54585d;
-}
-
-.horizontal {
-    max-width: fit-content;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 15px;
-    flex-wrap: wrap;
-    align-content: flex-start;
-}
-
-.form form {
-    display: flex;
-    flex-direction: column;
-    max-width: fit-content;
-    gap: 15px;
-}
+/* Agrega más estilos según tus necesidades */
