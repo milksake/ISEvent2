@@ -34,10 +34,15 @@ E-vent
             <div><b>Tipo:</b> {{ evento.tipo }}</div>
             <br>
             <p>{{ evento.descripcion }}</p>
+            <br><br>
+            {% if config %}
+                <a href="{{ url_for('config.adaptarEvento', id=evento.id) }}"><button type="button">Adaptar Evento</button></a>
+            {% endif %}
             </div>
             <div>
                 <img style="max-height: 400px;" src="{{ url_for('static', filename='imgs/eventos/'~ evento.id ~ '.png') }}" alt="">
             </div>
+            
         </div>
     {%endfor%}
 </div>

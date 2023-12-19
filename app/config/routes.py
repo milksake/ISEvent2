@@ -5,6 +5,7 @@ from app.extensions import db
 from datetime import datetime
 from app.forms.FormValidarActividad import FormValidarActividad
 from pony.orm import commit
+from shutil import copyfile
 
 ############
 # CF-03-01 #
@@ -109,6 +110,55 @@ def modificarEvento(id):
         abort(403)
     return render_template("añadirEvento.html", evento=ev, comites=comits)
 #FIN
+
+############
+# CF-03-04 #
+############
+@bp.route('/adaptarEvento/<id>', methods=['GET', 'POST'])
+@login_required
+def adaptarEvento(id):
+    ev = db.Evento.get(id=int(id))
+    if not ev:
+        flash("No existe ese evento")
+        return redirect(url_for('main.index'))
+    comits = None
+    if request.method == 'POST':
+        nom = request.form['nombre']
+        ev1 = db.Evento.get(nombre=nom)
+        if ev1:
+            flash('Ese nombre de evento ya existe')
+            return redirect(url_for('main.index'))
+        comit = db.Comite.get(id=int(request.form['comite']))
+        if not comit:
+            flash('Ese comite no es válido')
+
+        newEve = db.Evento(
+            nombre=nom,
+            descripcion=request.form['descripcion'],
+            fechaInscripcionInicio=datetime.strptime(request.form['fechaInscripcionIni'], '%Y-%m-%dT%H:%M'),
+            fechaInscripcionFin=datetime.strptime(request.form['fechaInscripcionFin'], '%Y-%m-%dT%H:%M'),
+            tipo=request.form['tipo'],
+            comite=comit
+        )
+        commit()
+        file = request.files['imagen']
+        if file and file.filename != '' and file.filename.split('.')[-1].lower() in ['jpg', 'png', 'jpeg']:
+            file.save("./app/" + url_for('static', filename=f"imgs/eventos/{newEve.id}.png"))
+        else:
+            copyfile("./app/" + url_for('static', filename=f"imgs/eventos/{ev.id}.png"), "./app/" + url_for('static', filename=f"imgs/eventos/{newEve.id}.png"))
+        
+
+        flash("Evento agregado")
+        return redirect(url_for('config.eventos'))
+    if current_user.rol == "admin":
+        comits = db.Comite.select()
+    elif current_user.rol == "encargado":
+        if ev not in current_user.comites.eventos:
+            abort(403)
+        comits = [cc for cc in current_user.comites if cc != ev.comite]
+    else:
+        abort(403)
+    return render_template("añadirEvento.html", evento=ev, comites=comits)
 
 ############
 # CF-15-03 #
