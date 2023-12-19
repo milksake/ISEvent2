@@ -1,32 +1,85 @@
 {%extends "layout.html"%}
 
 {%block title%}
-Login
+    Login
 {%endblock%}
 
 {%block estilos%}
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form {
+            width: 350px;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label,
+        input {
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 {%endblock%}
 
 {%block contenido%}
-<div class="page">
-    
-    <div class="form">
-        <h1>Login Form</h1>
-        <br>
-        <form action="" method="post">
-            <div class="input-box">
-                <label>Nombre</label>
-                <br>
-                <input type="text" name="nombre" autocomplete="off" required>
-            </div>
-            <div class="input-box">
-                <label>Contraseña</label>
-                <br>
-                <input type="password" name="contrasena" autocomplete="off" required>
-            </div>
-            <button class="btn" type="submit">Iniciar Sesión</button>
-        </form>
+    <div class="page">
+        <div class="form">
+            <h1>Login Form</h1>
+            <form action="" method="post">
+                <div class="input-box">
+                    <label>Nombre</label>
+                    <input type="text" name="nombre" autocomplete="off" required>
+                </div>
+                <div class="input-box">
+                    <label>Contraseña</label>
+                    <input type="password" name="contrasena" autocomplete="off" required>
+                </div>
+                <button class="btn" type="submit">Iniciar Sesión</button>
+            </form>
+        </div>
     </div>
-
-</div>
 {%endblock%}

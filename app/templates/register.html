@@ -1,45 +1,93 @@
-{%extends "layout.html"%}
+{% extends "layout.html" %}
 
-{%block title%}
-Register
-{%endblock%}
+{% block title %}
+    Register
+{% endblock %}
 
-{%block estilos%}
-{%endblock%}
+{% block estilos %}
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+        }
 
-{%block contenido%}
-<div class="page">
+        .page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-    <div class="form">
-        <h1>Register Form</h1>
-        <br>
-        <form action="" method="post">
-            <div class="input-box">
-                <label>Nombre</label>
-                <br>
-                <input type="text" name="nombre" autocomplete="off" required>
-            </div>
-            <div class="input-box">
-                <label>Correo</label>
-                <br>
-                <input type="email" name="correo" autocomplete="off" required>
-            </div>
-            
-            <div class="input-box">
-                <label>Contraseña</label>
-                <br>
-                <input type="password" name="contrasena" autocomplete="off" required>
-            </div>
-            
-            <div class="input-box">
-                <label>Confirmar Contraseña</label>
-                <br>
-                <input type="password" name="contrasena-repeat" autocomplete="off" required>
-            </div>
-            
-            <button class="btn" type="submit" style="margin-bottom: 0;">Register</button>
-        </form>
+        .form {
+            width: 350px;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label,
+        input {
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #28a745;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+{% endblock %}
+
+{% block contenido %}
+    <div class="page">
+        <div class="form">
+            <h1>Register Form</h1>
+            <form action="" method="post">
+                <div class="input-box">
+                    <label>Nombre</label>
+                    <input type="text" name="nombre" autocomplete="off" required>
+                </div>
+                <div class="input-box">
+                    <label>Correo</label>
+                    <input type="email" name="correo" autocomplete="off" required>
+                </div>
+                <div class="input-box">
+                    <label>Contraseña</label>
+                    <input type="password" name="contrasena" autocomplete="off" required>
+                </div>
+                <div class="input-box">
+                    <label>Confirmar Contraseña</label>
+                    <input type="password" name="contrasena-repeat" autocomplete="off" required>
+                </div>
+                <button class="btn" type="submit">Register</button>
+            </form>
+        </div>
     </div>
-
-</div>
-{%endblock%}
+{% endblock %}
