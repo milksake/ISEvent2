@@ -26,6 +26,7 @@ E-vent
     <tr>
         <th>Nombre</th>
         <th>Evento</th>
+        <th>Expositor(es)</th>
         <th>Inicio</th>
         <th>Fin</th>
         <th>Tipo</th>
@@ -35,6 +36,11 @@ E-vent
     <tr>
         <td>{{ actividad.nombre }}</td>
         <td><a href="{{url_for('inscripcion.evento', id=actividad.evento.id)}}">{{ actividad.evento.nombre }}</a></td>
+        <td>
+            {%for exp in actividad.expositores%}
+                {{exp.nombre}},
+            {% endfor %}
+        </td>
         <td>{{ actividad.fechaInicio }}</td>
         <td>{{ actividad.fechaFin }}</td>
         <td>{{ actividad.tipo }}</td>

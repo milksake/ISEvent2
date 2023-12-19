@@ -818,6 +818,65 @@ def createEgresos():
     
 # FIN CRECION DE EGRESOS Y MATERIALES
         
+# INICIO CREACION DE COMITES
+@db_session
+def createRandomComite(comite):
+    db.Comite(
+        nombre= comite,
+        eventos= [db.Evento.get(id= random.randint(1,8))],
+        cuentas= [db.Cuenta.get(id= random.randint(1,14)),
+                  db.Cuenta.get(id= random.randint(1,14))],
+    )
+
+@db_session
+def createComites():
+    comites= [
+    "Comité de Organización", "Comité de Programa","Comité de Patrocinio", "Comité de Marketing",
+    "Comité de Logística", "Comité de Comunicación","Comité de Entretenimiento", "Comité de Evaluación", 
+    "Comité de Tecnología","Comité de Redes Sociales","Comité de Estudio de Hábitos Alimenticios de Mascotas",
+    "Comité de Investigación de Sonidos Subacuáticos","Comité de Evaluación de Efectos del Color en el Entorno Laboral",
+    "Comité de Optimización de Rutinas Matutinas","Comité de Preservación del Arte Urbano Efímero",
+    "Comité de Análisis de Tendencias en Sombreros","Comité de Exploración de Tecnologías de Limpieza Sostenible",
+    "Comité de Estudio de Relaciones entre Café y Creatividad","Comité de Investigación de Usos Alternativos para Globos de Helio",
+    "Comité de Observación de Patrones de Sueño en Estudiantes de Ciencias de la Computación",
+]
+    for i in range(len(comites)):
+        createRandomComite(comites[i])
+
+# FIN CREACION DE COMITES
+        
+#INICIO CREACION EXPOSITORES
+@db_session
+def createRandomExpositor(expositor,descripcion):
+    db.Expositor(
+        nombre= expositor,
+        correo= expositor+'_prueba@gmail.com',
+        descripcion= descripcion,
+        actividades= [db.Actividad.get(id= random.randint(1,32))],
+    )
+
+@db_session
+def createExpositores():
+    descripciones = [
+    "Experta en inteligencia artificial y líder en innovación tecnológica.",
+    "Reconocido autor y conferencista internacional en liderazgo y motivación.",
+    "Pionero en la industria de la sostenibilidad y energías renovables.",
+    "Emprendedora exitosa en el ámbito de la tecnología financiera (fintech).",
+    "Especialista en marketing digital y estrategias de contenido en redes sociales.",
+    ]
+    expositores = [
+    "Ana Martínez", "Carlos Rodríguez", "Elena García", "Francisco López", "Isabel Pérez",
+    "Javier Hernández", "Laura Sánchez", "Miguel Fernández", "Natalia González", "Óscar Ramírez",
+    "Patricia Díaz", "Roberto Ruiz", "Sara Torres", "Tomás Jiménez", "Verónica Moreno",
+    "Alejandro Vargas", "Beatriz Castro", "César Navarro", "Diana Herrera", "Emilio Mendoza",
+    "Fabiola Reyes", "Gustavo Aguilar", "Hilda Ortega", "Iván Silva", "Julia Núñez",
+    "Luis Medina", "Marina Ríos", "Nacho Herrera", "Olga García",
+    ]
+    for i in range(len(expositores)):
+        createRandomExpositor(expositores[i],descripciones[random.randint(0,4)])
+
+#FIN CREACION EXPOSITORES
+        
 @db_session
 def createPosers():
     db.Expositor(
@@ -841,3 +900,5 @@ createEventos()
 createPosers()
 createIngresos()
 createEgresos()
+createComites()
+createExpositores()
