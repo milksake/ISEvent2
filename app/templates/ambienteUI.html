@@ -11,7 +11,7 @@
             margin-bottom: 20px;
         }
 
-        .btn {
+        .btn{
             text-decoration: none;
             background-color: #007bff;
             color: #fff;
@@ -21,7 +21,16 @@
             margin-bottom: 10px;
         }
 
-        .btn:hover {
+        .my-button{
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            display: inline-block;
+            border: none;
+        }
+
+        .btn:hover,.my-button:hover {
             background-color: #0056b3;
         }
 
@@ -74,7 +83,7 @@
 
         <div class="btn-container">
             <a class="btn" href="{{ url_for('config.añadirAmbiente') }}">
-                <button type="button">Agregar ambiente</button>
+                <button class= "my-button" type="btn">Agregar ambiente</button>
             </a>
         </div>
 

@@ -64,6 +64,31 @@
         .btn-modificar:hover {
             background-color: #218838;
         }
+        .my-button{
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            display: inline-block;
+            border: none;
+        }
+
+        .btn:hover,.my-button:hover {
+            background-color: #0056b3;
+        }
+        .my-button{
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
+            padding: 5px 5px;
+            border-radius: 5px;
+            display: inline-block;
+            border: none;
+        }
+
+        .btn:hover,.my-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 {% endblock %}
 
@@ -75,8 +100,8 @@
     <h1>Actividades</h1>
 
     <div class="btn-container">
-        <a class="btn" href="{{ url_for('config.añadirActividad') }}">
-            <button type="button">Agregar actividad</button>
+        <a class="my-button" href="{{ url_for('config.añadirActividad') }}">
+            <button class= "my-button" type="button">Agregar actividad</button>
         </a>
     </div>
 
